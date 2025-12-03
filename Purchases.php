@@ -138,30 +138,56 @@ include 'config/db.php';
                       <div class="table-responsive pt-3">
                         <table class="table table-hover" id="inventory">
                           <thead>
-                            <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">SKU</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Category</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Unit</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Qty</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Reorder</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Price</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-        </tr>
+        <th>Product</th>
+        <th>Customer</th>
+        <th>Total Price</th>
+        <th>Total Quantity</th>
+        <th>Purchases</th>
+        <th>Status</th>
+        <th>Action</th>
       </thead>
                           </thead>
                           <tbody id="inventoryBody">
                              <!-- Sample Row -->
         <tr class="hover:bg-gray-50">
-          <td class="px-4 py-2">SKU001</td>
-          <td class="px-4 py-2">iPhone 14</td>
-          <td class="px-4 py-2">Electronics</td>
-          <td class="px-4 py-2">pcs</td>
-          <td class="px-4 py-2 text-red-600 font-bold">5</td>
-          <td class="px-4 py-2">10</td>
-          <td class="px-4 py-2">₱50,000</td>
+          <td class="d-flex align-items-center">
+          <img src="" alt="img" class="me-3" width="40" height="40" style="object-fit:cover; border-radius:5px;">
+          <div>
+            <div class="fw-bold">iPhone 14</div>
+            <div class="text-muted small">SKU001</div>
+          </div>
+        </td>
+          <td class="px-4 py-2">John Doe</td>
+          <td class="px-4 py-2">P 2,000.00</td>
+          <td class="px-4 py-2">5</td>
+                  <td>
+        <?php
+         // $badge = 'text-danger';
+          //$icon = '▼';
+          //if ($sale >= 80) {
+          //$badge = 'text-success';
+          //$icon = '▲';
+          //} elseif ($sale >= 30) {
+          //$badge = 'text-warning';
+          //$icon = '▼';
+          //}
+        ?>
+        <!--<span class="<?= $badge ?>">
+        <?= number_format($sale, 2) ?>% <?= $icon ?>
+        </span>-->
+        </td>
+                  <td>
+                    <!-- Status Badge
+          <span style="color:white;" class="badge bg-<?= $row['status'] == 'Active' ? 'success' : 'danger' ?>">
+            <?= $row['status'] ?>
+          </span> -->
+        </td>
           <td class="px-4 py-2 space-x-2">
             <button type="button" class="btn btn-inverse-warning btn-icon mr-2 edit-btn" data-id="${data}">
                             <i class="typcn typcn-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-inverse-info btn-icon mr-2 view-btn" data-id="${data}">
+                            <i class="typcn typcn-eye-outline"></i>
                         </button>
             <button type="button" class="btn btn-inverse-danger btn-icon delete-btn" data-id="${data}">
                             <i class="typcn typcn-delete-outline"></i>
@@ -169,7 +195,7 @@ include 'config/db.php';
           </td>
         </tr>
 
-        <!-- Another Sample Row -->
+        <!-- Another Sample Row 
         <tr>
           <td class="px-4 py-2">SKU002</td>
           <td class="px-4 py-2">USB Cable</td>
@@ -186,7 +212,7 @@ include 'config/db.php';
                             <i class="typcn typcn-delete-outline"></i>
                         </button>
           </td>
-        </tr>
+        </tr>-->
                           </tbody>
                         </table>
                       </div>
