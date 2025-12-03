@@ -138,8 +138,8 @@ include 'config/db.php';
                       <div class="table-responsive pt-3">
                         <table class="table table-hover" id="inventory">
                           <thead>
-        <th>Product</th>
         <th>Customer</th>
+        <th>Address</th>
         <th>Total Price</th>
         <th>Total Quantity</th>
         <th>Purchases</th>
@@ -153,11 +153,11 @@ include 'config/db.php';
           <td class="d-flex align-items-center">
           <img src="" alt="img" class="me-3" width="40" height="40" style="object-fit:cover; border-radius:5px;">
           <div>
-            <div class="fw-bold">iPhone 14</div>
+            <div class="fw-bold">John Doe</div>
             <div class="text-muted small">SKU001</div>
           </div>
         </td>
-          <td class="px-4 py-2">John Doe</td>
+          <td class="px-4 py-2">Ortigas</td>
           <td class="px-4 py-2">P 2,000.00</td>
           <td class="px-4 py-2">5</td>
                   <td>
@@ -182,7 +182,7 @@ include 'config/db.php';
             <?= $row['status'] ?>
           </span> -->
         </td>
-          <td class="px-4 py-2 space-x-2">
+          <td class="px-4 py-2 space-x-2 d-flex align-items-center">
             <button type="button" class="btn btn-inverse-warning btn-icon mr-2 edit-btn" data-id="${data}">
                             <i class="typcn typcn-edit"></i>
                         </button>
