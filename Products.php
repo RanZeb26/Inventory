@@ -686,7 +686,6 @@ include 'Get/fetch_category_item.php';
   <script src="js/template.js"></script>
   <script src="js/settings.js"></script>
   <script src="js/todolist.js"></script>
-
   <script src="js/file-upload.js"></script>
 <script>
 
