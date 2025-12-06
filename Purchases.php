@@ -5,7 +5,7 @@ if (!isset($_SESSION['logged_in'])) {
     exit;
 }
 include 'config/db.php';
-include 'get_product.php';
+include 'Get/fetch_purchases.php';
 include 'Get/fetch_category_item.php';
 ?>
 
