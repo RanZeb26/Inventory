@@ -99,7 +99,7 @@ RewriteRule ^Purchases$ Purchases.php [L]
 
 # Admin sales
 
-RewriteRule ^sales$ Sales.php [L]
+RewriteRule ^Sales$ Sales.php [L]
 
 # Admin Settings
 
@@ -125,11 +125,10 @@ RewriteRule ^login$ login.php [L]
 
 # Fetch
 
-RewriteRule ^admin/get_job$ admin_salemtec/get/fetch_job.php [L]
-RewriteRule ^admin/get_one_job$ admin_salemtec/get/fetch_job_each.php [L]
-
 RewriteRule ^get_prinvlis$ Get/fetch_purchases.php [L]
+RewriteRule ^get_sales$ Get/fetch_sales.php [L]
 
+RewriteRule ^admin/get_one_job$ admin_salemtec/get/fetch_job_each.php [L]
 RewriteRule ^admin/get_prinv$ admin_salemtec/get/fetch_prinv.php [L]
 RewriteRule ^admin/get_pritem$ admin_salemtec/get/fetch_pritem.php [L]
 RewriteRule ^admin/get_poinv$ admin_salemtec/get/fetch_poinv.php [L]

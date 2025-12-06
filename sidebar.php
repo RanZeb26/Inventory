@@ -61,7 +61,7 @@
             </a>
           </li>-->
            <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="Sales">
               <i class="typcn typcn-briefcase menu-icon"></i>
               <span class="menu-title">Sales</span>
             </a>
