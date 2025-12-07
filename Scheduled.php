@@ -114,13 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_schedule_id'])
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- Required for 💰 Sales
 
-        *Record customer sales
-
-        *Invoice generation
-
-        *Track stock deduction upon sale -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Inventory</title>
@@ -129,9 +123,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_schedule_id'])
   <link rel="stylesheet" href="vendors/typicons.font/font/typicons.css" />
   <link rel="stylesheet" href="css/vertical-layout-light/style.css" />
   <link rel="shortcut icon" href="images/favicon.png" />
-
-  <!-- FullCalendar CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.css" rel="stylesheet" />
   
 </head>
 <body>
@@ -408,16 +399,5 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 </script>
-  <!-- jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- Bootstrap JS Bundle -->  
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- FullCalendar JS -->
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js"></script>
-  <script src="js/off-canvas.js"></script>
-  <script src="js/hoverable-collapse.js"></script>
-  <script src="js/template.js"></script>
-  <script src="js/settings.js"></script>
-  <script src="js/todolist.js"></script>
 </body>
 </html>

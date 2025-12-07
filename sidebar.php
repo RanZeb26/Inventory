@@ -53,13 +53,12 @@
               <span class="menu-title">Purchases</span>
             </a>
           </li>
-          <!--
                   <li class="nav-item">
             <a class="nav-link" href="Scheduled.php">
               <i class="typcn typcn-briefcase menu-icon"></i>
               <span class="menu-title">Schedule</span>
             </a>
-          </li>-->
+          </li>
            <li class="nav-item">
             <a class="nav-link" href="Sales">
               <i class="typcn typcn-briefcase menu-icon"></i>

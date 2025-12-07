@@ -8,7 +8,13 @@ include 'config/db.php';
 include 'Get/fetch_sales.php';
 include 'Get/fetch_category_item.php';
 ?>
+  <!-- Required for 💰 Sales
 
+        *Record customer sales
+
+        *Invoice generation
+
+        *Track stock deduction upon sale -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
