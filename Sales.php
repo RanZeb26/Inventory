@@ -203,7 +203,7 @@ include 'Get/fetch_category_item.php';
     <div class="modal-content">
       <form id="itemForm" action="add_item" method="POST" enctype="multipart/form-data">
         <div class="modal-header">
-          <h5 class="modal-title" id="add_item_ModalLabel">Add New Product</h5>
+          <h5 class="modal-title" id="add_item_ModalLabel">Add Sales</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -382,10 +382,10 @@ include 'Get/fetch_category_item.php';
   <table class="table table-hover bg-white shadow-sm">
     <thead class="table-light">
       <tr>
-        <th>Vendors</th>
+        <th>Customer</th>
         <th>Total Cost</th>
         <th>Total Quantity</th>
-        <th>Purchases</th>
+        <th>Sales</th>
         <th>Status</th>
         <th>Action</th>
       </tr>
@@ -462,7 +462,7 @@ include 'Get/fetch_category_item.php';
                             <form id="editItemForm" action="update_sales" method="POST" enctype="multipart/form-data">
                               <input type="hidden" id="edit_item_id" name="id" value="<?= $row['product_id'] ?>">
                               <div class="modal-header">
-                                <h5 class="modal-title" id="editItemModalLabel">Edit Product</h5>
+                                <h5 class="modal-title" id="editItemModalLabel">Edit Sales</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                               </div>
                               <div class="modal-body">

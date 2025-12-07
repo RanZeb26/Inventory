@@ -41,24 +41,32 @@
               <span class="menu-title">Calendar</span>
             </a>
           </li>-->
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+              <i class="typcn typcn-dropbox menu-icon"></i>
+              <span class="menu-title">Products</span>
+              <i class="typcn typcn-chevron-right menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ui-basic">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="Products">Items & Services</a></li>
+                <li class="nav-item"> <a class="nav-link" href="QuantityAdjustment">Inventory Adjustment</a></li>
+              </ul>
+            </div>
+          </li>
+          <!--
         <li class="nav-item">
             <a class="nav-link" href="Products">
               <i class="typcn typcn-dropbox menu-icon"></i>
               <span class="menu-title">Products <span class="badge badge-primary ml-3">New</span></span>
             </a>
-          </li>
+          </li>-->
         <li class="nav-item">
             <a class="nav-link" href="Purchases">
               <i class="typcn typcn-shopping-cart menu-icon"></i>
               <span class="menu-title">Purchases</span>
             </a>
-          </li>
-                  <li class="nav-item">
-            <a class="nav-link" href="Scheduled.php">
-              <i class="typcn typcn-briefcase menu-icon"></i>
-              <span class="menu-title">Schedule</span>
-            </a>
-          </li>
+
            <li class="nav-item">
             <a class="nav-link" href="Sales">
               <i class="typcn typcn-briefcase menu-icon"></i>
@@ -77,12 +85,20 @@
               <span class="menu-title">Adjustment</span>
             </a>
           </li>
+                    </li>
+                  <li class="nav-item">
+            <a class="nav-link" href="Scheduled.php">
+              <i class="typcn typcn-briefcase menu-icon"></i>
+              <span class="menu-title">Schedule</span>
+            </a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="#">
               <i class="typcn typcn-chart-pie menu-icon"></i>
               <span class="menu-title">Reports</span>
             </a>
           </li>
+
           <!-- Add more menu items as needed 
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">

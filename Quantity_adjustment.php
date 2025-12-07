@@ -32,7 +32,7 @@ include 'Get/fetch_qty_adjustment.php';
                   <div class="card">
                     <div class="card-body">
                       <h4 class="card-title">Quantity Adjustment</h4>
-                          <a href="Adjustment" class="btn btn-primary mb-3"><< Back to Adjustment</a>
+                          <!--<a href="Adjustment" class="btn btn-primary mb-3"><< Back to Adjustment</a>-->
                           <div class="d-flex justify-content-end align-items-center mb-3">
                             <div class="input-group">
                               <form method="GET" class="mb-3 d-flex">
