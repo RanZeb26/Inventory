@@ -173,8 +173,9 @@ include 'Get/fetch_qty_adjustment.php';
                                     <div class="col-md-12">
                                       <label class="form-label">Status</label>
                                       <select class="form-control" id="exampleSelectGender" name="status">
-                                          <option value="Active" <?= $row['status'] === 'Active' ? 'selected' : '' ?>>Active</option>
-                                          <option value="Inactive" <?= $row['status'] === 'Inactive' ? 'selected' : '' ?>>Inactive</option>
+
+                                          <option value="Draft" <?= $row['status'] === 'Draft' ? 'selected' : '' ?>>Draft</option>
+                                          <option value="Finalized" <?= $row['status'] === 'Finalized' ? 'selected' : '' ?>>Finalized</option>
                                         </select>
                                     </div>
                                   </div>

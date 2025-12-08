@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $user_id = $_SESSION['id'] ?? null; // ✅ get logged-in user id
 
     // Update all product details
-    $stmt = $pdo->prepare("UPDATE products_adjustment SET product_name=?, reasons=?, status=?, updated_at=? WHERE reference_id=?");
+    $stmt = $pdo->prepare("UPDATE adjustments SET product_name=?, reasons=?, status=?, updated_at=? WHERE reference_id=?");
 
     $success = $stmt->execute([
         $name, $reason, $status, date("Y-m-d H:i:s"), $reference_id
