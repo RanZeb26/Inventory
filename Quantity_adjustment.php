@@ -50,6 +50,7 @@ include 'Get/fetch_products.php';
                           </button>
                         </div>
                       </div>
+
                       <!-- ADD ITEM Modal -->
                       <div class="modal fade" id="add_item_Modal" tabindex="-1" aria-labelledby="add_item_ModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-md">
@@ -67,9 +68,9 @@ include 'Get/fetch_products.php';
 
                                     <!-- PRODUCT SELECT -->
                                     <div class="col-md-12">
-                                      <label class="form-label">Item</label>
+                                      <label class="form-label">Product</label>
                                       <select name="product_id" id="productSelect" class="form-control" required>
-                                        <option value="" disabled selected>Select Item</option>
+                                        <option value="" disabled selected>Select Product</option>
                                         <?php foreach ($category as $categories): ?>
                                           <option
                                             value="<?= $categories['product_id'] ?>"
@@ -117,6 +118,28 @@ include 'Get/fetch_products.php';
                       </div>
                       <!-- END MODAL -->
 
+
+
+                            <!-- Delete Confirmation Modal -->
+                            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header bg-light text-black">
+                                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    Are you sure you want to delete this product?
+                                    <input type="hidden" id="delete_id">
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
                       <div class="table-responsive pt-3">
                         <table class="table table-hover bg-white shadow-sm">
                           <thead class="table-light">
@@ -125,7 +148,7 @@ include 'Get/fetch_products.php';
                               <th>Name</th>
                               <th>Reason</th>
                               <th>Status</th>
-                              <th>Quantity</th>
+                              <th>Current Quantity</th>
                               <th>Adjustment Quantity</th>
                               <th>Action</th>
                             </tr>
@@ -151,28 +174,23 @@ include 'Get/fetch_products.php';
                                   <td><?= htmlspecialchars($row['quantity']) ?></td>
                                   <td><?= htmlspecialchars($row['adjustment_qty']) ?></td>
                                   <td>
+                                    <!-- EDIT BUTTON -->
                                     <button class="btn btn-inverse-warning btn-icon mr-2 edit-btn"
                                       data-bs-toggle="modal" data-bs-target="#editModal<?= $row['adj_id'] ?>">
                                       <i class="typcn typcn-edit"></i>
                                     </button>
+                                    <!-- VIEW BUTTON 
                                     <button type="button" class="btn btn-inverse-info btn-icon mr-2 view-btn"
                                       data-bs-toggle="modal" data-bs-target="#viewModal<?= $row['adj_id'] ?>" onclick="redirectToList(<?= $row['adj_id'] ?>)">
                                       <i class="typcn typcn-eye-outline"></i>
-                                    </button>
+                                    </button>-->
                                     <button class="btn btn-inverse-danger btn-icon open-delete-modal"
-                                      data-reference_id="<?= $row['adj_id'] ?>">
+                                      data-adj_id="<?= $row['adj_id'] ?>">
                                       <i class="typcn typcn-delete-outline"></i>
                                     </button>
                                   </td>
                                 </tr>
-                              <?php endforeach; ?>
-                            <?php else: ?>
-                              <tr>
-                                <td colspan="7" class="text-center text-muted">No records found</td>
-                              </tr>
-                            <?php endif; ?>
-
-                            <!-- Edit ITEM Modal -->
+                                                                                                                                       <!-- Edit ITEM Modal -->
                             <div class="modal fade" id="editModal<?= $row['adj_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
                               <div class="modal-dialog modal-md">
                                 <div class="modal-content">
@@ -186,26 +204,24 @@ include 'Get/fetch_products.php';
                                       <div class="container-fluid">
                                         <div class="row g-3">
                                           <div class="col-md-12">
-                                            <label class="form-label">Reference ID</label>
-                                            <input type="text" value="<?= $row['reference_id'] ?>" name="reference_id" class="form-control" required>
-                                          </div>
-                                          <div class="col-md-12">
                                             <label class="form-label">Name</label>
-                                            <input type="text" value="<?= $row['product_name'] ?>" name="name" class="form-control" required>
+                                            <input type="text" value="<?= $row['name'] ?>" name="name" class="form-control" required>
                                           </div>
                                           <div class="col-md-12">
                                             <label class="form-label">Reason</label>
-                                            <textarea name="reason" class="form-control" rows="3"><?= $row['reasons'] ?></textarea>
+                                            <textarea name="reason" class="form-control" rows="3"><?= $row['reason'] ?></textarea>
                                           </div>
+                                                                              <!-- PREVIOUS QUANTITY -->
+                                    <div class="col-md-12">
+                                      <label class="form-label">Previous Quantity</label>
+                                      <input value="<?= $row['quantity'] ?>" name="previous_qty" type="text" id="productQty" class="form-control" readonly>
+                                    </div>
 
-                                          <div class="col-md-12">
-                                            <label class="form-label">Status</label>
-                                            <select class="form-control" id="exampleSelectGender" name="status">
-
-                                              <option value="Draft" <?= $row['status'] === 'Draft' ? 'selected' : '' ?>>Draft</option>
-                                              <option value="Finalized" <?= $row['status'] === 'Finalized' ? 'selected' : '' ?>>Finalized</option>
-                                            </select>
-                                          </div>
+                                    <!-- ADJUSTMENT -->
+                                    <div class="col-md-12">
+                                      <label class="form-label">Quantity Adjustment</label>
+                                      <input value="<?= $row['adjustment_qty'] ?>" type="text" name="adjustment_qty" class="form-control" required>
+                                    </div>
                                         </div>
                                       </div>
                                     </div>
@@ -218,29 +234,15 @@ include 'Get/fetch_products.php';
                               </div>
                             </div>
                             <!-- END OF EDIT ITEM MODAL -->
+                              <?php endforeach; ?>
+                            <?php else: ?>
+                              <tr>
+                                <td colspan="7" class="text-center text-muted">No records found</td>
+                              </tr>
 
-
-                            <!-- Delete Confirmation Modal -->
-                            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                              <div class="modal-dialog">
-                                <div class="modal-content">
-                                  <div class="modal-header bg-light text-black">
-                                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                  </div>
-                                  <div class="modal-body">
-                                    Are you sure you want to delete this product?
-                                    <input type="hidden" id="delete_id">
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-
+                            <?php endif; ?>
                           </tbody>
+                          
                         </table>
 
                         <!-- Pagination -->
@@ -294,10 +296,11 @@ document.getElementById('productSelect').addEventListener('change', function() {
 
     $(document).ready(function() {
       let deleteId = null;
+      let deleteModalEl = document.getElementById('deleteModal');
 
       // Open modal and set ID
       $(document).on("click", ".open-delete-modal", function() {
-        deleteId = $(this).data("reference_id"); // ✅ matches attribute
+        deleteId = $(this).data("adj_id"); // ✅ matches attribute
         $("#delete_id").val(deleteId);
         $("#deleteModal").modal("show");
       });
@@ -309,7 +312,7 @@ document.getElementById('productSelect').addEventListener('change', function() {
             url: "delete_adj_desc", // ✅ full filename
             type: "POST",
             data: {
-              reference_id: deleteId
+              adj_id: deleteId
             }, // ✅ matches PHP
             success: function(response) {
               if (response.status === "success") {
@@ -319,7 +322,8 @@ document.getElementById('productSelect').addEventListener('change', function() {
                 alert(response.message || "Failed to delete product.");
               }
             },
-            error: function() {
+            error: function(xhr) {
+              console.log(xhr.responseText); // shows exact PHP error
               alert("An error occurred.");
             }
           });
