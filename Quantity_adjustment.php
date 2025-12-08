@@ -120,25 +120,25 @@ include 'Get/fetch_products.php';
 
 
 
-                            <!-- Delete Confirmation Modal -->
-                            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                              <div class="modal-dialog">
-                                <div class="modal-content">
-                                  <div class="modal-header bg-light text-black">
-                                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                  </div>
-                                  <div class="modal-body">
-                                    Are you sure you want to delete this product?
-                                    <input type="hidden" id="delete_id">
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
-                                  </div>
-                                </div>
-                              </div>
+                      <!-- Delete Confirmation Modal -->
+                      <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header bg-light text-black">
+                              <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
+                            <div class="modal-body">
+                              Are you sure you want to delete this product?
+                              <input type="hidden" id="delete_id">
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                              <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
                       <div class="table-responsive pt-3">
                         <table class="table table-hover bg-white shadow-sm">
@@ -190,50 +190,50 @@ include 'Get/fetch_products.php';
                                     </button>
                                   </td>
                                 </tr>
-                                                                                                                                       <!-- Edit ITEM Modal -->
-                            <div class="modal fade" id="editModal<?= $row['adj_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-                              <div class="modal-dialog modal-md">
-                                <div class="modal-content">
-                                  <form id="editItemForm" action="update_adj_desc" method="POST" enctype="multipart/form-data">
-                                    <input type="hidden" id="edit_item_id" name="id" value="<?= $row['adj_id'] ?>">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title" id="editItemModalLabel">Edit Product</h5>
-                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <div class="container-fluid">
-                                        <div class="row g-3">
-                                          <div class="col-md-12">
-                                            <label class="form-label">Name</label>
-                                            <input type="text" value="<?= $row['name'] ?>" name="name" class="form-control" required>
-                                          </div>
-                                          <div class="col-md-12">
-                                            <label class="form-label">Reason</label>
-                                            <textarea name="reason" class="form-control" rows="3"><?= $row['reason'] ?></textarea>
-                                          </div>
-                                                                              <!-- PREVIOUS QUANTITY -->
-                                    <div class="col-md-12">
-                                      <label class="form-label">Previous Quantity</label>
-                                      <input value="<?= $row['quantity'] ?>" name="previous_qty" type="text" id="productQty" class="form-control" readonly>
-                                    </div>
-
-                                    <!-- ADJUSTMENT -->
-                                    <div class="col-md-12">
-                                      <label class="form-label">Quantity Adjustment</label>
-                                      <input value="<?= $row['adjustment_qty'] ?>" type="text" name="adjustment_qty" class="form-control" required>
-                                    </div>
+                                <!-- Edit ITEM Modal -->
+                                <div class="modal fade" id="editModal<?= $row['adj_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                      <form id="editItemForm" action="update_adj_desc" method="POST" enctype="multipart/form-data">
+                                        <input type="hidden" id="edit_item_id" name="id" value="<?= $row['adj_id'] ?>">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="editItemModalLabel">Edit Product</h5>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
-                                      </div>
+                                        <div class="modal-body">
+                                          <div class="container-fluid">
+                                            <div class="row g-3">
+                                              <div class="col-md-12">
+                                                <label class="form-label">Name</label>
+                                                <input type="text" value="<?= $row['name'] ?>" name="name" class="form-control" required>
+                                              </div>
+                                              <div class="col-md-12">
+                                                <label class="form-label">Reason</label>
+                                                <textarea name="reason" class="form-control" rows="3"><?= $row['reason'] ?></textarea>
+                                              </div>
+                                              <!-- PREVIOUS QUANTITY -->
+                                              <div class="col-md-12">
+                                                <label class="form-label">Previous Quantity</label>
+                                                <input value="<?= $row['quantity'] ?>" name="previous_qty" type="text" id="productQty" class="form-control" readonly>
+                                              </div>
+
+                                              <!-- ADJUSTMENT -->
+                                              <div class="col-md-12">
+                                                <label class="form-label">Quantity Adjustment</label>
+                                                <input value="<?= $row['adjustment_qty'] ?>" type="text" name="adjustment_qty" class="form-control" required>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="submit" class="btn btn-info">Update Product</button>
+                                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                      </form>
                                     </div>
-                                    <div class="modal-footer">
-                                      <button type="submit" class="btn btn-info">Update Product</button>
-                                      <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                    </div>
-                                  </form>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                            <!-- END OF EDIT ITEM MODAL -->
+                                <!-- END OF EDIT ITEM MODAL -->
                               <?php endforeach; ?>
                             <?php else: ?>
                               <tr>
@@ -242,7 +242,7 @@ include 'Get/fetch_products.php';
 
                             <?php endif; ?>
                           </tbody>
-                          
+
                         </table>
 
                         <!-- Pagination -->
@@ -286,13 +286,13 @@ include 'Get/fetch_products.php';
   <script src="js/settings.js"></script>
 
   <script>
-document.getElementById('productSelect').addEventListener('change', function() {
-    let qty = this.options[this.selectedIndex].getAttribute('data-qty');
-    let name = this.options[this.selectedIndex].getAttribute('data-name');
+    document.getElementById('productSelect').addEventListener('change', function() {
+      let qty = this.options[this.selectedIndex].getAttribute('data-qty');
+      let name = this.options[this.selectedIndex].getAttribute('data-name');
 
-    document.getElementById('productQty').value = qty;
-    document.getElementById('itemName').value = name;
-});
+      document.getElementById('productQty').value = qty;
+      document.getElementById('itemName').value = name;
+    });
 
     $(document).ready(function() {
       let deleteId = null;
