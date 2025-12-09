@@ -93,7 +93,7 @@ include 'Get/fetch_products.php';
 
                                     <!-- PREVIOUS QUANTITY -->
                                     <div class="col-md-12">
-                                      <label class="form-label">Previous Quantity</label>
+                                      <label class="form-label">Current Quantity</label>
                                       <input name="previous_qty" type="text" id="productQty" class="form-control" readonly>
                                     </div>
 
@@ -214,7 +214,7 @@ include 'Get/fetch_products.php';
                                               <!-- PREVIOUS QUANTITY -->
                                               <div class="col-md-12">
                                                 <label class="form-label">Previous Quantity</label>
-                                                <input value="<?= $row['quantity'] ?>" name="previous_qty" type="text" id="productQty" class="form-control" readonly>
+                                                <input value="<?= $row['previous_qty'] ?>" name="previous_qty" type="text" id="productQty" class="form-control" readonly>
                                               </div>
 
                                               <!-- ADJUSTMENT -->

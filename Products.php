@@ -373,7 +373,7 @@ include 'Get/fetch_category_item.php';
                       </div>
                       <!-- END OF ADD ITEM MODAL -->
 <div class="table-responsive pt-3">
-  <table class="table table-hover bg-white shadow-sm">
+  <table id="productTable" class="table table-hover bg-white shadow-sm">
     <thead class="table-light">
       <tr>
         <th>Product</th>

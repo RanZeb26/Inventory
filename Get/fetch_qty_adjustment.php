@@ -24,7 +24,7 @@ $total_products = $total_row ? $total_row['total'] : 0;
 $total_pages = ceil($total_products / $limit);
 
 // Fetch records
-$sql = "SELECT i.name,i.quantity,i.status,a.adj_id,a.adjustment_qty,a.reason,a.created_at
+$sql = "SELECT i.name,i.quantity,i.status,a.adj_id,a.adjustment_qty,a.previous_qty,a.reason,a.created_at
 FROM products i
 INNER JOIN products_adjustments a ON a.product_id = i.product_id
 $search_sql LIMIT :limit OFFSET :offset";
