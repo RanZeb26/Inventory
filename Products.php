@@ -68,7 +68,7 @@ include 'Get/fetch_category_item.php';
                       <div class="d-flex justify-content-end align-items-center mb-3">
                         <div class="input-group">
                           <form class="d-flex" method="GET">
-                            <input name="search" value="<?= $search ?>" class="form-control me-2" type="search" placeholder="Search...">
+                            <input name="search" value="<?= htmlspecialchars($search) ?>" class="form-control me-2" type="search" placeholder="Search...">
                             <button class="btn btn-light"><i class="typcn typcn-zoom"></i></button>
                           </form>
                           <!--<input type="text" class="form-control" placeholder="Search for...">
@@ -387,261 +387,268 @@ include 'Get/fetch_category_item.php';
                             </tr>
                           </thead>
                           <tbody>
-                            <?php while ($row = $result->fetch_assoc()): ?>
-                              <tr>
-                                <td class="d-flex align-items-center">
-                                  <img src="<?= $row['image'] ?>" alt="img" class="me-3" width="40" height="40" style="object-fit:cover; border-radius:5px;">
-                                  <div>
-                                    <div class="fw-bold"> <?= $row['name'] ?></div>
-                                    <div class="text-muted small">SKU <?= $row['sku'] ?></div>
-                                  </div>
-                                </td>
-                                <td><?= number_format($row['cost_price'], 2) ?> Php</td>
-                                <td><?= $row['quantity'] ?></td>
-                                <?php
-                                $sold = $row['sold'];
-                                $stock = $row['quantity'];
-                                $sale = ($stock + $sold) > 0 ? ($sold / $stock) * 100 : 0;
-                                ?>
-                                <td>
+                            <?php if (!empty($result)): ?>
+                              <?php foreach ($result as $row): ?>
+                                <tr>
+                                  <td class="d-flex align-items-center">
+                                    <img src="<?= $row['image'] ?>" alt="img" class="me-3" width="40" height="40" style="object-fit:cover; border-radius:5px; padding:2px; border:1px solid #ccc;">
+                                    <div>
+                                      <div class="fw-bold"> <?= $row['name'] ?></div>
+                                      <div class="text-muted small">SKU <?= $row['sku'] ?></div>
+                                    </div>
+                                  </td>
+                                  <td><?= number_format($row['cost_price'], 2) ?> Php</td>
+                                  <td><?= $row['quantity'] ?></td>
                                   <?php
-                                  $badge = 'text-danger';
-                                  $icon = '▼';
-                                  if ($sale >= 80) {
-                                    $badge = 'text-success';
-                                    $icon = '▲';
-                                  } elseif ($sale >= 30) {
-                                    $badge = 'text-warning';
-                                    $icon = '▼';
-                                  }
+                                  $sold = $row['sold'];
+                                  $stock = $row['quantity'];
+                                  $sale = ($stock + $sold) > 0 ? ($sold / $stock) * 100 : 0;
                                   ?>
-                                  <span class="<?= $badge ?>">
-                                    <?= number_format($sale, 2) ?>% <?= $icon ?>
-                                  </span>
-                                </td>
-                                <td>
-                                  <span style="color:white;" class="badge bg-<?= $row['status'] == 'Active' ? 'success' : 'danger' ?>">
-                                    <?= $row['status'] ?>
-                                  </span>
-                                </td>
-                                <td>
-                                  <button class="btn btn-inverse-warning btn-icon mr-2 edit-btn" data-bs-toggle="modal" data-bs-target="#editModal<?= $row['product_id'] ?>"><i class="typcn typcn-edit"></i></button>
-                                  <button class="btn btn-inverse-danger btn-icon open-delete-modal" data-id="<?= $row['product_id'] ?>"><i class="typcn typcn-delete-outline"></i></button>
-                                </td>
-                              </tr>
-                              <!-- Delete Confirmation Modal -->
-                              <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                  <div class="modal-content">
-                                    <div class="modal-header bg-light text-black">
-                                      <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                      Are you sure you want to delete this product?
-                                      <input type="hidden" id="delete_id">
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                      <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-
-
-
-                              <!-- Edit ITEM Modal -->
-                              <div class="modal fade" id="editModal<?= $row['product_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-md">
-                                  <div class="modal-content">
-                                    <form id="editItemForm" action="update_sales" method="POST" enctype="multipart/form-data">
-                                      <input type="hidden" id="edit_item_id" name="id" value="<?= $row['product_id'] ?>">
-                                      <div class="modal-header">
-                                        <h5 class="modal-title" id="editItemModalLabel">Edit Product</h5>
+                                  <td>
+                                    <?php
+                                    $badge = 'text-danger';
+                                    $icon = '▼';
+                                    if ($sale >= 80) {
+                                      $badge = 'text-success';
+                                      $icon = '▲';
+                                    } elseif ($sale >= 30) {
+                                      $badge = 'text-warning';
+                                      $icon = '▼';
+                                    }
+                                    ?>
+                                    <span class="<?= $badge ?>">
+                                      <?= number_format($sale, 2) ?>% <?= $icon ?>
+                                    </span>
+                                  </td>
+                                  <td>
+                                    <span style="color:white;" class="badge bg-<?= $row['status'] == 'Active' ? 'success' : 'danger' ?>">
+                                      <?= $row['status'] ?>
+                                    </span>
+                                  </td>
+                                  <td>
+                                    <button class="btn btn-inverse-warning btn-icon mr-2 edit-btn" data-bs-toggle="modal" data-bs-target="#editModal<?= $row['product_id'] ?>"><i class="typcn typcn-edit"></i></button>
+                                    <button class="btn btn-inverse-danger btn-icon open-delete-modal" data-id="<?= $row['product_id'] ?>"><i class="typcn typcn-delete-outline"></i></button>
+                                  </td>
+                                </tr>
+                                <!-- Delete Confirmation Modal -->
+                                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header bg-light text-black">
+                                        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                       </div>
                                       <div class="modal-body">
-                                        <div class="container-fluid">
-                                          <div class="row g-3">
-                                            <div class="col-md-6">
-                                              <label class="form-label">Product SKU / Code</label>
-                                              <input type="text" name="sku" value="<?= $row['sku'] ?>" class="form-control" required>
-                                            </div>
-                                            <div class="col-md-6">
-                                              <label class="form-label">Barcode</label>
-                                              <input type="text" name="barcode" value="<?= $row['barcode'] ?>" class="form-control">
-                                            </div>
-                                            <div class="col-md-12">
-                                              <label class="form-label">Product Name</label>
-                                              <input type="text" name="name" value="<?= $row['name'] ?>" class="form-control" required>
-                                            </div>
-                                            <div class="col-md-6">
-                                              <label class="form-label">Category</label>
-                                              <input type="text" name="category" value="<?= $row['category'] ?>" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                              <label class="form-label">Brand</label>
-                                              <input type="text" name="brand" value="<?= $row['brand'] ?>" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                              <label class="form-label">Unit</label>
-                                              <input type="text" name="unit" value="<?= $row['unit'] ?>" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                              <div class="form-group">
-                                                <label for="exampleSelectGender">Status</label>
-                                                <select class="form-control" id="exampleSelectGender" name="status">
-                                                  <option value="Active" <?= $row['status'] === 'Active' ? 'selected' : '' ?>>Active</option>
-                                                  <option value="Inactive" <?= $row['status'] === 'Inactive' ? 'selected' : '' ?>>Inactive</option>
-                                                </select>
-                                              </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                              <label class="form-label">Cost Price</label>
-                                              <input type="number" name="price" value="<?= $row['cost_price'] ?>" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                              <label class="form-label">Selling Price</label>
-                                              <input type="number" name="selling_price" value="<?= $row['selling_price'] ?>" class="form-control">
-                                            </div>
-                                            <div class="col-md-12">
-                                              <label class="form-label">Reorder Level</label>
-                                              <input type="number" name="stock_level" value="<?= $row['reorder_level'] ?>" class="form-control">
-                                            </div>
-                                            <div class="col-md-12">
-                                              <div class="form-group">
-                                                <label>File upload</label>
-                                                <input type="file" name="image" class="file-upload-default">
-                                                <div class="input-group col-xs-12">
-                                                  <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
-                                                  <span class="input-group-append">
-                                                    <button class="file-upload-browse btn btn-light" type="button">Upload</button>
-
-                                                  </span>
-                                                </div>
-                                                <small class="text-muted">Current: <?= $row['image'] ?></small>
-                                              </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                              <label class="form-label">Description</label>
-                                              <textarea name="description" value="<?= $row['description'] ?>" class="form-control" rows="3"></textarea>
-                                            </div>
-                                          </div>
-                                        </div>
+                                        Are you sure you want to delete this product?
+                                        <input type="hidden" id="delete_id">
                                       </div>
                                       <div class="modal-footer">
-                                        <button type="submit" class="btn btn-info">Update Product</button>
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
                                       </div>
-                                    </form>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              <!-- END OF ADD ITEM MODAL -->
 
-                              <!-- Modal -->
-                              <div class="modal fade" id="leditModal<?= $row['product_id'] ?>" tabindex="-1">
-                                <div class="modal-dialog modal-md">
-                                  <form class="modal-content" action="update_sales" method="POST" enctype="multipart/form-data">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title">Edit Product</h5>
-                                      <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                      <input type="hidden" name="id" value="<?= $row['id'] ?>">
 
-                                      <div class="mb-2">
-                                        <label>Name</label>
-                                        <input name="name" value="<?= $row['name'] ?>" class="form-control">
-                                      </div>
-                                      <div class="mb-2">
-                                        <label>SKU</label>
-                                        <input name="sku" value="<?= $row['sku'] ?>" class="form-control">
-                                      </div>
-                                      <div class="mb-2">
-                                        <label>Price</label>
-                                        <input name="price" value="<?= $row['price'] ?>" class="form-control" type="number" step="0.01">
-                                      </div>
-                                      <div class="mb-2">
-                                        <label>Quantity</label>
-                                        <input name="quantity" value="<?= $row['quantity'] ?>" class="form-control" type="number">
-                                      </div>
-                                      <div class="mb-2">
-                                        <label>Status</label>
-                                        <select name="status" class="form-select">
-                                          <option value="Active" <?= $row['status'] === 'Active' ? 'selected' : '' ?>>Active</option>
-                                          <option value="Inactive" <?= $row['status'] === 'Inactive' ? 'selected' : '' ?>>Inactive</option>
-                                        </select>
-                                      </div>
-                                      <div class="mb-2">
-                                        <label>Upload Image</label><br>
-                                        <input type="file" name="image" class="form-control">
-                                        <small class="text-muted">Current: <?= $row['image'] ?></small>
-                                      </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                      <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                      <button type="submit" class="btn btn-primary">Save</button>
-                                    </div>
-                                  </form>
-                                </div>
-                              </div>
 
-                              <!-- EDIT ITEM MODAL (Ensure it's inside <body> at the same level as other modals) -->
-                              <div class="modal fade" id="leditModal<?= $row['product_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                  <div class="modal-content">
-                                    <div class="modal-header">
-                                      <h5 class="modal-title" id="editItemModalLabel">Edit Item</h5>
-                                    </div>
-                                    <div class="modal-body">
+                                <!-- Edit ITEM Modal -->
+                                <div class="modal fade" id="editModal<?= $row['product_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
                                       <form id="editItemForm" action="update_sales" method="POST" enctype="multipart/form-data">
                                         <input type="hidden" id="edit_item_id" name="id" value="<?= $row['product_id'] ?>">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="editItemModalLabel">Edit Product</h5>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                          <div class="container-fluid">
+                                            <div class="row g-3">
+                                              <div class="col-md-6">
+                                                <label class="form-label">Product SKU / Code</label>
+                                                <input type="text" name="sku" value="<?= $row['sku'] ?>" class="form-control" required>
+                                              </div>
+                                              <div class="col-md-6">
+                                                <label class="form-label">Barcode</label>
+                                                <input type="text" name="barcode" value="<?= $row['barcode'] ?>" class="form-control">
+                                              </div>
+                                              <div class="col-md-12">
+                                                <label class="form-label">Product Name</label>
+                                                <input type="text" name="name" value="<?= $row['name'] ?>" class="form-control" required>
+                                              </div>
+                                              <div class="col-md-6">
+                                                <label class="form-label">Category</label>
+                                                <input type="text" name="category" value="<?= $row['category'] ?>" class="form-control">
+                                              </div>
+                                              <div class="col-md-6">
+                                                <label class="form-label">Brand</label>
+                                                <input type="text" name="brand" value="<?= $row['brand'] ?>" class="form-control">
+                                              </div>
+                                              <div class="col-md-6">
+                                                <label class="form-label">Unit</label>
+                                                <input type="text" name="unit" value="<?= $row['unit'] ?>" class="form-control">
+                                              </div>
+                                              <div class="col-md-6">
+                                                <div class="form-group">
+                                                  <label for="exampleSelectGender">Status</label>
+                                                  <select class="form-control" id="exampleSelectGender" name="status">
+                                                    <option value="Active" <?= $row['status'] === 'Active' ? 'selected' : '' ?>>Active</option>
+                                                    <option value="Inactive" <?= $row['status'] === 'Inactive' ? 'selected' : '' ?>>Inactive</option>
+                                                  </select>
+                                                </div>
+                                              </div>
+                                              <div class="col-md-6">
+                                                <label class="form-label">Cost Price</label>
+                                                <input type="number" name="price" value="<?= $row['cost_price'] ?>" class="form-control">
+                                              </div>
+                                              <div class="col-md-6">
+                                                <label class="form-label">Selling Price</label>
+                                                <input type="number" name="selling_price" value="<?= $row['selling_price'] ?>" class="form-control">
+                                              </div>
+                                              <div class="col-md-12">
+                                                <label class="form-label">Reorder Level</label>
+                                                <input type="number" name="stock_level" value="<?= $row['reorder_level'] ?>" class="form-control">
+                                              </div>
+                                              <div class="col-md-12">
+                                                <div class="form-group">
+                                                  <label>File upload</label>
+                                                  <input type="file" name="image" class="file-upload-default">
+                                                  <div class="input-group col-xs-12">
+                                                    <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
+                                                    <span class="input-group-append">
+                                                      <button class="file-upload-browse btn btn-light" type="button">Upload</button>
 
-                                        <div class="form-group">
-                                          <label for="edit_item_name">Job Site Name</label>
-                                          <div class="mb-2">
-                                            <label>Name</label>
-                                            <input name="name" value="<?= $row['name'] ?>" class="form-control">
-                                          </div>
-                                          <div class="mb-2">
-                                            <label>SKU</label>
-                                            <input name="sku" value="<?= $row['sku'] ?>" class="form-control">
-                                          </div>
-                                          <div class="mb-2">
-                                            <label>Price</label>
-                                            <input name="price" value="<?= $row['cost_price'] ?>" class="form-control" type="number" step="0.01">
-                                          </div>
-                                          <div class="mb-2">
-                                            <label>Quantity</label>
-                                            <input name="quantity" value="<?= $row['quantity'] ?>" class="form-control" type="number">
-                                          </div>
-                                          <div class="mb-2">
-                                            <label>Status</label>
-                                            <select name="status" class="form-group">
-                                              <option value="Active" <?= $row['status'] === 'Active' ? 'selected' : '' ?>>Active</option>
-                                              <option value="Inactive" <?= $row['status'] === 'Inactive' ? 'selected' : '' ?>>Inactive</option>
-                                            </select>
-                                          </div>
-                                          <div class="mb-2">
-                                            <label>Upload Image</label><br>
-                                            <input type="file" name="image" class="form-control">
-                                            <small class="text-muted">Current: <?= $row['image'] ?></small>
+                                                    </span>
+                                                  </div>
+                                                  <small class="text-muted">Current: <?= $row['image'] ?></small>
+                                                </div>
+                                              </div>
+                                              <div class="col-md-12">
+                                                <label class="form-label">Description</label>
+                                                <textarea name="description" value="<?= $row['description'] ?>" class="form-control" rows="3"></textarea>
+                                              </div>
+                                            </div>
                                           </div>
                                         </div>
                                         <div class="modal-footer">
-                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                          <button type="submit" class="btn btn-primary">Update Item</button>
+                                          <button type="submit" class="btn btn-info">Update Product</button>
+                                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                                         </div>
                                       </form>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
-                              <!--End of Edit Modal-->
+                                <!-- END OF ADD ITEM MODAL -->
 
-                            <?php endwhile; ?>
+                                <!-- Modal -->
+                                <div class="modal fade" id="leditModal<?= $row['product_id'] ?>" tabindex="-1">
+                                  <div class="modal-dialog modal-md">
+                                    <form class="modal-content" action="update_sales" method="POST" enctype="multipart/form-data">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title">Edit Product</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                      </div>
+                                      <div class="modal-body">
+                                        <input type="hidden" name="id" value="<?= $row['id'] ?>">
+
+                                        <div class="mb-2">
+                                          <label>Name</label>
+                                          <input name="name" value="<?= $row['name'] ?>" class="form-control">
+                                        </div>
+                                        <div class="mb-2">
+                                          <label>SKU</label>
+                                          <input name="sku" value="<?= $row['sku'] ?>" class="form-control">
+                                        </div>
+                                        <div class="mb-2">
+                                          <label>Price</label>
+                                          <input name="price" value="<?= $row['price'] ?>" class="form-control" type="number" step="0.01">
+                                        </div>
+                                        <div class="mb-2">
+                                          <label>Quantity</label>
+                                          <input name="quantity" value="<?= $row['quantity'] ?>" class="form-control" type="number">
+                                        </div>
+                                        <div class="mb-2">
+                                          <label>Status</label>
+                                          <select name="status" class="form-select">
+                                            <option value="Active" <?= $row['status'] === 'Active' ? 'selected' : '' ?>>Active</option>
+                                            <option value="Inactive" <?= $row['status'] === 'Inactive' ? 'selected' : '' ?>>Inactive</option>
+                                          </select>
+                                        </div>
+                                        <div class="mb-2">
+                                          <label>Upload Image</label><br>
+                                          <input type="file" name="image" class="form-control">
+                                          <small class="text-muted">Current: <?= $row['image'] ?></small>
+                                        </div>
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                      </div>
+                                    </form>
+                                  </div>
+                                </div>
+
+                                <!-- EDIT ITEM MODAL (Ensure it's inside <body> at the same level as other modals) -->
+                                <div class="modal fade" id="leditModal<?= $row['product_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="editItemModalLabel">Edit Item</h5>
+                                      </div>
+                                      <div class="modal-body">
+                                        <form id="editItemForm" action="update_sales" method="POST" enctype="multipart/form-data">
+                                          <input type="hidden" id="edit_item_id" name="id" value="<?= $row['product_id'] ?>">
+
+                                          <div class="form-group">
+                                            <label for="edit_item_name">Job Site Name</label>
+                                            <div class="mb-2">
+                                              <label>Name</label>
+                                              <input name="name" value="<?= $row['name'] ?>" class="form-control">
+                                            </div>
+                                            <div class="mb-2">
+                                              <label>SKU</label>
+                                              <input name="sku" value="<?= $row['sku'] ?>" class="form-control">
+                                            </div>
+                                            <div class="mb-2">
+                                              <label>Price</label>
+                                              <input name="price" value="<?= $row['cost_price'] ?>" class="form-control" type="number" step="0.01">
+                                            </div>
+                                            <div class="mb-2">
+                                              <label>Quantity</label>
+                                              <input name="quantity" value="<?= $row['quantity'] ?>" class="form-control" type="number">
+                                            </div>
+                                            <div class="mb-2">
+                                              <label>Status</label>
+                                              <select name="status" class="form-group">
+                                                <option value="Active" <?= $row['status'] === 'Active' ? 'selected' : '' ?>>Active</option>
+                                                <option value="Inactive" <?= $row['status'] === 'Inactive' ? 'selected' : '' ?>>Inactive</option>
+                                              </select>
+                                            </div>
+                                            <div class="mb-2">
+                                              <label>Upload Image</label><br>
+                                              <input type="file" name="image" class="form-control">
+                                              <small class="text-muted">Current: <?= $row['image'] ?></small>
+                                            </div>
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Update Item</button>
+                                          </div>
+                                        </form>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!--End of Edit Modal-->
+
+                              <?php endforeach; ?>
+                            <?php else: ?>
+                              <tr>
+                                <td colspan="7" class="text-center text-muted">No records found</td>
+                              </tr>
+
+                            <?php endif; ?>
                           </tbody>
                         </table>
 

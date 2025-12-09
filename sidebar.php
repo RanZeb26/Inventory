@@ -42,12 +42,12 @@
             </a>
           </li>-->
             <li class="nav-item">
-            <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+            <a class="nav-link" data-toggle="collapse" href="#products" aria-expanded="false" aria-controls="products">
               <i class="typcn typcn-dropbox menu-icon"></i>
               <span class="menu-title">Products</span>
               <i class="typcn typcn-chevron-right menu-arrow"></i>
             </a>
-            <div class="collapse" id="ui-basic">
+            <div class="collapse" id="products">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="Products">Items</a></li>
                 <li class="nav-item"> <a class="nav-link" href="QuantityAdjustment">Inventory Adjustment</a></li>
@@ -66,25 +66,33 @@
               <i class="typcn typcn-shopping-cart menu-icon"></i>
               <span class="menu-title">Purchases</span>
             </a>
-
-           <li class="nav-item">
-            <a class="nav-link" href="Sales">
+            <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#sales" aria-expanded="false" aria-controls="sales">
               <i class="typcn typcn-briefcase menu-icon"></i>
               <span class="menu-title">Sales</span>
+              <i class="typcn typcn-chevron-right menu-arrow"></i>
             </a>
+            <div class="collapse" id="sales">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="customer.php">Customer</a></li>
+                <li class="nav-item"> <a class="nav-link" href="Invoice.php">Invoice</a></li>
+              </ul>
+            </div>
           </li>
+          <!-- 
         <li class="nav-item">
             <a class="nav-link" href="#">
               <i class="typcn typcn-shopping-bag menu-icon"></i>
               <span class="menu-title">Deliveries</span>
             </a>
           </li>
+          
           <li class="nav-item">
             <a class="nav-link" href="Adjustment">
               <i class="typcn typcn-flow-parallel menu-icon"></i>
               <span class="menu-title">Adjustment</span>
             </a>
-          </li>
+          </li>-->
                     </li>
                   <li class="nav-item">
             <a class="nav-link" href="Scheduled.php">
