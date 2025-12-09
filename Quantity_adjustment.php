@@ -174,11 +174,11 @@ include 'Get/fetch_products.php';
                                   <td><?= htmlspecialchars($row['quantity']) ?></td>
                                   <td><?= htmlspecialchars($row['adjustment_qty']) ?></td>
                                   <td>
-                                    <!-- EDIT BUTTON -->
+                                    <!-- EDIT BUTTON 
                                     <button class="btn btn-inverse-warning btn-icon mr-2 edit-btn"
                                       data-bs-toggle="modal" data-bs-target="#editModal<?= $row['adj_id'] ?>">
                                       <i class="typcn typcn-edit"></i>
-                                    </button>
+                                    </button>-->
                                     <!-- VIEW BUTTON 
                                     <button type="button" class="btn btn-inverse-info btn-icon mr-2 view-btn"
                                       data-bs-toggle="modal" data-bs-target="#viewModal<?= $row['adj_id'] ?>" onclick="redirectToList(<?= $row['adj_id'] ?>)">

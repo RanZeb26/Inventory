@@ -150,7 +150,7 @@ RewriteRule ^admin/add_adjitem$ admin_salemtec/post/insert_adjitem.php [L]
 
 # Update
 
-RewriteRule ^update_sales$ update_product.php [L]
+RewriteRule ^update_sales$ Update/update_product.php [L]
 RewriteRule ^update_adj_desc$ Update/update_adj_desc.php [L]
 
 RewriteRule ^admin/approve$ admin_salemtec/update/update_prapprove.php [L]
