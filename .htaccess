@@ -70,9 +70,9 @@ RewriteRule ^Dashboard$ Index.php [L]
 
 RewriteRule ^admin/job$ admin_salemtec/js_function/job.js [L]
 
-# Admin jobsite
+# Admin Customer
 
-RewriteRule ^admin/jobsite$ admin_salemtec/jobsite.php [L]
+RewriteRule ^Customer$ Customer.php [L]
 
 # Admin jobsite LIST
 
@@ -142,8 +142,8 @@ RewriteRule ^admin/get_listing$ admin_salemtec/get/fetch_itemstat.php [L]
 
 RewriteRule ^save_items$ Add/save_selected_items.php [L]
 RewriteRule ^save_adj_desc$ Add/save_adj_desc.php [L]
+RewriteRule ^add_customer$ Add/save_customer.php [L]
 
-RewriteRule ^admin/add_listing$ admin_salemtec/post/insert_jobsite_list.php [L]
 RewriteRule ^admin/add_prinv$ admin_salemtec/post/insert_prinv.php [L]
 RewriteRule ^admin/add_pritems$ admin_salemtec/post/insert_pritems.php [L]
 RewriteRule ^admin/add_adjitem$ admin_salemtec/post/insert_adjitem.php [L]
