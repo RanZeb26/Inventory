@@ -25,7 +25,7 @@ $total_pages = ceil($total_products / $limit);
 
 // Fetch records
 $sql = "SELECT *
-FROM customers
+FROM customers where status='Active'
 $search_sql LIMIT :limit OFFSET :offset";
 $stmt = $pdo->prepare($sql);
 

@@ -174,11 +174,11 @@ include 'Get/fetch_products.php';
                                   <td><?= htmlspecialchars($row['quantity']) ?></td>
                                   <td><?= htmlspecialchars($row['adjustment_qty']) ?></td>
                                   <td>
-                                    <!-- EDIT BUTTON 
+                                    <!-- EDIT BUTTON -->
                                     <button class="btn btn-inverse-warning btn-icon mr-2 edit-btn"
                                       data-bs-toggle="modal" data-bs-target="#editModal<?= $row['adj_id'] ?>">
                                       <i class="typcn typcn-edit"></i>
-                                    </button>-->
+                                    </button>
                                     <!-- VIEW BUTTON 
                                     <button type="button" class="btn btn-inverse-info btn-icon mr-2 view-btn"
                                       data-bs-toggle="modal" data-bs-target="#viewModal<?= $row['adj_id'] ?>" onclick="redirectToList(<?= $row['adj_id'] ?>)">
@@ -190,50 +190,7 @@ include 'Get/fetch_products.php';
                                     </button>
                                   </td>
                                 </tr>
-                                <!-- Edit ITEM Modal -->
-                                <div class="modal fade" id="editModal<?= $row['adj_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-                                  <div class="modal-dialog modal-md">
-                                    <div class="modal-content">
-                                      <form id="editItemForm" action="update_adj_desc" method="POST" enctype="multipart/form-data">
-                                        <input type="hidden" id="edit_item_id" name="id" value="<?= $row['adj_id'] ?>">
-                                        <div class="modal-header">
-                                          <h5 class="modal-title" id="editItemModalLabel">Edit Product</h5>
-                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                          <div class="container-fluid">
-                                            <div class="row g-3">
-                                              <div class="col-md-12">
-                                                <label class="form-label">Name</label>
-                                                <input type="text" value="<?= $row['name'] ?>" name="name" class="form-control" required>
-                                              </div>
-                                              <div class="col-md-12">
-                                                <label class="form-label">Reason</label>
-                                                <textarea name="reason" class="form-control" rows="3"><?= $row['reason'] ?></textarea>
-                                              </div>
-                                              <!-- PREVIOUS QUANTITY -->
-                                              <div class="col-md-12">
-                                                <label class="form-label">Previous Quantity</label>
-                                                <input value="<?= $row['previous_qty'] ?>" name="previous_qty" type="text" id="productQty" class="form-control" readonly>
-                                              </div>
 
-                                              <!-- ADJUSTMENT -->
-                                              <div class="col-md-12">
-                                                <label class="form-label">Quantity Adjustment</label>
-                                                <input value="<?= $row['adjustment_qty'] ?>" type="text" name="adjustment_qty" class="form-control" required>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                          <button type="submit" class="btn btn-info">Update Product</button>
-                                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                        </div>
-                                      </form>
-                                    </div>
-                                  </div>
-                                </div>
-                                <!-- END OF EDIT ITEM MODAL -->
                               <?php endforeach; ?>
                             <?php else: ?>
                               <tr>
@@ -244,7 +201,52 @@ include 'Get/fetch_products.php';
                           </tbody>
 
                         </table>
+                        <!-- Edit ITEM Modal -->
+                        <?php foreach ($result as $row): ?>
+                          <div class="modal fade" id="editModal<?= $row['adj_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-md">
+                              <div class="modal-content">
+                                <form id="editItemForm" action="update_adj_desc" method="POST" enctype="multipart/form-data">
+                                  <input type="hidden" id="edit_item_id" name="id" value="<?= $row['adj_id'] ?>">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="editItemModalLabel">Edit Product</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <div class="container-fluid">
+                                      <div class="row g-3">
+                                        <div class="col-md-12">
+                                          <label class="form-label">Name</label>
+                                          <input type="text" value="<?= $row['name'] ?>" name="name" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-12">
+                                          <label class="form-label">Reason</label>
+                                          <textarea name="reason" class="form-control" rows="3"><?= $row['reason'] ?></textarea>
+                                        </div>
+                                        <!-- PREVIOUS QUANTITY -->
+                                        <div class="col-md-12">
+                                          <label class="form-label">Previous Quantity</label>
+                                          <input value="<?= $row['previous_qty'] ?>" name="previous_qty" type="text" id="productQty" class="form-control" readonly>
+                                        </div>
 
+                                        <!-- ADJUSTMENT -->
+                                        <div class="col-md-12">
+                                          <label class="form-label">Quantity Adjustment</label>
+                                          <input value="<?= $row['adjustment_qty'] ?>" type="text" name="adjustment_qty" class="form-control" required>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="submit" class="btn btn-info">Update Product</button>
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        <?php endforeach; ?>
+                        <!-- END OF EDIT ITEM MODAL -->
                         <!-- Pagination -->
                         <nav>
                           <ul class="pagination justify-content-center">

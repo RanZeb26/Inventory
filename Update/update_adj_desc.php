@@ -18,15 +18,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Update all product details
     $stmt = $pdo->prepare("UPDATE products_adjustments SET reason=?, adjustment_qty=?, previous_qty=? WHERE adj_id=?");
-    $newQty = $adjustment_qty - $productqty;
+    $newQty = $adjustment_qty - $previous_qty;
     $success = $stmt->execute([
         $reason,
         $newQty,
         $previous_qty,
         $id
+
     ]);
-
-
     if ($success) {
         $error = "Item updated successfully!";
         header("Location: QuantityAdjustment?success=" . urlencode($error));

@@ -159,8 +159,8 @@ RewriteRule ^admin/approve$ admin_salemtec/update/update_prapprove.php [L]
 
 RewriteRule ^delete_item$ Delete/delete_item.php [L]
 RewriteRule ^delete_adj_desc$ Delete/delete_adj_desc.php [L]
+RewriteRule ^delete_customer$ Delete/delete_customer.php [L]
 
-RewriteRule ^admin/delete_list$ admin_salemtec/delete/delete_jobsite_item.php [L]
 RewriteRule ^admin/delete_prlis$ admin_salemtec/delete/delete_prlist.php [L]
 RewriteRule ^admin/delete_pr$ admin_salemtec/delete/delete_prinv.php [L]
 #####################################

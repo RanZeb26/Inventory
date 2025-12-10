@@ -120,7 +120,7 @@ include 'Get/fetch_products.php';
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                              Are you sure you want to delete this product?
+                              Are you sure you want to delete this customer?
                               <input type="hidden" id="delete_id">
                             </div>
                             <div class="modal-footer">
@@ -159,7 +159,9 @@ include 'Get/fetch_products.php';
                                     <div class="fw-bold"> <?= $row['phone'] ?></div>
                                   </td>
                                   <td><?= htmlspecialchars($row['address']) ?></td>
-                                  <td><?= htmlspecialchars($row['status']) ?></td>
+                                  <td><span style="color:white;" class="badge bg-<?= $row['status'] == 'Active' ? 'success' : 'danger' ?>">
+                                      <?= $row['status'] ?>
+                                    </span></td>
                                   <td>
                                     <!-- EDIT BUTTON -->
                                     <button class="btn btn-inverse-warning btn-icon mr-2 edit-btn"
@@ -171,56 +173,14 @@ include 'Get/fetch_products.php';
                                       data-bs-toggle="modal" data-bs-target="#viewModal<?= $row['adj_id'] ?>" onclick="redirectToList(<?= $row['adj_id'] ?>)">
                                       <i class="typcn typcn-eye-outline"></i>
                                     </button>-->
+                                    <!-- DELETE BUTTON -->
                                     <button class="btn btn-inverse-danger btn-icon open-delete-modal"
-                                      data-adj_id="<?= $row['customer_id'] ?>">
+                                      data-customer_id="<?= $row['customer_id'] ?>">
                                       <i class="typcn typcn-delete-outline"></i>
                                     </button>
                                   </td>
                                 </tr>
-                                <!-- Edit ITEM Modal -->
-                                <div class="modal fade" id="editModal<?= $row['adj_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-                                  <div class="modal-dialog modal-md">
-                                    <div class="modal-content">
-                                      <form id="editItemForm" action="update_adj_desc" method="POST" enctype="multipart/form-data">
-                                        <input type="hidden" id="edit_item_id" name="id" value="<?= $row['adj_id'] ?>">
-                                        <div class="modal-header">
-                                          <h5 class="modal-title" id="editItemModalLabel">Edit Product</h5>
-                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                          <div class="container-fluid">
-                                            <div class="row g-3">
-                                              <div class="col-md-12">
-                                                <label class="form-label">Name</label>
-                                                <input type="text" value="<?= $row['name'] ?>" name="name" class="form-control" required>
-                                              </div>
-                                              <div class="col-md-12">
-                                                <label class="form-label">Reason</label>
-                                                <textarea name="reason" class="form-control" rows="3"><?= $row['reason'] ?></textarea>
-                                              </div>
-                                              <!-- PREVIOUS QUANTITY -->
-                                              <div class="col-md-12">
-                                                <label class="form-label">Previous Quantity</label>
-                                                <input value="<?= $row['previous_qty'] ?>" name="previous_qty" type="text" id="productQty" class="form-control" readonly>
-                                              </div>
 
-                                              <!-- ADJUSTMENT -->
-                                              <div class="col-md-12">
-                                                <label class="form-label">Quantity Adjustment</label>
-                                                <input value="<?= $row['adjustment_qty'] ?>" type="text" name="adjustment_qty" class="form-control" required>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                          <button type="submit" class="btn btn-info">Update Product</button>
-                                          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                        </div>
-                                      </form>
-                                    </div>
-                                  </div>
-                                </div>
-                                <!-- END OF EDIT ITEM MODAL -->
                               <?php endforeach; ?>
                             <?php else: ?>
                               <tr>
@@ -231,7 +191,66 @@ include 'Get/fetch_products.php';
                           </tbody>
 
                         </table>
-
+                        <!-- Edit ITEM Modal -->
+                        <?php foreach ($result as $row): ?>
+                          <div class="modal fade" id="editModal<?= $row['customer_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-md">
+                              <div class="modal-content">
+                                <form id="editItemForm" action="update_adj_desc" method="POST" enctype="multipart/form-data">
+                                  <input type="hidden" id="edit_item_id" name="id" value="<?= $row['customer_id'] ?>">
+                                  <div class="modal-header">
+                                    <h5 class="modal-title" id="editItemModalLabel">Edit Customer</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                  </div>
+                                  <div class="modal-body">
+                                    <div class="container-fluid">
+                                      <div class="row g-3">
+                                        <div class="col-md-12">
+                                          <label class="form-label">Customer Name</label>
+                                          <input type="text" value="<?= $row['customer_name'] ?>" name="name" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-12">
+                                          <label class="form-label">Company Name</label>
+                                          <input type="text" value="<?= $row['company_name'] ?>" name="company_name" class="form-control" required>
+                                        </div>
+                                        <div class="col-md-12">
+                                          <label class="form-label">Email Address</label>
+                                          <input type="email" value="<?= $row['email'] ?>" name="email" class="form-control">
+                                        </div>
+                                        <div class="col-md-12">
+                                          <label class="form-label">Phone Number</label>
+                                          <input type="tel" value="<?= $row['phone'] ?>" name="phone" class="form-control">
+                                        </div>
+                                        <div class="col-md-12">
+                                          <label class="form-label">Address</label>
+                                          <textarea name="address" class="form-control" rows="3"><?= $row['address'] ?></textarea>
+                                        </div>
+                                                                            <div class="col-md-12">
+                                      <div class="form-group">
+                                        <label>File upload</label>
+                                        <input type="file" name="image" class="file-upload-default">
+                                        <div class="input-group col-xs-12">
+                                          <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
+                                          <span class="input-group-append">
+                                            <button class="file-upload-browse btn btn-light" type="button">Upload</button>
+                                          </span>
+                                        </div>
+                                        <small class="text-muted">Current: <?= $row['image'] ?></small>
+                                      </div>
+                                    </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="submit" class="btn btn-info">Update Product</button>
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        <?php endforeach; ?>
+                        <!-- END OF EDIT ITEM MODAL -->
                         <!-- Pagination -->
                         <nav>
                           <ul class="pagination justify-content-center">
@@ -273,40 +292,36 @@ include 'Get/fetch_products.php';
   <script src="js/settings.js"></script>
   <script src="js/file-upload.js"></script>
   <script>
-    document.getElementById('productSelect').addEventListener('change', function() {
-      let qty = this.options[this.selectedIndex].getAttribute('data-qty');
-      let name = this.options[this.selectedIndex].getAttribute('data-name');
-
-      document.getElementById('productQty').value = qty;
-      document.getElementById('itemName').value = name;
-    });
-
     $(document).ready(function() {
       let deleteId = null;
       let deleteModalEl = document.getElementById('deleteModal');
 
       // Open modal and set ID
       $(document).on("click", ".open-delete-modal", function() {
-        deleteId = $(this).data("adj_id"); // ✅ matches attribute
+        deleteId = $(this).data("customer_id"); // ✅ matches attribute
+
         $("#delete_id").val(deleteId);
         $("#deleteModal").modal("show");
+
       });
 
       // Confirm deletion
       $("#confirmDeleteBtn").on("click", function() {
+                console.log("Deleting customer ID: " + deleteId); // Debugging
         if (deleteId) {
           $.ajax({
-            url: "delete_adj_desc", // ✅ full filename
+            url: "delete_customer", // ✅ full filename
             type: "POST",
             data: {
-              adj_id: deleteId
+              
+              customer_id: deleteId
             }, // ✅ matches PHP
             success: function(response) {
               if (response.status === "success") {
                 $("#deleteModal").modal("hide");
                 location.reload();
               } else {
-                alert(response.message || "Failed to delete product.");
+                alert(response.message || "Failed to delete customer.");
               }
             },
             error: function(xhr) {
