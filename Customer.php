@@ -196,8 +196,8 @@ include 'Get/fetch_products.php';
                           <div class="modal fade" id="editModal<?= $row['customer_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-md">
                               <div class="modal-content">
-                                <form id="editItemForm" action="update_adj_desc" method="POST" enctype="multipart/form-data">
-                                  <input type="hidden" id="edit_item_id" name="id" value="<?= $row['customer_id'] ?>">
+                                <form id="editItemForm" action="Update_Customer" method="POST" enctype="multipart/form-data">
+                                  <input type="hidden" id="edit_item_id" name="customer_id" value="<?= $row['customer_id'] ?>">
                                   <div class="modal-header">
                                     <h5 class="modal-title" id="editItemModalLabel">Edit Customer</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -207,7 +207,7 @@ include 'Get/fetch_products.php';
                                       <div class="row g-3">
                                         <div class="col-md-12">
                                           <label class="form-label">Customer Name</label>
-                                          <input type="text" value="<?= $row['customer_name'] ?>" name="name" class="form-control" required>
+                                          <input type="text" value="<?= $row['customer_name'] ?>" name="customer_name" class="form-control" required>
                                         </div>
                                         <div class="col-md-12">
                                           <label class="form-label">Company Name</label>
