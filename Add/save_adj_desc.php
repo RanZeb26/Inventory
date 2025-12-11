@@ -40,9 +40,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // INSERT adjustment
         $stmt = $pdo->prepare("
             INSERT INTO products_adjustments 
-                (product_id, reason, adjustment_qty, previous_qty)
+                (product_id, reason, adjustment_qty, previous_qty,new_qty, adjusted_by)
             VALUES 
-                (:product_id, :reason, :adjustment_qty, :previous_qty)
+                (:product_id, :reason, :adjustment_qty, :previous_qty, :new_qty, :adjusted_by)
         ");
         // Update main item table
         $update = $pdo->prepare("UPDATE products SET quantity = ? WHERE product_id = ?");
@@ -54,6 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ":reason" => $reason,
             ":adjustment_qty" => $adjustment_qty,
             ":previous_qty" => $previous_qty,
+            ":new_qty" => $newQty,
+            ":adjusted_by" => $user_id
         ]);
 
         $success = "Quantity adjustment recorded successfully!";

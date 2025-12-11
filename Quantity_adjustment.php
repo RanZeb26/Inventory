@@ -207,7 +207,8 @@ include 'Get/fetch_products.php';
                             <div class="modal-dialog modal-md">
                               <div class="modal-content">
                                 <form id="editItemForm" action="update_adj_desc" method="POST" enctype="multipart/form-data">
-                                  <input type="hidden" id="edit_item_id" name="id" value="<?= $row['adj_id'] ?>">
+                                  <input type="text" id="edit_item_id" name="adj_id" value="<?= $row['adj_id'] ?>">
+                                  <input type="text" name="product_id" value="<?= $row['product_id'] ?>">
                                   <div class="modal-header">
                                     <h5 class="modal-title" id="editItemModalLabel">Edit Product</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

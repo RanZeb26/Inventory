@@ -12,6 +12,6 @@ try {
     ]);
 } catch (PDOException $e) {
     error_log("Database connection error: " . $e->getMessage());
-    die("Database connection failed. Please contact support.");
+    die("Database connection failed. Please contact salemtec for support.");
 }
 ?>

@@ -60,12 +60,13 @@
               <i class="typcn typcn-dropbox menu-icon"></i>
               <span class="menu-title">Products <span class="badge badge-primary ml-3">New</span></span>
             </a>
-          </li>-->
+          </li>
         <li class="nav-item">
             <a class="nav-link" href="Purchases">
               <i class="typcn typcn-shopping-cart menu-icon"></i>
               <span class="menu-title">Purchases</span>
             </a>
+          </li>-->
             <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#sales" aria-expanded="false" aria-controls="sales">
               <i class="typcn typcn-briefcase menu-icon"></i>
