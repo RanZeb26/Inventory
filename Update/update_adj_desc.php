@@ -8,6 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $previous_qty = trim($_POST['previous_qty']);
     $adjustment_qty = trim($_POST['adjustment_qty']);
     $adj_id = trim($_POST['adj_id']);
+    $productID= trim($_POST['productID']);
     $user_id = $_SESSION['id'] ?? null;
 
     // Fetch product name
