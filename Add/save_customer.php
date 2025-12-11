@@ -35,7 +35,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: Customer?error=" . urlencode($error));
             exit();
         }
-
+        if (isset($_FILES['image']) && $_FILES['image']['size'] > 0) {
+            $targetDir = "images/";
+            $image = $targetDir . basename($_FILES["image"]["name"]);
+            move_uploaded_file($_FILES["image"]["tmp_name"], $image);
         // INSERT adjustment
         $stmt = $pdo->prepare("
             INSERT INTO customers 
@@ -51,10 +54,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             ":address" => $address,
             ":user_id" => $user_id,
         ]);
-
         $success = "Customer recorded successfully!";
         header("Location: Customer?success=" . urlencode($success));
         exit();
+        } else {
+            // ✅ Insert the new item if no image is found
+            $stmt = $pdo->prepare("
+                INSERT INTO customers 
+                    (customer_name, company_name, email, phone, address, added_by)
+                VALUES 
+                    (:customer_name, :company_name, :email, :phone, :address, :user_id)
+            ");
+            $stmt->execute([
+                ":customer_name" => $customer_name,
+                ":company_name" => $company_name,
+                ":email" => $email,
+                ":phone" => $phone,
+                ":address" => $address,
+                ":user_id" => $user_id,
+            ]);
+           
+        }
     } catch (PDOException $e) {
         error_log("Database error: " . $e->getMessage());
         echo json_encode([
