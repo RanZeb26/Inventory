@@ -1,44 +1,54 @@
 <?php
+session_start();
 include "../config/db.php";
 header("Content-Type: application/json");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = trim($_POST['name']);
-    $reason = trim($_POST['reason']);
-    $previous_qty = trim($_POST['previous_qty']);
-    $adjustment_qty = trim($_POST['adjustment_qty']);
-    $adj_id = trim($_POST['adj_id']);
-    $productID= trim($_POST['productID']);
-    $user_id = $_SESSION['id'] ?? null;
 
-    // Fetch product name
-    $stmt = $pdo->prepare("SELECT i.product_id, i.adjustment_qty, a.quantity FROM products a INNER JOIN products_adjustments i ON a.product_id = i.product_id WHERE i.adj_id = ?");
-    $stmt->execute([$id]);
+    $reason          = trim($_POST['reason']);
+    $previous_qty    = (int) trim($_POST['previous_qty']);
+    $adjustment_qty  = (int) trim($_POST['adjustment_qty']);
+    $adj_id          = trim($_POST['adj_id']);
+    $productID       = trim($_POST['productID']);
+    $user_id         = $_SESSION['id'] ?? null;
+
+    // Get current quantity
+    $stmt = $pdo->prepare("SELECT quantity FROM products WHERE product_id = ?");
+    $stmt->execute([$productID]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    $productID = $row['product_id'];
-    $productqty = $row['adjustment_qty'];
-    $current_qty = $row['quantity'];
+    if (!$row) {
+        echo json_encode(["status" => "error", "message" => "Product not found."]);
+        exit;
+    }
 
-    // Update main item table
-    $update = $pdo->prepare("UPDATE products SET quantity = ? WHERE product_id = ?");
+    $current_qty = (int)$row['quantity'];
+
+    // Compute new quantity
     $newQty = $previous_qty + $adjustment_qty;
+
+    // Update products inventory
+    $update = $pdo->prepare("UPDATE products SET quantity = ? WHERE product_id = ?");
     $update->execute([$newQty, $productID]);
 
-    // Update all product details
-    $stmt = $pdo->prepare("UPDATE products_adjustments SET reason=?, adjustment_qty=?, previous_qty=? WHERE adj_id=?");
-    $newQty = $previous_qty + $adjustment_qty;
+    // Update adjustment record
+    $stmt = $pdo->prepare("
+        UPDATE products_adjustments
+        SET reason = ?, adjustment_qty = ?, previous_qty = ?
+        WHERE adj_id = ?
+    ");
+
     $success = $stmt->execute([
         $reason,
-        $newQty,
-        $previous_qty,
+        $adjustment_qty,   // correct value
+        $previous_qty,     // correct previous qty
         $adj_id
-
     ]);
+
     if ($success) {
-        $error = "Item updated successfully!";
-        header("Location: QuantityAdjustment?success=" . urlencode($error));
+        header("Location: QuantityAdjustment?success=" . urlencode("Item updated successfully!"));
     } else {
         echo json_encode(["status" => "error", "message" => "Failed to update product."]);
     }
 }
+?>
