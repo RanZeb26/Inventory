@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $image = $oldImage;
     // Handle image upload
     if (isset($_FILES['image']) && $_FILES['image']['size'] > 0) {
-        $targetDir = "images/";
+        $targetDir = "../images/";
         if (!is_dir($targetDir)) {
             mkdir($targetDir, 0755, true);
         }
@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 if (!empty($oldImage) && file_exists($oldImage)) {
                     unlink($oldImage);
                 }
-                $image = $targetFile;
+                $image = "images/" . $fileName;
             } else {
                 echo json_encode(["status" => "error", "message" => "Failed to upload new image."]);
                 exit;

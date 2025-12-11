@@ -147,7 +147,7 @@ include 'Get/fetch_products.php';
                               <?php foreach ($result as $row): ?>
                                 <tr>
                                   <td class="d-flex align-items-center">
-                                    <img src="<?= $row['image'] ?>" alt="img" class="me-3" width="40" height="40" style="object-fit:cover; border-radius:5px; padding:2px; border:1px solid #ccc;">
+                                    <img src="<?= htmlspecialchars($row['image']) ?>" alt="img" class="me-3" width="40" height="40" style="object-fit:cover; border-radius:5px; padding:2px; border:1px solid #ccc;">
                                     <div>
                                       <div class="fw-bold" style="font-weight: 900;"> <?= $row['company_name'] ?></div>
                                       <div class="fw-bold"> <?= $row['customer_name'] ?></div>
