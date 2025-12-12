@@ -76,7 +76,7 @@
             <div class="collapse" id="sales">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="Customer">Customer</a></li>
-                <li class="nav-item"> <a class="nav-link" href="Invoice.php">Invoice</a></li>
+                <li class="nav-item"> <a class="nav-link" href="Invoice">Invoice</a></li>
               </ul>
             </div>
           </li>

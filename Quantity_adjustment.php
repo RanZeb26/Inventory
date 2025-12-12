@@ -38,7 +38,7 @@ include 'Get/fetch_products.php';
                       <!--<a href="Adjustment" class="btn btn-primary mb-3"><< Back to Adjustment</a>-->
                       <div class="d-flex justify-content-end align-items-center mb-3">
                         <div class="input-group">
-                          <form method="GET" class="mb-3 d-flex">
+                          <form method="GET" class="mb-3 d-flex" >
                             <input type="text" name="search" class="form-control me-2"
                               placeholder="Search by Name" value="<?= htmlspecialchars($search) ?>">
                             <button class="btn btn-light"><i class="typcn typcn-zoom"></i></button>
@@ -108,8 +108,8 @@ include 'Get/fetch_products.php';
                               </div>
 
                               <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary">Save Adjustment</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-info">Save Adjustment</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                               </div>
 
                             </form>
@@ -133,8 +133,9 @@ include 'Get/fetch_products.php';
                               <input type="hidden" id="delete_id">
                             </div>
                             <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                              <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
+                              <button type="button" id="confirmDeleteBtn" class="btn btn-info">Delete</button>
+                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                              
                             </div>
                           </div>
                         </div>

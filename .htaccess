@@ -74,6 +74,10 @@ RewriteRule ^admin/job$ admin_salemtec/js_function/job.js [L]
 
 RewriteRule ^Customer$ Customer.php [L]
 
+# Admin Invoices
+
+RewriteRule ^Invoice$ Invoice.php [L]
+
 # Admin jobsite LIST
 
 RewriteRule ^list$ Qty_Adj_list.php [L]

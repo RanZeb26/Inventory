@@ -443,8 +443,8 @@ include 'Get/fetch_category_item.php';
                                         <input type="hidden" id="delete_id">
                                       </div>
                                       <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                        <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
+                                        <button type="button" id="confirmDeleteBtn" class="btn btn-info">Delete</button>
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button> 
                                       </div>
                                     </div>
                                   </div>

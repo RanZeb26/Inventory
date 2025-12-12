@@ -124,8 +124,8 @@ include 'Get/fetch_products.php';
                               <input type="hidden" id="delete_id">
                             </div>
                             <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                              <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
+                              <button type="button" id="confirmDeleteBtn" class="btn btn-info">Delete</button>
+                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                             </div>
                           </div>
                         </div>
@@ -225,19 +225,19 @@ include 'Get/fetch_products.php';
                                           <label class="form-label">Address</label>
                                           <textarea name="address" class="form-control" rows="3"><?= $row['address'] ?></textarea>
                                         </div>
-                                                                            <div class="col-md-12">
-                                      <div class="form-group">
-                                        <label>File upload</label>
-                                        <input type="file" name="image" class="file-upload-default">
-                                        <div class="input-group col-xs-12">
-                                          <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
-                                          <span class="input-group-append">
-                                            <button class="file-upload-browse btn btn-light" type="button">Upload</button>
-                                          </span>
+                                        <div class="col-md-12">
+                                          <div class="form-group">
+                                            <label>File upload</label>
+                                            <input type="file" name="image" class="file-upload-default">
+                                            <div class="input-group col-xs-12">
+                                              <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
+                                              <span class="input-group-append">
+                                                <button class="file-upload-browse btn btn-light" type="button">Upload</button>
+                                              </span>
+                                            </div>
+                                            <small class="text-muted">Current: <?= $row['image'] ?></small>
+                                          </div>
                                         </div>
-                                        <small class="text-muted">Current: <?= $row['image'] ?></small>
-                                      </div>
-                                    </div>
                                       </div>
                                     </div>
                                   </div>
@@ -307,13 +307,13 @@ include 'Get/fetch_products.php';
 
       // Confirm deletion
       $("#confirmDeleteBtn").on("click", function() {
-                console.log("Deleting customer ID: " + deleteId); // Debugging
+        console.log("Deleting customer ID: " + deleteId); // Debugging
         if (deleteId) {
           $.ajax({
             url: "delete_customer", // ✅ full filename
             type: "POST",
             data: {
-              
+
               customer_id: deleteId
             }, // ✅ matches PHP
             success: function(response) {
