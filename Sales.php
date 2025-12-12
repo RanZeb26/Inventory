@@ -156,7 +156,7 @@ include 'Get/fetch_list_customer.php';
                     <div class="card p-3">
                       <h5>Item Table</h5>
 
-                      <table class="table table-bordered align-middle">
+                      <table class="table table-bordered align-middle border rounded p-3 bg-light">
                         <thead>
                           <tr>
                             <th style="width: 30%">Item Details</th>
@@ -444,7 +444,7 @@ document.addEventListener("click", function (e) {
     // Add Row
     document.getElementById("addRow").onclick = function() {
       let row = document.querySelector("tbody tr").cloneNode(true);
-      row.querySelectorAll("input").forEach(i => i.value = 0);
+      row.querySelectorAll("input").forEach(i => i.value = "");
       document.getElementById("itemRows").appendChild(row);
     };
 

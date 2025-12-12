@@ -160,9 +160,9 @@ include 'Get/fetch_list_customer.php';
                     </div>
 
                     <div class="card p-3">
-                      <h5>Item Table</h5>
+                      <h4>Item Table</h4>
 
-                      <table class="table table-bordered align-middle">
+                      <table class="table table-bordered align-middle border rounded p-3 bg-light">
                         <thead>
                           <tr>
                             <th style="width: 30%">Item Details</th>
@@ -207,9 +207,11 @@ include 'Get/fetch_list_customer.php';
                       </table>
 
                       <button id="addRow" class="btn btn-info btn-sm">+ Add New Item</button>
+                      <!-- TOTALS -->
                       <div class="row mt-4">
+                        <!-- LEFT BLANK -->
                         <div class="col-md-6"></div>
-
+                        <!-- Right TOTALS -->
                         <div class="col-md-6">
                           <div class="border rounded p-3 bg-light">
 
@@ -244,8 +246,9 @@ include 'Get/fetch_list_customer.php';
 
                           </div>
                         </div>
+                        <!-- END Right TOTALS -->
                       </div>
-
+                      <!-- END TOTALS -->
                     </div>
 
                   </div>
