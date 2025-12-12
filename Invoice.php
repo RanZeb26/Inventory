@@ -80,7 +80,7 @@ include 'Get/fetch_list_customer.php';
                               <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">+ New Invoice</button>
                             </div>
                           </div>
-                          <div id="listContainer"></div>
+                          <div class="left-list bg-white border-end" id="listContainer" style="position: sticky; overflow-y: auto; height: 80vh;"></div>
                         </div>
                         <div class="col-md-7">
                           <div id="previewContainer" class="text-center text-muted mt-5">
@@ -148,6 +148,12 @@ include 'Get/fetch_list_customer.php';
                       <label>Company Name</label>
                       <input type="text" class="form-control" name="company_name" id="companyName" readonly>
                     </div>
+                    <!-- Due DATE -->
+                    <div class="col-md-4">
+                      <label>Due Date</label>
+                      <input type="date" class="form-control" name="due_date">
+                    </div>
+                    <!-- SUBJECT -->
                     <div class="col-md-8">
                       <label>Subject</label>
                       <input type="text" class="form-control" name="subject" required>
@@ -327,68 +333,68 @@ include 'Get/fetch_list_customer.php';
       document.getElementById('customerName').value = customername;
       document.getElementById('companyName').value = companyname;
     });
-let items = [];
+    let items = [];
 
-// Load items from database
-function loadItems() {
-  fetch("fetch_product_price.php")
-    .then(res => res.json())
-    .then(data => {
-      items = data;   // Save globally
-      console.log("Items loaded:", items);
-    })
-    .catch(err => console.error(err));
-}
+    // Load items from database
+    function loadItems() {
+      fetch("fetch_product_price.php")
+        .then(res => res.json())
+        .then(data => {
+          items = data; // Save globally
+          console.log("Items loaded:", items);
+        })
+        .catch(err => console.error(err));
+    }
 
-loadItems(); // Call on page load
-document.addEventListener("input", function (e) {
-  if (e.target.classList.contains("item-input")) {
+    loadItems(); // Call on page load
+    document.addEventListener("input", function(e) {
+      if (e.target.classList.contains("item-input")) {
 
-    const wrapper = e.target.closest(".item-dropdown-wrapper");
-    const dropdown = wrapper.querySelector(".item-dropdown");
-    const search = e.target.value.toLowerCase();
+        const wrapper = e.target.closest(".item-dropdown-wrapper");
+        const dropdown = wrapper.querySelector(".item-dropdown");
+        const search = e.target.value.toLowerCase();
 
-    // Filter items
-    const filtered = items.filter(item =>
-      item.name.toLowerCase().includes(search)
-    );
+        // Filter items
+        const filtered = items.filter(item =>
+          item.name.toLowerCase().includes(search)
+        );
 
-    // Create dropdown list
-    dropdown.innerHTML = filtered.map(i => `
+        // Create dropdown list
+        dropdown.innerHTML = filtered.map(i => `
       <button class="dropdown-item select-item" data-name="${i.name}" data-rate="${i.selling_price}">
         ${i.name} <span class="text-muted float-end">₱${i.selling_price}</span>
       </button>
     `).join("");
 
-    dropdown.classList.add("show");
-  }
-});
-document.addEventListener("click", function (e) {
-  if (e.target.classList.contains("select-item")) {
+        dropdown.classList.add("show");
+      }
+    });
+    document.addEventListener("click", function(e) {
+      if (e.target.classList.contains("select-item")) {
 
-    const name = e.target.dataset.name;
-    const rate = e.target.dataset.rate;
+        const name = e.target.dataset.name;
+        const rate = e.target.dataset.rate;
 
-    const wrapper = e.target.closest(".item-dropdown-wrapper");
-    wrapper.querySelector(".item-input").value = name;
+        const wrapper = e.target.closest(".item-dropdown-wrapper");
+        wrapper.querySelector(".item-input").value = name;
 
-    // Insert rate into the "rate" column
-    const row = wrapper.closest("tr");
-    row.querySelector(".rate").value = rate;
+        // Insert rate into the "rate" column
+        const row = wrapper.closest("tr");
+        row.querySelector(".rate").value = rate;
 
-    // Recompute totals
-    computeRow(row);
+        // Recompute totals
+        computeRow(row);
 
-    // Hide dropdown
-    wrapper.querySelector(".item-dropdown").classList.remove("show");
-  }
-});
+        // Hide dropdown
+        wrapper.querySelector(".item-dropdown").classList.remove("show");
+      }
+    });
     // Recompute row on input change
-    document.addEventListener("input", function (e) {
+    document.addEventListener("input", function(e) {
       if (e.target.classList.contains("qty") ||
-          e.target.classList.contains("rate") ||
-          e.target.classList.contains("discount") ||
-          e.target.classList.contains("tax")) {
+        e.target.classList.contains("rate") ||
+        e.target.classList.contains("discount") ||
+        e.target.classList.contains("tax")) {
         const row = e.target.closest("tr");
         computeRow(row);
       }

@@ -1,14 +1,14 @@
 <?php
 session_start();
 if (!isset($_SESSION['logged_in'])) {
-    header("Location: login");
-    exit;
+  header("Location: login");
+  exit;
 }
 include 'config/db.php';
 include 'Get/fetch_sales.php';
-include 'Get/fetch_category_item.php';
+include 'Get/fetch_list_customer.php';
 ?>
-  <!-- Required for 💰 Sales
+<!-- Required for 💰 Sales
 
         *Record customer sales
 
@@ -17,6 +17,7 @@ include 'Get/fetch_category_item.php';
         *Track stock deduction upon sale -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -27,6 +28,7 @@ include 'Get/fetch_category_item.php';
   <link rel="stylesheet" href="css/product.css">
   <link rel="shortcut icon" href="images/favicon.png" />
 </head>
+
 <body>
   <div class="container-scroller">
     <!--Navbar-->
@@ -38,22 +40,22 @@ include 'Get/fetch_category_item.php';
         <div id="theme-settings" class="settings-panel">
           <i class="settings-close typcn typcn-delete-outline"></i>
           <p class="settings-heading">Sidebar Settings</p>
-           <nav>
-        <ul class="nav">
-          <li class="sidesetings col-12">
-            <a class="nav-link hover:text-blue-500 dark:hover:text-blue-300" href="#">
-              <!--<i class="typcn typcn-device-desktop menu-icon"></i>-->
-              <span data-bs-toggle="modal" data-bs-target="#add_category_Modal">Add Category</span>
-            </a>
-          </li>
-          <li class="sidesetings col-12">
-            <a class="nav-link" href="Products">
-              <!--<i class="typcn typcn-dropbox menu-icon"></i>-->
-              <span class="menu-title">Add Unit</span>
-            </a>
-          </li>
-        </ul>
-           </nav>
+          <nav>
+            <ul class="nav">
+              <li class="sidesetings col-12">
+                <a class="nav-link hover:text-blue-500 dark:hover:text-blue-300" href="#">
+                  <!--<i class="typcn typcn-device-desktop menu-icon"></i>-->
+                  <span data-bs-toggle="modal" data-bs-target="#add_category_Modal">Add Category</span>
+                </a>
+              </li>
+              <li class="sidesetings col-12">
+                <a class="nav-link" href="Products">
+                  <!--<i class="typcn typcn-dropbox menu-icon"></i>-->
+                  <span class="menu-title">Add Unit</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
       <!--Sidebar-->
@@ -67,605 +69,25 @@ include 'Get/fetch_category_item.php';
                 <div class="col-lg-12 d-flex grid-margin stretch-card">
                   <div class="card">
                     <div class="card-body">
-                      <h4 class="card-title">Sales</h4>
                       <div id="editResponseMessage"></div>
-                      <div class="d-flex justify-content-end align-items-center mb-3">
-                        <div class="input-group">
-                          <form class="d-flex" method="GET">
-                            <input name="search" value="<?= $search ?>" class="form-control me-2" type="search" placeholder="Search...">
-                            <button class="btn btn-light"><i class="typcn typcn-zoom"></i></button>
-                          </form>
-                          <!--<input type="text" class="form-control" placeholder="Search for...">
-                          <button class="btn btn-light" type="button"><i class="typcn typcn-zoom"></i></button>-->
-                        </div>
-                          <div class="control-form col-md-3">
-                        <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#add_item_Modal">
-                          <i class="typcn typcn-plus-outline"></i> Add Sales
-                        </button>
-                        <!--
-                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#qtyModal">
-                          <i class="typcn typcn-upload-outline"></i> Qty Adjustment
-                        </button>-->
-                      </div>
-                      </div>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <div class="d-flex justify-content-between mb-3">
+                            <h3 id="listTitle">Sales</h3>
 
-<!-- QTY adjustment Modal -->
-<div class="modal fade" id="qtyModal" tabindex="-1" role="dialog" aria-labelledby="itemModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="itemModalLabel">Item Selection</h5>
-                <button type="button" class="btn-close text-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <!-- Modal Body -->
-            <div class="modal-body">
-
-                <!-- Search Bar -->
-                <div class="mb-3">
-                    <input type="text" id="search" class="form-control" placeholder="Search items...">
-                </div>
-
-                <!-- Available Items -->
-                <div class="card mb-4">
-                    <div class="card-header bg-light"><strong>Available Items</strong></div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover" id="availableItemsTable">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>Item Code</th>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Quantity</th>
-                                        <th>Item Cost</th>
-                                        <th>Total Cost</th>
-                                        <th>Category</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="itemList">
-                                    <?php foreach ($items as $item): ?>
-                                        <tr>
-                                            <td><?= $item['sku'] ?></td>
-                                            <td><?= $item['name'] ?></td>
-                                            <td><?= $item['description'] ?></td>
-                                            <td><?= $item['quantity'] ?></td>
-                                            <td><?= number_format($item['cost_price'], 2) ?> Php</td>
-                                            <td><?= number_format($item['total_cost'], 2) ?> Php</td>
-                                            <td><?= $item['category'] ?></td>
-                                            <td>
-                                                <button class="btn btn-primary addItem"
-                                                    data-id="<?= $item['id'] ?>"
-                                                    data-sku="<?= $item['sku'] ?>"
-                                                    data-name="<?= $item['name'] ?>"
-                                                    data-description="<?= $item['description'] ?>"
-                                                    data-cost="<?= $item['cost_price'] ?>"
-                                                    data-category="<?= $item['category'] ?>">
-                                                    Select
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Selected Items -->
-                <div class="card">
-                    <div class="card-header bg-light"><strong>Selected Items</strong></div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table id="selectedItemsTable" class="table table-hover">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>Item Code</th>
-                                        <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Quantity</th>
-                                        <th>Item Cost</th>
-                                        <th>Total Cost</th>
-                                        <th>Category</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- Dynamically filled via JS -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                    <i class="fas fa-times"></i> Close
-                </button>
-                <button type="button" class="btn btn-success" id="saveToDatabase">
-                    <i class="fas fa-save"></i> Save
-                </button>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<!-- ADD ITEM Modal -->
-<div class="modal fade" id="add_item_Modal" tabindex="-1" aria-labelledby="add_item_ModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <form id="itemForm" action="add_item" method="POST" enctype="multipart/form-data">
-        <div class="modal-header">
-          <h5 class="modal-title" id="add_item_ModalLabel">Add Sales</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="container-fluid">
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label">Product SKU / Code</label>
-                <input type="text" name="sku" class="form-control" required>
-              </div>
-              <div class="col-md-6">
-                <label class="form-label">Barcode</label>
-                <input type="text" name="barcode" class="form-control">
-              </div>
-              <div class="col-md-12">
-                <label class="form-label">Product Name</label>
-                <input type="text" name="name" class="form-control" required>
-              </div>
-              <div class="col-md-6">
-                                      <label class="form-label">Category</label>
-                                      <select name="category" class="form-control">
-                                        <option value="" disabled selected>Select Category</option>
-                                         <?php foreach ($category as $categories): ?>
-                                          <option value="<?= $categories['id'] ?>"><?= htmlspecialchars($categories['cat_name']) ?></option>
-                                          <?php endforeach; ?>
-                                      </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Brand</label>
-                                      <input type="text" name="brand" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Unit</label>
-                                      <input type="text" name="unit" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                      <div class="form-group">
-                                        <label for="exampleSelectGender">Status</label>
-                                          <select class="form-control" id="exampleSelectGender" name="status">
-                                            <option>Active</option>
-                                            <option>Inactive</option>
-                                          </select>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Cost Price</label>
-                                      <input type="number" name="cost_price" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Selling Price</label>
-                                      <input type="number" name="selling_price" class="form-control">
-                                    </div>
-                                    <div class="col-md-12">
-                                      <label class="form-label">Reorder Level</label>
-                                      <input type="number" name="stock_level" class="form-control">
-                                    </div>
-                                    <div class="col-md-12">
-                                      <div class="form-group">
-                                        <label>File upload</label>
-                                        <input type="file" name="image" class="file-upload-default">
-                                          <div class="input-group col-xs-12">
-                                            <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
-                                            <span class="input-group-append">
-                                              <button class="file-upload-browse btn btn-light" type="button">Upload</button>
-                                            </span>
-                                          </div>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                      <label class="form-label">Description</label>
-                                      <textarea name="description" class="form-control" rows="3"></textarea>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="submit" class="btn btn-info">Save Product</button>
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                              </div>
-                            </form>
+                            <!-- BUTTONS -->
+                            <div>
+                              <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">+ New Sales Receipt</button>
+                            </div>
                           </div>
+                          <div class="left-list bg-white border-end" id="listContainer" style="position: sticky; overflow-y: auto; height: 80vh;"></div>
                         </div>
-</div>
-<!-- END OF ADD ITEM MODAL -->
-
-                      <!-- Add Category Modal -->
-                      <div class="modal fade" id="add_category_Modal" tabindex="-1" aria-labelledby="add_category_ModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                          <div class="modal-content">
-                            <form id="itemForm">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="add_item_ModalLabel">Add Category</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
-                              <div class="modal-body">
-                                <div class="container-fluid">
-                                  <div class="row g-3">
-                                    <div class="col-md-6">
-                                      <label class="form-label">Product SKU / Code</label>
-                                      <input type="text" name="sku" class="form-control" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Barcode</label>
-                                      <input type="text" name="barcode" class="form-control">
-                                    </div>
-                                    <div class="col-md-12">
-                                      <label class="form-label">Product Name</label>
-                                      <input type="text" name="name" class="form-control" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Category</label>
-                                      <input type="text" name="category" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Brand</label>
-                                      <input type="text" name="brand" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Unit</label>
-                                      <input type="text" name="unit" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Reorder Level</label>
-                                      <input type="number" name="reorder_level" class="form-control">
-                                    </div>
-                                    <div class="col-md-4">
-                                      <label class="form-label">Quantity in Stock</label>
-                                      <input type="number" name="quantity" class="form-control">
-                                    </div>
-                                    <div class="col-md-4">
-                                      <label class="form-label">Cost Price</label>
-                                      <input type="number" name="cost_price" class="form-control">
-                                    </div>
-                                    <div class="col-md-4">
-                                      <label class="form-label">Selling Price</label>
-                                      <input type="number" name="selling_price" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                      <div class="form-group">
-                        <label for="exampleSelectGender">Status</label>
-                        <select class="form-control" id="exampleSelectGender">
-                          <option>Active</option>
-                          <option>Inactive</option>
-                        </select>
-                        </div>
-                                      
-                                    </div>
-                                    <div class="col-md-6">
-                                      <div class="form-group">
-                        <label>File upload</label>
-                        <input type="file" name="img[]" class="file-upload-default">
-                        <div class="input-group col-xs-12">
-                        <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
-                        <span class="input-group-append">
-                          <button class="file-upload-browse btn btn-light" type="button">Upload</button>
-                        </span>
-                        </div>
-                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                      <label class="form-label">Description</label>
-                                      <textarea name="description" class="form-control" rows="3"></textarea>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="submit" class="btn btn-info">Save Product</button>
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                              </div>
-                            </form>
+                        <div class="col-md-7">
+                          <div id="previewContainer" class="text-center text-muted mt-5">
+                            <p>Select an item to preview</p>
                           </div>
                         </div>
                       </div>
-                      <!-- END OF ADD ITEM MODAL -->
-<div class="table-responsive pt-3">
-  <table class="table table-hover bg-white shadow-sm">
-    <thead class="table-light">
-      <tr>
-        <th>Customer</th>
-        <th>Total Cost</th>
-        <th>Total Quantity</th>
-        <th>Sales</th>
-        <th>Status</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php while($row = $result->fetch_assoc()): ?>
-      <tr>
-        <td class="d-flex align-items-center">
-          <img src="<?= $row['image'] ?>" alt="img" class="me-3" width="40" height="40" style="object-fit:cover; border-radius:5px;">
-          <div>
-            <div class="fw-bold"> <?= $row['name'] ?></div>
-            <div class="text-muted small">SKU <?= $row['sku'] ?></div>
-          </div>
-        </td>
-        <td><?= number_format($row['cost_price'], 2) ?> Php</td>
-        <td><?= $row['quantity'] ?></td>
-        <?php
-          $sold = $row['sold'];
-          $stock = $row['quantity'];
-          $sale = ($stock + $sold) > 0 ? ($sold / $stock ) * 100 : 0;
-          ?>
-        <td>
-        <?php
-          $badge = 'text-danger';
-          $icon = '▼';
-          if ($sale >= 80) {
-          $badge = 'text-success';
-          $icon = '▲';
-          } elseif ($sale >= 30) {
-          $badge = 'text-warning';
-          $icon = '▼';
-          }
-        ?>
-        <span class="<?= $badge ?>">
-        <?= number_format($sale, 2) ?>% <?= $icon ?>
-        </span>
-        </td>
-        <td>
-          <span style="color:white;" class="badge bg-<?= $row['status'] == 'Active' ? 'success' : 'danger' ?>">
-            <?= $row['status'] ?>
-          </span>
-        </td>
-        <td>
-          <button class="btn btn-inverse-warning btn-icon mr-2 edit-btn" data-bs-toggle="modal" data-bs-target="#editModal<?= $row['product_id'] ?>"><i class="typcn typcn-edit"></i></button>
-          <button class="btn btn-inverse-danger btn-icon open-delete-modal" data-id="<?= $row['product_id'] ?>"><i class="typcn typcn-delete-outline"></i></button>
-        </td>
-      </tr>
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header bg-light text-black">
-        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to delete this product?
-        <input type="hidden" id="delete_id">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Delete</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-<!-- Edit ITEM Modal -->
-                      <div class="modal fade" id="editModal<?= $row['product_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-md">
-                          <div class="modal-content">
-                            <form id="editItemForm" action="update_sales" method="POST" enctype="multipart/form-data">
-                              <input type="hidden" id="edit_item_id" name="id" value="<?= $row['product_id'] ?>">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="editItemModalLabel">Edit Sales</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                              </div>
-                              <div class="modal-body">
-                                <div class="container-fluid">
-                                  <div class="row g-3">
-                                    <div class="col-md-6">
-                                      <label class="form-label">Product SKU / Code</label>
-                                      <input type="text" name="sku" value="<?= $row['sku'] ?>" class="form-control" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Barcode</label>
-                                      <input type="text" name="barcode" value="<?= $row['barcode'] ?>" class="form-control">
-                                    </div>
-                                    <div class="col-md-12">
-                                      <label class="form-label">Product Name</label>
-                                      <input type="text" name="name" value="<?= $row['name'] ?>" class="form-control" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Category</label>
-                                      <input type="text" name="category" value="<?= $row['category'] ?>" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Brand</label>
-                                      <input type="text" name="brand" value="<?= $row['brand'] ?>" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Unit</label>
-                                      <input type="text" name="unit" value="<?= $row['unit'] ?>" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                      <div class="form-group">
-                                        <label for="exampleSelectGender">Status</label>
-                                        <select class="form-control" id="exampleSelectGender" name="status">
-                                          <option value="Active" <?= $row['status'] === 'Active' ? 'selected' : '' ?>>Active</option>
-                                          <option value="Inactive" <?= $row['status'] === 'Inactive' ? 'selected' : '' ?>>Inactive</option>
-                                        </select>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Cost Price</label>
-                                      <input type="number" name="price" value="<?= $row['cost_price'] ?>" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Selling Price</label>
-                                      <input type="number" name="selling_price" value="<?= $row['selling_price'] ?>" class="form-control">
-                                    </div>
-                                      <div class="col-md-12">
-                                      <label class="form-label">Reorder Level</label>
-                                      <input type="number" name="stock_level" value="<?=$row['reorder_level']?>" class="form-control">
-                                    </div>
-                                    <div class="col-md-12">
-                                      <div class="form-group">
-                        <label>File upload</label>
-                        <input type="file" name="image" class="file-upload-default">
-                        <div class="input-group col-xs-12">
-                        <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
-                        <span class="input-group-append">
-                          <button class="file-upload-browse btn btn-light" type="button">Upload</button>
-                          
-                        </span>
-                        </div>
-                        <small class="text-muted">Current: <?= $row['image'] ?></small>
-                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                      <label class="form-label">Description</label>
-                                      <textarea name="description" value="<?= $row['description'] ?>" class="form-control" rows="3"></textarea>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="submit" class="btn btn-info">Update Product</button>
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- END OF ADD ITEM MODAL -->
-
-<!-- Modal -->
-      <div class="modal fade" id="leditModal<?= $row['product_id'] ?>" tabindex="-1">
-        <div class="modal-dialog modal-md" >
-          <form class="modal-content" action="update_sales" method="POST" enctype="multipart/form-data">
-            <div class="modal-header">
-              <h5 class="modal-title">Edit Product</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div class="modal-body">
-              <input type="hidden" name="id" value="<?= $row['id'] ?>">
-
-              <div class="mb-2">
-                <label>Name</label>
-                <input name="name" value="<?= $row['name'] ?>" class="form-control">
-              </div>
-              <div class="mb-2">
-                <label>SKU</label>
-                <input name="sku" value="<?= $row['sku'] ?>" class="form-control">
-              </div>
-              <div class="mb-2">
-                <label>Price</label>
-                <input name="price" value="<?= $row['price'] ?>" class="form-control" type="number" step="0.01">
-              </div>
-              <div class="mb-2">
-                <label>Quantity</label>
-                <input name="quantity" value="<?= $row['quantity'] ?>" class="form-control" type="number">
-              </div>
-              <div class="mb-2">
-                <label>Status</label>
-                <select name="status" class="form-select">
-                  <option value="Active" <?= $row['status'] === 'Active' ? 'selected' : '' ?>>Active</option>
-                  <option value="Inactive" <?= $row['status'] === 'Inactive' ? 'selected' : '' ?>>Inactive</option>
-                </select>
-              </div>
-              <div class="mb-2">
-                <label>Upload Image</label><br>
-                <input type="file" name="image" class="form-control">
-                <small class="text-muted">Current: <?= $row['image'] ?></small>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-              <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-          </form>
-        </div>
-      </div>
-
-      <!-- EDIT ITEM MODAL (Ensure it's inside <body> at the same level as other modals) -->
-<div class="modal fade" id="leditModal<?= $row['product_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editItemModalLabel">Edit Item</h5>
-       </div>
-      <div class="modal-body">
-        <form id="editItemForm" action="update_sales" method="POST" enctype="multipart/form-data">
-          <input type="hidden" id="edit_item_id" name="id" value="<?= $row['product_id'] ?>">
-
-          <div class="form-group">
-    <label for="edit_item_name">Job Site Name</label>
-    <div class="mb-2">
-                <label>Name</label>
-                <input name="name" value="<?= $row['name'] ?>" class="form-control">
-              </div>
-              <div class="mb-2">
-                <label>SKU</label>
-                <input name="sku" value="<?= $row['sku'] ?>" class="form-control">
-              </div>
-              <div class="mb-2">
-                <label>Price</label>
-                <input name="price" value="<?= $row['cost_price'] ?>" class="form-control" type="number" step="0.01">
-              </div>
-              <div class="mb-2">
-                <label>Quantity</label>
-                <input name="quantity" value="<?= $row['quantity'] ?>" class="form-control" type="number">
-              </div>
-              <div class="mb-2">
-                <label>Status</label>
-                <select name="status" class="form-group">
-                  <option value="Active" <?= $row['status'] === 'Active' ? 'selected' : '' ?>>Active</option>
-                  <option value="Inactive" <?= $row['status'] === 'Inactive' ? 'selected' : '' ?>>Inactive</option>
-                </select>
-              </div>
-              <div class="mb-2">
-                <label>Upload Image</label><br>
-                <input type="file" name="image" class="form-control">
-                <small class="text-muted">Current: <?= $row['image'] ?></small>
-              </div>
-            </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Update Item</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-      <!--End of Edit Modal-->
-
-      <?php endwhile; ?>
-    </tbody>
-  </table>
-
-<!-- Pagination -->
-  <nav>
-    <ul class="pagination justify-content-center">
-      <?php if ($page > 1): ?>
-        <li class="page-item"><a class="page-link" href="?page=<?= $page-1 ?>&search=<?= $search ?>">&laquo; Prev</a></li>
-      <?php endif; ?>
-      <?php for ($i = 1; $i <= $total_pages; $i++): ?>
-        <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-          <a class="page-link" href="?page=<?= $i ?>&search=<?= $search ?>"><?= $i ?></a>
-        </li>
-      <?php endfor; ?>
-      <?php if ($page < $total_pages): ?>
-        <li class="page-item"><a class="page-link" href="?page=<?= $page+1 ?>&search=<?= $search ?>">Next &raquo;</a></li>
-      <?php endif; ?>
-    </ul>
-  </nav>
-</div>
                     </div>
                   </div>
                 </div>
@@ -673,16 +95,220 @@ include 'Get/fetch_category_item.php';
             </div>
           </div>
         </div>
-          <footer class="footer">
-            <div class="d-sm-flex justify-content-center justify-content-sm-between">
-              <span class="text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="#">randolfh.com</a> 2025</span>
+        <!-- -------------------- MODALS ---------------------- -->
+
+        <!-- ADD MODAL -->
+        <div class="modal fade" id="addModal" tabindex="-1">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+
+              <form id="addForm">
+                <div class="modal-header">
+                  <h5 class="modal-title">Add New Sales Receipt</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+
+                  <div class="row g-3">
+                    <!-- INVOICE NUMBER -->
+                    <div class="col-md-4">
+                      <label>Invoice #</label>
+                      <input type="text" class="form-control" name="invoice_number" required>
+                    </div>
+                    <!-- ORDER NUMBER -->
+                    <div class="col-md-4">
+                      <label>Order #</label>
+                      <input type="text" class="form-control" name="order_number" required>
+                    </div>
+                    <!-- INVOICE DATE -->
+                    <div class="col-md-4">
+                      <label>Invoice Date</label>
+                      <input type="date" class="form-control" name="date">
+                    </div>
+                    <!-- CUSTOMER SELECT -->
+                    <div class="col-md-4">
+                      <label>Customer Name</label>
+                      <select name="customer_id" id="customerSelect" class="form-control" required>
+                        <option value="" disabled selected>Select Customer</option>
+                        <?php foreach ($category as $categories): ?>
+                          <option
+                            value="<?= $categories['customer_id'] ?>"
+                            data-customername="<?= htmlspecialchars($categories['customer_name']) ?>"
+                            data-companyname="<?= $categories['company_name'] ?>">
+                            <?= htmlspecialchars($categories['customer_name']) ?>
+                          </option>
+                        <?php endforeach; ?>
+                      </select>
+                    </div>
+                    <!-- HIDDEN NAME -->
+                    <input type="hidden" name="name" id="customerName">
+                    <!-- Company SELECT -->
+                    <div class="col-md-4">
+                      <label>Company Name</label>
+                      <input type="text" class="form-control" name="company_name" id="companyName" readonly>
+                    </div>
+                    <div class="col-md-8">
+                      <label>Subject</label>
+                      <input type="text" class="form-control" name="subject" required>
+                    </div>
+
+                    <div class="card p-3">
+                      <h5>Item Table</h5>
+
+                      <table class="table table-bordered align-middle">
+                        <thead>
+                          <tr>
+                            <th style="width: 30%">Item Details</th>
+                            <th style="width: 10%">Qty</th>
+                            <th style="width: 15%">Price</th>
+                            <th style="width: 10%">Discount (%)</th>
+                            <th style="width: 15%">Tax</th>
+                            <th style="width: 15%">Amount</th>
+                            <th style="width: 5%"></th>
+                          </tr>
+                        </thead>
+
+                        <tbody id="itemRows">
+                          <tr>
+                            <td>
+                              <div class="item-dropdown-wrapper" style="position: relative;">
+                                <input type="text" class="form-control item-input" placeholder="Type or click to select an item">
+
+                                <div class="dropdown-menu item-dropdown w-100"></div>
+                              </div>
+                            </td>
+
+                            <td><input type="number" class="form-control qty" value="1"></td>
+                            <td><input type="number" class="form-control rate" value="0"></td>
+                            <td><input type="number" class="form-control discount" value="0"></td>
+
+                            <td>
+                              <select class="form-control tax">
+                                <option value="0">None</option>
+                                <option value="5">5%</option>
+                                <option value="12">12%</option>
+                              </select>
+                            </td>
+
+                            <td><input type="text" class="form-control amount" value="0" readonly></td>
+
+                            <td>
+                              <button class="btn btn-danger btn-sm removeRow">&times;</button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+                      <button id="addRow" class="btn btn-info btn-sm">+ Add New Item</button>
+                      <div class="row mt-4">
+                        <div class="col-md-6"></div>
+
+                        <div class="col-md-6">
+                          <div class="border rounded p-3 bg-light">
+
+                            <h6 class="fw-bold">Sub Total</h6>
+
+                            <div class="d-flex justify-content-between mb-2">
+                              <span>Item Total</span>
+                              <span id="subtotal">0.00</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2">
+                              <span>Shipping Charges</span>
+                              <input type="number" id="shipping" class="form-control form-control-sm w-50" value="0">
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2">
+                              <span>VAT (7.5%)</span>
+                              <span id="vat">0.00</span>
+                            </div>
+
+                            <div class="d-flex justify-content-between mb-2">
+                              <span>Adjustment</span>
+                              <input type="number" id="adjustment" class="form-control form-control-sm w-50" value="0">
+                            </div>
+
+                            <hr>
+
+                            <div class="d-flex justify-content-between mb-2 fw-bold">
+                              <span>Total Amount</span>
+                              <span id="grand_total">0.00</span>
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div class="modal-footer">
+                  <button class="btn btn-info">Save Invoice</button>
+                  <button class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+
+              </form>
+
             </div>
-          </footer>
+          </div>
+        </div>
+
+        <!-- EDIT MODAL -->
+        <div class="modal fade" id="editModal" tabindex="-1">
+          <div class="modal-dialog modal-mb">
+            <div class="modal-content">
+
+              <form id="editForm">
+                <div class="modal-header">
+                  <h5 class="modal-title">Edit Invoice</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                  <input type="hidden" name="id">
+
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label>Customer Name</label>
+                      <input type="text" class="form-control" name="customer">
+                    </div>
+
+                    <div class="col-md-3">
+                      <label>Date</label>
+                      <input type="date" class="form-control" name="date">
+                    </div>
+
+                    <div class="col-md-3">
+                      <label>Amount</label>
+                      <input type="number" class="form-control" name="amount">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="modal-footer">
+                  <button class="btn btn-danger" id="deleteBtn">Delete</button>
+                  <button class="btn btn-primary">Save Changes</button>
+                </div>
+
+              </form>
+
+            </div>
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="d-sm-flex justify-content-center justify-content-sm-between">
+            <span class="text-center text-sm-left d-block d-sm-inline-block">Copyright © <a href="#">randolfh.com</a> 2025</span>
+          </div>
+        </footer>
       </div>
       <!-- End of Main Panel -->
     </div>
   </div>
-<!-- DataTables Activation Script -->
+  <!-- DataTables Activation Script -->
 
 
   <script src="js/bootstrap.bundle.min.js"></script>
@@ -693,201 +319,240 @@ include 'Get/fetch_category_item.php';
   <script src="js/settings.js"></script>
   <script src="js/todolist.js"></script>
   <script src="js/file-upload.js"></script>
-<script>
+  <script>
+    document.getElementById('customerSelect').addEventListener('change', function() {
+      let customername = this.options[this.selectedIndex].getAttribute('data-customername');
+      let companyname = this.options[this.selectedIndex].getAttribute('data-companyname');
 
-  $(document).ready(function () {
-    $('#productTable').DataTable({
-      paging: true,
-      searching: true,
-      ordering: true,
-      responsive: true
+      document.getElementById('customerName').value = customername;
+      document.getElementById('companyName').value = companyname;
     });
-  });
-function updateSlider(slider) {
-  const tooltip = document.getElementById('rangeTooltip');
-  tooltip.textContent = slider.value;
+let items = [];
 
-  // Position tooltip
-  const percent = (slider.value - slider.min) / (slider.max - slider.min);
-  tooltip.style.left = `calc(${percent * 100}% - 20px)`;
-
-  // Update background
-  slider.style.background = `linear-gradient(to right, #f44336 0%, #f44336 ${percent * 100}%, #e0e0e0 ${percent * 100}%, #e0e0e0 100%)`;
-}
-function updateSlider2(slider) {
-  const tooltip = document.getElementById('rangeTooltip2');
-  tooltip.textContent = slider.value;
-
-  // Position tooltip
-  const percent = (slider.value - slider.min) / (slider.max - slider.min);
-  tooltip.style.left = `calc(${percent * 100}% - 20px)`;
-
-  // Update background
-  slider.style.background = `linear-gradient(to right, #f44336 0%, #f44336 ${percent * 100}%, #e0e0e0 ${percent * 100}%, #e0e0e0 100%)`;
+// Load items from database
+function loadItems() {
+  fetch("fetch_product_price.php")
+    .then(res => res.json())
+    .then(data => {
+      items = data;   // Save globally
+      console.log("Items loaded:", items);
+    })
+    .catch(err => console.error(err));
 }
 
-// Delete functions
-$(document).ready(function() {
-    let deleteId = null;
+loadItems(); // Call on page load
+document.addEventListener("input", function (e) {
+  if (e.target.classList.contains("item-input")) {
 
-    // Open modal and set ID
-    $(document).on("click", ".open-delete-modal", function() {
-        deleteId = $(this).data("id");
-        $("#delete_id").val(deleteId);
-        $("#deleteModal").modal("show");
-    });
+    const wrapper = e.target.closest(".item-dropdown-wrapper");
+    const dropdown = wrapper.querySelector(".item-dropdown");
+    const search = e.target.value.toLowerCase();
 
-// Confirm delete
-  $("#confirmDeleteBtn").click(function() {
-        const id = $("#delete_id").val();
+    // Filter items
+    const filtered = items.filter(item =>
+      item.name.toLowerCase().includes(search)
+    );
 
-        $.ajax({
-            url: "delete_item",
-            type: "POST",
-            data: { id: id },
-            dataType: "json",
-            success: function(response) {
-                if (response.status === "success") {
-                    $("#deleteModal").modal("hide");
-                    // Reload DataTable or whole page
-                    $("#inventory").DataTable().ajax.reload(null, false);
-                } else {
-                    alert("Error: " + response.message);
-                }
-            },
-            error: function() {
-                alert("Error deleting product.");
-            }
-        });
-    });
+    // Create dropdown list
+    dropdown.innerHTML = filtered.map(i => `
+      <button class="dropdown-item select-item" data-name="${i.name}" data-rate="${i.selling_price}">
+        ${i.name} <span class="text-muted float-end">₱${i.selling_price}</span>
+      </button>
+    `).join("");
+
+    dropdown.classList.add("show");
+  }
 });
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("select-item")) {
 
-let selectedItems = [];
+    const name = e.target.dataset.name;
+    const rate = e.target.dataset.rate;
 
-// Format currency
-function formatCurrency(value) {
-    return new Intl.NumberFormat('en-PH', {
-        style: 'currency',
-        currency: 'PHP'
-    }).format(value);
-}
+    const wrapper = e.target.closest(".item-dropdown-wrapper");
+    wrapper.querySelector(".item-input").value = name;
 
-// Render selected items
-function renderSelectedItems() {
-    let tbody = $("#selectedItemsTable tbody");
-    tbody.empty();
+    // Insert rate into the "rate" column
+    const row = wrapper.closest("tr");
+    row.querySelector(".rate").value = rate;
 
-    selectedItems.forEach((item) => {
-        let row = `
-            <tr>
-                <td>${item.sku}</td>
-                <td>${item.name}</td>
-                <td>${item.description}</td>
-                <td>
-                    <input type="number" class="form-control itemQuantity" 
-                        data-id="${item.id}" value="${item.quantity}" min="1">
-                </td>
-                <td>${formatCurrency(item.items_cost)}</td>
-                <td>${formatCurrency(item.total_cost)}</td>
-                <td>${item.category}</td>
-                <td>
-                    <button class="btn btn-danger btn-sm removeItem" data-id="${item.id}">Remove</button>
-                </td>
-            </tr>`;
-        tbody.append(row);
-    });
-}
+    // Recompute totals
+    computeRow(row);
 
-$(document).ready(function () {
-
-    // Add item
-    $(document).on("click", ".addItem", function () {
-        let itemId = $(this).data("id");
-        let itemSKU = $(this).data("sku");
-        let itemName = $(this).data("name");
-        let itemDescription = $(this).data("description");
-        let itemCost = parseFloat($(this).data("cost"));
-        let itemCategory = $(this).data("category");
-
-        if (!selectedItems.some(item => item.id == itemId)) {
-            selectedItems.push({
-                id: itemId,
-                sku: itemSKU,
-                name: itemName,
-                description: itemDescription,
-                quantity: 1,
-                items_cost: itemCost,
-                total_cost: itemCost,
-                category: itemCategory
-            });
-            renderSelectedItems();
-        }
+    // Hide dropdown
+    wrapper.querySelector(".item-dropdown").classList.remove("show");
+  }
+});
+    // Recompute row on input change
+    document.addEventListener("input", function (e) {
+      if (e.target.classList.contains("qty") ||
+          e.target.classList.contains("rate") ||
+          e.target.classList.contains("discount") ||
+          e.target.classList.contains("tax")) {
+        const row = e.target.closest("tr");
+        computeRow(row);
+      }
     });
 
-    // Remove item
-    $(document).on("click", ".removeItem", function () {
-        let id = $(this).data("id");
-        selectedItems = selectedItems.filter(item => item.id != id);
-        renderSelectedItems();
-    });
+    // Compute Amount per row
+    function computeRow(row) {
+      let qty = parseFloat(row.querySelector(".qty").value) || 0;
+      let rate = parseFloat(row.querySelector(".rate").value) || 0;
+      let discount = parseFloat(row.querySelector(".discount").value) || 0;
+      let taxPercent = parseFloat(row.querySelector(".tax").value) || 0;
 
-    // Update quantity
-    $(document).on("input", ".itemQuantity", function () {
-        let id = $(this).data("id");
-        let qty = parseInt($(this).val()) || 1;
-        selectedItems.forEach(item => {
-            if (item.id == id) {
-                item.quantity = qty;
-                item.total_cost = qty * item.items_cost;
-            }
-        });
-        renderSelectedItems();
-    });
+      let base = qty * rate;
+      let lessDiscount = base - (base * (discount / 100));
+      let taxAmount = lessDiscount * (taxPercent / 100);
+      let total = lessDiscount + taxAmount;
 
-   $("#saveToDatabase").click(function () {
-    if (selectedItems.length === 0) {
-        alert("No items selected.");
-        return;
+      // If amount is an input field
+      if (row.querySelector(".amount").tagName === "INPUT") {
+        row.querySelector(".amount").value = total.toFixed(2);
+      } else {
+        row.querySelector(".amount").textContent = total.toFixed(2);
+      }
+
+      computeTotals(); // update totals
     }
 
-    $.ajax({
-        url: "Add/save_selected_items.php",
-        type: "POST",
-        contentType: "application/json",
-        data: JSON.stringify({ items: selectedItems }),
-        dataType: "json",
-        success: function (response) {
-            if (response.status === "success") {
-                alert("Items saved successfully!");
-                $("#qtyModal").modal("hide");
-                selectedItems = [];
-                renderSelectedItems();
-            } else {
-              console.log(response.message);
-                alert("Error saving items: " + response.message);
-            }
+    // Compute all totals
+    function computeTotals() {
+      let subtotal = 0;
+
+      document.querySelectorAll(".amount").forEach(a => {
+        let val = (a.tagName === "INPUT") ? a.value : a.textContent;
+        subtotal += parseFloat(val) || 0;
+      });
+
+      let shipping = parseFloat(document.getElementById("shipping").value) || 0;
+      let adjustment = parseFloat(document.getElementById("adjustment").value) || 0;
+      let vat = subtotal * 0.075; // 7.5%
+
+      document.getElementById("subtotal").textContent = subtotal.toFixed(2);
+      document.getElementById("vat").textContent = vat.toFixed(2);
+
+      let grand = subtotal + vat + shipping + adjustment;
+      document.getElementById("grand_total").textContent = grand.toFixed(2);
+    }
+
+    // Trigger recalculation when shipping or adjustment changes
+    document.getElementById("shipping").addEventListener("input", computeTotals);
+    document.getElementById("adjustment").addEventListener("input", computeTotals);
+
+
+    // Add Row
+    document.getElementById("addRow").onclick = function() {
+      let row = document.querySelector("tbody tr").cloneNode(true);
+      row.querySelectorAll("input").forEach(i => i.value = 0);
+      document.getElementById("itemRows").appendChild(row);
+    };
+
+    // Remove Row
+    document.addEventListener("click", function(e) {
+      if (e.target.classList.contains("removeRow")) {
+        e.target.closest("tr").remove();
+      }
+    });
+
+    // TEMP LOCAL DATA (will be replaced by PHP + MySQL)
+    let data = {
+      "Sales": [{
+          id: 1,
+          code: "SR-0001",
+          date: "2025-01-10",
+          customer: "ABC Corp",
+          amount: 15000
         },
-        error: function (xhr, status, error) {
-            console.log(xhr.responseText);
-            alert("AJAX error: " + error);
-        }
-    });
-});
+        {
+          id: 2,
+          code: "SR-0002",
+          date: "2025-01-12",
+          customer: "John Doe",
+          amount: 8950
+        },
+        {
+          id: 3,
+          code: "SR-0003",
+          date: "2025-01-14",
+          customer: "Metro Supplies",
+          amount: 32000
+        },
+                {
+          id: 4,
+          code: "SR-0004",
+          date: "2025-01-14",
+          customer: "Gardening Supplies",
+          amount: 32000
+        },
+                        {
+          id: 5,
+          code: "SR-0005",
+          date: "2025-01-14",
+          customer: "Electric Supplies",
+          amount: 32000
+        },
 
+      ],
+      "Bills": [{
+        id: 1,
+        code: "BILL-9001",
+        date: "2025-01-08",
+        vendor: "Water Utility",
+        amount: 2500
+      }, ]
+    };
 
-    // Search filter
-    $("#search").on("keyup", function () {
-        let value = $(this).val().toLowerCase();
-        $("#availableItemsTable tbody tr").filter(function () {
-            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-        });
-    });
+    function loadMenu(menu) {
+      document.getElementById("listTitle").innerText = menu;
 
-});
+      let list = data[menu] || [];
+      let html = "";
 
+      list.forEach(item => {
+        html += `
+        <div class="card mb-2 invoice-item" onclick='loadPreview(${JSON.stringify(item)})'>
+            <div class="card-body border">
+                <strong>${item.code}</strong><br>
+                <small>${item.date}</small><br>
+                <span>${item.customer || item.vendor}</span>
+            </div>
+        </div>
+        `;
+      });
 
-</script>
- 
-  
+      document.getElementById("listContainer").innerHTML = html;
+    }
+
+    function loadPreview(item) {
+      document.getElementById("previewContainer").innerHTML = `
+        <div class="preview-box">
+            <span class="tag">Draft</span>
+            <h3 class="mt-3">INVOICE</h3>
+            <p class="mt-2"><strong># ${item.code}</strong></p>
+
+            <p><strong>Date:</strong> ${item.date}</p>
+            <p><strong>Name:</strong> ${item.customer || item.vendor}</p>
+            <p><strong>Amount Due:</strong> ₱${item.amount.toLocaleString()}</p>
+
+            <button class="btn btn-sm btn-primary mt-3" onclick='editInvoice(${JSON.stringify(item)})'
+                    data-bs-toggle="modal" data-bs-target="#editModal">
+                Edit Invoice
+            </button>
+        </div>
+    `;
+    }
+
+    function editInvoice(item) {
+      document.querySelector("#editForm [name=id]").value = item.id;
+      document.querySelector("#editForm [name=customer]").value = item.customer;
+      document.querySelector("#editForm [name=date]").value = item.date;
+      document.querySelector("#editForm [name=amount]").value = item.amount;
+    }
+
+    // Default load
+    loadMenu("Sales");
+  </script>
 </body>
+
 </html>
