@@ -195,7 +195,7 @@ include 'Get/fetch_category_item.php';
 
                       <!-- ADD ITEM Modal -->
                       <div class="modal fade" id="add_item_Modal" tabindex="-1" aria-labelledby="add_item_ModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-md">
+                        <div class="modal-dialog modal-lg">
                           <div class="modal-content">
                             <form id="itemForm" action="add_item" method="POST" enctype="multipart/form-data">
                               <div class="modal-header">
@@ -251,11 +251,11 @@ include 'Get/fetch_category_item.php';
                                       <label class="form-label">Selling Price</label>
                                       <input type="number" name="selling_price" class="form-control">
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                       <label class="form-label">Reorder Level</label>
                                       <input type="number" name="stock_level" class="form-control">
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                       <div class="form-group">
                                         <label>File upload</label>
                                         <input type="file" name="image" class="file-upload-default">
@@ -454,7 +454,7 @@ include 'Get/fetch_category_item.php';
 
                                 <!-- Edit ITEM Modal -->
                                 <div class="modal fade" id="editModal<?= $row['product_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-                                  <div class="modal-dialog modal-md">
+                                  <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                       <form id="editItemForm" action="update_sales" method="POST" enctype="multipart/form-data">
                                         <input type="hidden" id="edit_item_id" name="id" value="<?= $row['product_id'] ?>">
@@ -506,11 +506,11 @@ include 'Get/fetch_category_item.php';
                                                 <label class="form-label">Selling Price</label>
                                                 <input type="number" name="selling_price" value="<?= $row['selling_price'] ?>" class="form-control">
                                               </div>
-                                              <div class="col-md-12">
+                                              <div class="col-md-6">
                                                 <label class="form-label">Reorder Level</label>
                                                 <input type="number" name="stock_level" value="<?= $row['reorder_level'] ?>" class="form-control">
                                               </div>
-                                              <div class="col-md-12">
+                                              <div class="col-md-6">
                                                 <div class="form-group">
                                                   <label>File upload</label>
                                                   <input type="file" name="image" class="file-upload-default">
