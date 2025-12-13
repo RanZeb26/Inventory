@@ -107,7 +107,7 @@ RewriteRule ^Sales$ Sales.php [L]
 
 # Admin Settings
 
-RewriteRule ^Settings$ settings.php [L]
+RewriteRule ^AllSettings$ all_settings.php [L]
 
 # Admin register
 

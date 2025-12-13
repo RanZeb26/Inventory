@@ -2,9 +2,7 @@
         <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
           <a class="navbar-brand brand-logo" href="Dashboard"><img style="width:40px;" src="images/RS logo.png" alt="logo"/>RS Enterprise</a>
           <a class="navbar-brand brand-logo-mini" href="Dashboard"><img src="images/RS logo.png" alt="logo"/></a>
-          <button class="navbar-toggler navbar-toggler align-self-center d-none d-lg-flex" type="button" data-toggle="minimize">
-            <span class="typcn typcn-th-menu"></span>
-          </button>
+
         </div>
         <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
 
@@ -162,8 +160,6 @@
               </div>
             </li>
           </ul>
-          <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-toggle="offcanvas">
-            <span class="typcn typcn-th-menu"></span>
-          </button>
+
         </div>
       </nav>

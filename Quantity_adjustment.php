@@ -38,7 +38,7 @@ include 'Get/fetch_products.php';
                       <!--<a href="Adjustment" class="btn btn-primary mb-3"><< Back to Adjustment</a>-->
                       <div class="d-flex justify-content-end align-items-center mb-3">
                         <div class="input-group">
-                          <form method="GET" class="mb-3 d-flex" >
+                          <form method="GET" class="mb-3 d-flex">
                             <input type="text" name="search" class="form-control me-2"
                               placeholder="Search by Name" value="<?= htmlspecialchars($search) ?>">
                             <button class="btn btn-light"><i class="typcn typcn-zoom"></i></button>
@@ -48,6 +48,7 @@ include 'Get/fetch_products.php';
                           <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#add_item_Modal">
                             New Qty Adjustment
                           </button>
+
                         </div>
                       </div>
 
@@ -68,9 +69,9 @@ include 'Get/fetch_products.php';
 
                                     <!-- PRODUCT SELECT -->
                                     <div class="col-md-12">
-                                      <label class="form-label">Product</label>
+                                      <label class="form-label">Select Product</label>
                                       <select name="product_id" id="productSelect" class="form-control" required>
-                                        <option value="" disabled selected>Select Product</option>
+                                        <option value="" disabled selected>Search / Select product...</option>
                                         <?php foreach ($category as $categories): ?>
                                           <option
                                             value="<?= $categories['product_id'] ?>"
@@ -84,16 +85,9 @@ include 'Get/fetch_products.php';
 
                                     <!-- HIDDEN NAME -->
                                     <input type="hidden" name="name" id="itemName">
-
-                                    <!-- REASON -->
-                                    <div class="col-md-12">
-                                      <label class="form-label">Reason</label>
-                                      <textarea name="reason" class="form-control" rows="3" required></textarea>
-                                    </div>
-
                                     <!-- PREVIOUS QUANTITY -->
                                     <div class="col-md-12">
-                                      <label class="form-label">Current Quantity</label>
+                                      <label class="form-label">Current Stock</label>
                                       <input name="previous_qty" type="text" id="productQty" class="form-control" readonly>
                                     </div>
 
@@ -102,6 +96,26 @@ include 'Get/fetch_products.php';
                                       <label class="form-label">Quantity Adjustment</label>
                                       <input type="text" name="adjustment_qty" class="form-control" required>
                                     </div>
+                                    <!-- REASON -->
+                                    <div class="col-md-12">
+                                      <label class="form-label">Reason</label>
+                                      <textarea name="reason" class="form-control" rows="3" placeholder="e.g. Damaged item, Incoming shipment, Inventory correction" required></textarea>
+                                    </div>
+                                    <!-- Upload photo -->
+                                    <div class="col-md-12">
+                                      <div class="form-group">
+                                        <label>File upload</label>
+                                        <input type="file" name="img[]" class="file-upload-default">
+                                        <div class="input-group col-xs-12">
+                                          <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
+                                          <span class="input-group-append">
+                                            <button class="file-upload-browse btn btn-light" type="button">Upload</button>
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+
+
 
                                   </div>
                                 </div>
@@ -135,7 +149,7 @@ include 'Get/fetch_products.php';
                             <div class="modal-footer">
                               <button type="button" id="confirmDeleteBtn" class="btn btn-info">Delete</button>
                               <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                              
+
                             </div>
                           </div>
                         </div>
@@ -341,6 +355,7 @@ include 'Get/fetch_products.php';
       window.location.href = `list?id=${referenceId}`;
     }
   </script>
+  
 </body>
 
 </html>

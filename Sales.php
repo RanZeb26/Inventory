@@ -129,7 +129,7 @@ include 'Get/fetch_list_customer.php';
                     <!-- CUSTOMER SELECT -->
                     <div class="col-md-4">
                       <label>Customer Name</label>
-                      <select name="customer_id" id="customerSelect" class="form-control" required>
+                      <select name="customer_id" style="height: 45px;" id="customerSelect" class="form-control" required>
                         <option value="" disabled selected>Select Customer</option>
                         <?php foreach ($category as $categories): ?>
                           <option
@@ -202,8 +202,51 @@ include 'Get/fetch_list_customer.php';
 
                       <button id="addRow" class="btn btn-info btn-sm">+ Add New Item</button>
                       <div class="row mt-4">
-                        <div class="col-md-6"></div>
+                        <!-- LEFT BLANK -->
+                        <div class="col-md-6">
 
+                          <div class="border rounded p-3 bg-light row g-3">
+                            <div class="col-md-4">
+                              <label>Payment Mode</label>
+                              <select name="customer_id" id="customerSelect" class="form-control" required>
+                                <option value="" disabled selected>Select Customer</option>
+                                <?php foreach ($category as $categories): ?>
+                                  <option
+                                    value="<?= $categories['customer_id'] ?>"
+                                    data-customername="<?= htmlspecialchars($categories['customer_name']) ?>"
+                                    data-companyname="<?= $categories['company_name'] ?>">
+                                    <?= htmlspecialchars($categories['customer_name']) ?>
+                                  </option>
+                                <?php endforeach; ?>
+                              </select>
+                            </div>
+                            <div class="col-md-4">
+                              <label>Deposit to</label>
+                              <select name="customer_id" id="customerSelect" class="form-control" required>
+                                <option value="" disabled selected>Select Customer</option>
+                                <?php foreach ($category as $categories): ?>
+                                  <option
+                                    value="<?= $categories['customer_id'] ?>"
+                                    data-customername="<?= htmlspecialchars($categories['customer_name']) ?>"
+                                    data-companyname="<?= $categories['company_name'] ?>">
+                                    <?= htmlspecialchars($categories['customer_name']) ?>
+                                  </option>
+                                <?php endforeach; ?>
+                              </select>
+                            </div>
+                            <div class="col-md-4">
+                              <label>Reference #</label>
+                              <input type="text" style="height: 35px;" class="form-control" name="company_name" id="companyName">
+                            </div>
+                            <div class="col-md-12">
+                              <label>Notes</label>
+                              <textarea class="form-control" name="notes" rows="3"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                        <!--End LEFT BLANK -->
+
+                        <!-- Right TOTALS -->
                         <div class="col-md-6">
                           <div class="border rounded p-3 bg-light">
 
@@ -238,6 +281,7 @@ include 'Get/fetch_list_customer.php';
 
                           </div>
                         </div>
+                        <!-- END Right TOTALS -->
                       </div>
 
                     </div>
@@ -327,68 +371,68 @@ include 'Get/fetch_list_customer.php';
       document.getElementById('customerName').value = customername;
       document.getElementById('companyName').value = companyname;
     });
-let items = [];
+    let items = [];
 
-// Load items from database
-function loadItems() {
-  fetch("fetch_product_price.php")
-    .then(res => res.json())
-    .then(data => {
-      items = data;   // Save globally
-      console.log("Items loaded:", items);
-    })
-    .catch(err => console.error(err));
-}
+    // Load items from database
+    function loadItems() {
+      fetch("fetch_product_price.php")
+        .then(res => res.json())
+        .then(data => {
+          items = data; // Save globally
+          console.log("Items loaded:", items);
+        })
+        .catch(err => console.error(err));
+    }
 
-loadItems(); // Call on page load
-document.addEventListener("input", function (e) {
-  if (e.target.classList.contains("item-input")) {
+    loadItems(); // Call on page load
+    document.addEventListener("input", function(e) {
+      if (e.target.classList.contains("item-input")) {
 
-    const wrapper = e.target.closest(".item-dropdown-wrapper");
-    const dropdown = wrapper.querySelector(".item-dropdown");
-    const search = e.target.value.toLowerCase();
+        const wrapper = e.target.closest(".item-dropdown-wrapper");
+        const dropdown = wrapper.querySelector(".item-dropdown");
+        const search = e.target.value.toLowerCase();
 
-    // Filter items
-    const filtered = items.filter(item =>
-      item.name.toLowerCase().includes(search)
-    );
+        // Filter items
+        const filtered = items.filter(item =>
+          item.name.toLowerCase().includes(search)
+        );
 
-    // Create dropdown list
-    dropdown.innerHTML = filtered.map(i => `
+        // Create dropdown list
+        dropdown.innerHTML = filtered.map(i => `
       <button class="dropdown-item select-item" data-name="${i.name}" data-rate="${i.selling_price}">
         ${i.name} <span class="text-muted float-end">₱${i.selling_price}</span>
       </button>
     `).join("");
 
-    dropdown.classList.add("show");
-  }
-});
-document.addEventListener("click", function (e) {
-  if (e.target.classList.contains("select-item")) {
+        dropdown.classList.add("show");
+      }
+    });
+    document.addEventListener("click", function(e) {
+      if (e.target.classList.contains("select-item")) {
 
-    const name = e.target.dataset.name;
-    const rate = e.target.dataset.rate;
+        const name = e.target.dataset.name;
+        const rate = e.target.dataset.rate;
 
-    const wrapper = e.target.closest(".item-dropdown-wrapper");
-    wrapper.querySelector(".item-input").value = name;
+        const wrapper = e.target.closest(".item-dropdown-wrapper");
+        wrapper.querySelector(".item-input").value = name;
 
-    // Insert rate into the "rate" column
-    const row = wrapper.closest("tr");
-    row.querySelector(".rate").value = rate;
+        // Insert rate into the "rate" column
+        const row = wrapper.closest("tr");
+        row.querySelector(".rate").value = rate;
 
-    // Recompute totals
-    computeRow(row);
+        // Recompute totals
+        computeRow(row);
 
-    // Hide dropdown
-    wrapper.querySelector(".item-dropdown").classList.remove("show");
-  }
-});
+        // Hide dropdown
+        wrapper.querySelector(".item-dropdown").classList.remove("show");
+      }
+    });
     // Recompute row on input change
-    document.addEventListener("input", function (e) {
+    document.addEventListener("input", function(e) {
       if (e.target.classList.contains("qty") ||
-          e.target.classList.contains("rate") ||
-          e.target.classList.contains("discount") ||
-          e.target.classList.contains("tax")) {
+        e.target.classList.contains("rate") ||
+        e.target.classList.contains("discount") ||
+        e.target.classList.contains("tax")) {
         const row = e.target.closest("tr");
         computeRow(row);
       }
@@ -478,14 +522,14 @@ document.addEventListener("click", function (e) {
           customer: "Metro Supplies",
           amount: 32000
         },
-                {
+        {
           id: 4,
           code: "SR-0004",
           date: "2025-01-14",
           customer: "Gardening Supplies",
           amount: 32000
         },
-                        {
+        {
           id: 5,
           code: "SR-0005",
           date: "2025-01-14",
