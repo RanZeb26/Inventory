@@ -4,7 +4,7 @@ if (!isset($_SESSION['logged_in'])) {
     header("Location: login");
     exit;
 }
-include 'config/db.php';
+include '../config/db.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,12 +19,6 @@ include 'config/db.php';
 
 </head>
 <body>
-  <div class="container-scroller">
-    <?php include 'Navbar/nav.php'; ?>
-    <div class="container-fluid page-body-wrapper">
-      <?php include 'sidebar.php'; ?>
-      <div class="main-panel">
-        <div class="content-wrapper">
           <div class="col-12 grid-margin">
             <div class="card-body">
               <div class="row">

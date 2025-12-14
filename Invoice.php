@@ -241,7 +241,7 @@ include 'Get/fetch_list_customer.php';
 
                             <div class="d-flex justify-content-between mb-2 fw-bold">
                               <span>Total Amount</span>
-                              <span id="grand_total">0.00</span>
+                              <span id="grand_total" >0.00</span>
                             </div>
 
                           </div>
@@ -365,7 +365,7 @@ include 'Get/fetch_list_customer.php';
         // Create dropdown list
         dropdown.innerHTML = filtered.map(i => `
       <button class="dropdown-item select-item" data-name="${i.name}" data-rate="${i.selling_price}">
-        ${i.name} <span class="text-muted float-end">₱${i.selling_price}</span>
+        ${i.name} <span class="text-muted float-end"> ₱${i.selling_price}</span>
       </button>
     `).join("");
 
