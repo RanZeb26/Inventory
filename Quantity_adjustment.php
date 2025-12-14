@@ -60,7 +60,7 @@ include 'Get/fetch_products.php';
 
                               <div class="modal-header">
                                 <h5 class="modal-title">Add New Quantity Adjustment</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal">&times;</button>
                               </div>
 
                               <div class="modal-body">
@@ -140,7 +140,7 @@ include 'Get/fetch_products.php';
                           <div class="modal-content">
                             <div class="modal-header bg-light text-black">
                               <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close">&times;</button>
                             </div>
                             <div class="modal-body">
                               Are you sure you want to delete this product?
@@ -222,11 +222,11 @@ include 'Get/fetch_products.php';
                             <div class="modal-dialog modal-md">
                               <div class="modal-content">
                                 <form id="editItemForm" action="update_adj_desc" method="POST" enctype="multipart/form-data">
-                                  <input type="text" id="edit_item_id" name="adj_id" value="<?= $row['adj_id'] ?>">
-                                  <input type="text" name="productID" value="<?= $row['product_id'] ?>">
+                                  <input type="hidden" id="edit_item_id" name="adj_id" value="<?= $row['adj_id'] ?>">
+                                  <input type="hidden" name="productID" value="<?= $row['product_id'] ?>">
                                   <div class="modal-header">
                                     <h5 class="modal-title" id="editItemModalLabel">Edit Product</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal">&times;</button>
                                   </div>
                                   <div class="modal-body">
                                     <div class="container-fluid">

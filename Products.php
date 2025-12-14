@@ -200,7 +200,7 @@ include 'Get/fetch_category_item.php';
                             <form id="itemForm" action="add_item" method="POST" enctype="multipart/form-data">
                               <div class="modal-header">
                                 <h5 class="modal-title" id="add_item_ModalLabel">Add New Product</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close">&times;</button>
                               </div>
                               <div class="modal-body">
                                 <div class="container-fluid">
@@ -291,7 +291,7 @@ include 'Get/fetch_category_item.php';
                             <form id="itemForm">
                               <div class="modal-header">
                                 <h5 class="modal-title" id="add_item_ModalLabel">Add Category</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal">&times;</button>
                               </div>
                               <div class="modal-body">
                                 <div class="container-fluid">
@@ -436,7 +436,7 @@ include 'Get/fetch_category_item.php';
                                     <div class="modal-content">
                                       <div class="modal-header bg-light text-black">
                                         <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal">&times;</button>
                                       </div>
                                       <div class="modal-body">
                                         Are you sure you want to delete this product?
@@ -460,7 +460,7 @@ include 'Get/fetch_category_item.php';
                                         <input type="hidden" id="edit_item_id" name="id" value="<?= $row['product_id'] ?>">
                                         <div class="modal-header">
                                           <h5 class="modal-title" id="editItemModalLabel">Edit Product</h5>
-                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                          <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal">&times;</button>
                                         </div>
                                         <div class="modal-body">
                                           <div class="container-fluid">

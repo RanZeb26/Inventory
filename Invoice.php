@@ -105,7 +105,7 @@ include 'Get/fetch_list_customer.php';
               <form id="addForm">
                 <div class="modal-header">
                   <h5 class="modal-title">Add New Invoice</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal">&times;</button>
                 </div>
 
                 <div class="modal-body">
@@ -200,17 +200,56 @@ include 'Get/fetch_list_customer.php';
                             <td><input type="text" class="form-control amount" value="0" readonly></td>
 
                             <td>
-                              <button class="btn btn-danger btn-sm removeRow">&times;</button>
+                              <button type="button" class="btn btn-danger btn-sm removeRow">&times;</button>
                             </td>
                           </tr>
                         </tbody>
                       </table>
 
-                      <button id="addRow" class="btn btn-info btn-sm">+ Add New Item</button>
+                      <button type="button" id="addRow" class="btn btn-info btn-sm">+ Add New Item</button>
                       <!-- TOTALS -->
                       <div class="row mt-4">
                         <!-- LEFT BLANK -->
-                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
+                          <div class="border rounded p-3 bg-light row g-3">
+                            <div class="col-md-4">
+                              <label>Payment Mode</label>
+                              <select name="customer_id" id="customerSelect" class="form-control" required>
+                                <option value="" disabled selected>Select Customer</option>
+                                <?php foreach ($category as $categories): ?>
+                                  <option
+                                    value="<?= $categories['customer_id'] ?>"
+                                    data-customername="<?= htmlspecialchars($categories['customer_name']) ?>"
+                                    data-companyname="<?= $categories['company_name'] ?>">
+                                    <?= htmlspecialchars($categories['customer_name']) ?>
+                                  </option>
+                                <?php endforeach; ?>
+                              </select>
+                            </div>
+                            <div class="col-md-4">
+                              <label>Deposit to</label>
+                              <select name="customer_id" id="customerSelect" class="form-control" required>
+                                <option value="" disabled selected>Select Customer</option>
+                                <?php foreach ($category as $categories): ?>
+                                  <option
+                                    value="<?= $categories['customer_id'] ?>"
+                                    data-customername="<?= htmlspecialchars($categories['customer_name']) ?>"
+                                    data-companyname="<?= $categories['company_name'] ?>">
+                                    <?= htmlspecialchars($categories['customer_name']) ?>
+                                  </option>
+                                <?php endforeach; ?>
+                              </select>
+                            </div>
+                            <div class="col-md-4">
+                              <label>Reference #</label>
+                              <input type="text" style="height: 35px;" class="form-control" name="company_name" id="companyName">
+                            </div>
+                            <div class="col-md-12">
+                              <label>Notes</label>
+                              <textarea class="form-control" name="notes" rows="3"></textarea>
+                            </div>
+                          </div>
+                        </div>
                         <!-- Right TOTALS -->
                         <div class="col-md-6">
                           <div class="border rounded p-3 bg-light">
@@ -274,7 +313,7 @@ include 'Get/fetch_list_customer.php';
               <form id="editForm">
                 <div class="modal-header">
                   <h5 class="modal-title">Edit Invoice</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal">&times;</button>
                 </div>
 
                 <div class="modal-body">
@@ -344,7 +383,7 @@ include 'Get/fetch_list_customer.php';
         .then(res => res.json())
         .then(data => {
           items = data; // Save globally
-          console.log("Items loaded:", items);
+          //console.log("Items loaded:", items);
         })
         .catch(err => console.error(err));
     }
@@ -372,26 +411,25 @@ include 'Get/fetch_list_customer.php';
         dropdown.classList.add("show");
       }
     });
-    document.addEventListener("click", function(e) {
-      if (e.target.classList.contains("select-item")) {
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("select-item")) {
+    e.preventDefault(); // ⛔ stop form submit
 
-        const name = e.target.dataset.name;
-        const rate = e.target.dataset.rate;
+    const name = e.target.dataset.name;
+    const rate = e.target.dataset.rate;
 
-        const wrapper = e.target.closest(".item-dropdown-wrapper");
-        wrapper.querySelector(".item-input").value = name;
+    const wrapper = e.target.closest(".item-dropdown-wrapper");
+    wrapper.querySelector(".item-input").value = name;
 
-        // Insert rate into the "rate" column
-        const row = wrapper.closest("tr");
-        row.querySelector(".rate").value = rate;
+    const row = wrapper.closest("tr");
+    row.querySelector(".rate").value = rate;
 
-        // Recompute totals
-        computeRow(row);
+    computeRow(row);
 
-        // Hide dropdown
-        wrapper.querySelector(".item-dropdown").classList.remove("show");
-      }
-    });
+    wrapper.querySelector(".item-dropdown").classList.remove("show");
+  }
+});
+
     // Recompute row on input change
     document.addEventListener("input", function(e) {
       if (e.target.classList.contains("qty") ||
@@ -422,7 +460,7 @@ include 'Get/fetch_list_customer.php';
         row.querySelector(".amount").textContent = total.toFixed(2);
       }
 
-      computeTotals(); // update totals
+      //computeTotals(); // update totals
     }
 
     // Compute all totals

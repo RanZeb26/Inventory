@@ -105,7 +105,7 @@ include 'Get/fetch_list_customer.php';
               <form id="addForm">
                 <div class="modal-header">
                   <h5 class="modal-title">Add New Sales Receipt</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal">&times;</button>
                 </div>
 
                 <div class="modal-body">
@@ -194,13 +194,13 @@ include 'Get/fetch_list_customer.php';
                             <td><input type="text" class="form-control amount" value="0" readonly></td>
 
                             <td>
-                              <button class="btn btn-danger btn-sm removeRow">&times;</button>
+                              <button type="button" class="btn btn-danger btn-sm removeRow">&times;</button>
                             </td>
                           </tr>
                         </tbody>
                       </table>
 
-                      <button id="addRow" class="btn btn-info btn-sm">+ Add New Item</button>
+                      <button type="button" id="addRow" class="btn btn-info btn-sm">+ Add New Item</button>
                       <div class="row mt-4">
                         <!-- LEFT BLANK -->
                         <div class="col-md-6">
@@ -309,7 +309,7 @@ include 'Get/fetch_list_customer.php';
               <form id="editForm">
                 <div class="modal-header">
                   <h5 class="modal-title">Edit Invoice</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal">&times;</button>
                 </div>
 
                 <div class="modal-body">
@@ -399,7 +399,7 @@ include 'Get/fetch_list_customer.php';
 
         // Create dropdown list
         dropdown.innerHTML = filtered.map(i => `
-      <button class="dropdown-item select-item" data-name="${i.name}" data-rate="${i.selling_price}">
+      <button type="button" class="dropdown-item select-item" data-name="${i.name}" data-rate="${i.selling_price}">
         ${i.name} <span class="text-muted float-end">₱${i.selling_price}</span>
       </button>
     `).join("");

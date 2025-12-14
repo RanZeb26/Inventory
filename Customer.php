@@ -58,7 +58,7 @@ include 'Get/fetch_products.php';
                             <form id="customerForm" action="add_customer" method="POST" enctype="multipart/form-data">
                               <div class="modal-header">
                                 <h5 class="modal-title" id="add_customer_ModalLabel">Add New Customer</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close">&times;</button>
                               </div>
                               <div class="modal-body">
                                 <div class="container-fluid">
@@ -117,7 +117,7 @@ include 'Get/fetch_products.php';
                           <div class="modal-content">
                             <div class="modal-header bg-light text-black">
                               <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close">&times;</button>
                             </div>
                             <div class="modal-body">
                               Are you sure you want to delete this customer?
@@ -200,7 +200,7 @@ include 'Get/fetch_products.php';
                                   <input type="hidden" id="edit_item_id" name="customer_id" value="<?= $row['customer_id'] ?>">
                                   <div class="modal-header">
                                     <h5 class="modal-title" id="editItemModalLabel">Edit Customer</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close">&times;</button>
                                   </div>
                                   <div class="modal-body">
                                     <div class="container-fluid">
