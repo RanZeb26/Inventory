@@ -17,7 +17,20 @@ include 'Get/fetch_list_customer.php';
         *Track stock deduction upon sale -->
 <!DOCTYPE html>
 <html lang="en">
-
+<style>
+  .modal-header .btn-close {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 10%;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    cursor: pointer;
+  }
+</style>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
