@@ -7,6 +7,7 @@ if (!isset($_SESSION['logged_in'])) {
 include 'config/db.php';
 include 'Get/fetch_sales.php';
 include 'Get/fetch_list_customer.php';
+include 'Get/fetch_coa.php';
 ?>
 <!-- Required for 💰 Sales
 
@@ -241,14 +242,14 @@ include 'Get/fetch_list_customer.php';
                             </div>
                             <div class="col-md-4">
                               <label>Deposit to</label>
-                              <select name="customer_id" id="customerSelect" class="form-control" required>
+                              <select name="deposit_id" id="coaSelect" class="form-control" required>
                                 <option value="" disabled selected>Select Customer</option>
                                 <?php foreach ($category as $categories): ?>
                                   <option
-                                    value="<?= $categories['customer_id'] ?>"
-                                    data-customername="<?= htmlspecialchars($categories['customer_name']) ?>"
-                                    data-companyname="<?= $categories['company_name'] ?>">
-                                    <?= htmlspecialchars($categories['customer_name']) ?>
+                                    value="<?= $categories['id'] ?>"
+                                    data-customername="<?= htmlspecialchars($categories['account_name']) ?>"
+                                    data-companyname="<?= $categories['account_code'] ?>">
+                                    <?= htmlspecialchars($categories['account_code']) ?> - <?= htmlspecialchars($categories['account_name']) ?>
                                   </option>
                                 <?php endforeach; ?>
                               </select>
