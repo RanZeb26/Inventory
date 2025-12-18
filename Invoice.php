@@ -8,6 +8,7 @@ include 'config/db.php';
 include 'Get/fetch_sales.php';
 include 'Get/fetch_list_customer.php';
 include 'Get/fetch_coa.php';
+include 'Get/fetch_payment_option.php';
 ?>
 <!-- Required for 💰 Sales
 
@@ -228,14 +229,13 @@ include 'Get/fetch_coa.php';
                           <div class="border rounded p-3 bg-light row g-3">
                             <div class="col-md-4">
                               <label>Payment Mode</label>
-                              <select name="customer_id" id="customerSelect" class="form-control" required>
-                                <option value="" disabled selected>Select Customer</option>
-                                <?php foreach ($category as $categories): ?>
+                              <select name="payment_id" id="paymentSelect" class="form-control" required>
+                                <option value="" disabled selected>Select payment mode</option>
+                                <?php foreach ($payment as $payments): ?>
                                   <option
-                                    value="<?= $categories['customer_id'] ?>"
-                                    data-customername="<?= htmlspecialchars($categories['customer_name']) ?>"
-                                    data-companyname="<?= $categories['company_name'] ?>">
-                                    <?= htmlspecialchars($categories['customer_name']) ?>
+                                    value="<?= $payments['id'] ?>"
+                                    data-customername="<?= htmlspecialchars($payments['name']) ?>">
+                                    <?= htmlspecialchars($payments['name']) ?>
                                   </option>
                                 <?php endforeach; ?>
                               </select>
@@ -243,13 +243,12 @@ include 'Get/fetch_coa.php';
                             <div class="col-md-4">
                               <label>Deposit to</label>
                               <select name="deposit_id" id="coaSelect" class="form-control" required>
-                                <option value="" disabled selected>Select Customer</option>
-                                <?php foreach ($category as $categories): ?>
+                                <option value="" disabled selected>Select accounts</option>
+                                <?php foreach ($account as $accounts): ?>
                                   <option
-                                    value="<?= $categories['id'] ?>"
-                                    data-customername="<?= htmlspecialchars($categories['account_name']) ?>"
-                                    data-companyname="<?= $categories['account_code'] ?>">
-                                    <?= htmlspecialchars($categories['account_code']) ?> - <?= htmlspecialchars($categories['account_name']) ?>
+                                    value="<?= $accounts['id'] ?>"
+                                    data-customernamedata-companyname="<?= $accounts['account_code'] ?>">
+                                    <?= htmlspecialchars($accounts['account_code']) ?> - <?= htmlspecialchars($accounts['account_name']) ?>
                                   </option>
                                 <?php endforeach; ?>
                               </select>
@@ -474,7 +473,7 @@ document.addEventListener("click", function(e) {
         row.querySelector(".amount").textContent = total.toFixed(2);
       }
 
-      //computeTotals(); // update totals
+      computeTotals(); // update totals
     }
 
     // Compute all totals
