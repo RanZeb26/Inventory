@@ -130,6 +130,8 @@ include 'config/db.php';
             <a href="#" onclick="loadPage('add_products', this)"><i class="typcn typcn-user"></i> User & Role</a>
             <a href="#" onclick="loadPage('product_adjustment', this)"><i class="typcn typcn-tag"></i> Tax</a>
             <a href="#" onclick="loadPage('adjustment_history', this)"><i class="typcn typcn-calculator"></i> Accounting</a>
+            <a href="#" onclick="loadPage('category', this)"><i class="typcn typcn-tag"></i> Category</a>
+            <a href="#" onclick="loadPage('unit', this)"><i class="typcn typcn-tag"></i> Unit</a>
             <a href="#" onclick="loadPage('reports', this)"><i class="typcn typcn-chart-pie"></i> Reports</a>
         </div>
 

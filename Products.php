@@ -50,17 +50,14 @@ include 'Get/fetch_category_item.php';
           <nav>
             <ul class="nav">
               <li class="sidesetings col-12">
-                <a class="nav-link hover:text-blue-500 dark:hover:text-blue-300" href="#">
-                  <!--<i class="typcn typcn-device-desktop menu-icon"></i>-->
-                  <span data-bs-toggle="modal" data-bs-target="#add_category_Modal">Add Category</span>
+                <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#add_category_Modal">Add Category
                 </a>
               </li>
-              <li class="sidesetings col-12">
-                <a class="nav-link" href="Products">
-                  <!--<i class="typcn typcn-dropbox menu-icon"></i>-->
-                  <span class="menu-title">Add Unit</span>
-                </a>
-              </li>
+<li class="sidesetings col-12">
+    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#add_unit_Modal">
+        Add Unit
+    </a>
+</li>
             </ul>
           </nav>
         </div>
@@ -299,9 +296,9 @@ include 'Get/fetch_category_item.php';
 
                       <!-- Add Category Modal -->
                       <div class="modal fade" id="add_category_Modal" tabindex="-1" aria-labelledby="add_category_ModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
+                        <div class="modal-dialog modal-md">
                           <div class="modal-content">
-                            <form id="itemForm">
+                            <form id="itemForm" action="add_category" method="POST">
                               <div class="modal-header">
                                 <h5 class="modal-title" id="add_item_ModalLabel">Add Category</h5>
                                 <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal">&times;</button>
@@ -309,47 +306,50 @@ include 'Get/fetch_category_item.php';
                               <div class="modal-body">
                                 <div class="container-fluid">
                                   <div class="row g-3">
-                                    <div class="col-md-6">
-                                      <label class="form-label">Product SKU / Code</label>
-                                      <input type="text" name="sku" class="form-control" required>
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Barcode</label>
-                                      <input type="text" name="barcode" class="form-control">
-                                    </div>
                                     <div class="col-md-12">
-                                      <label class="form-label">Product Name</label>
+                                      <label class="form-label">Category Name</label>
                                       <input type="text" name="name" class="form-control" required>
                                     </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Category</label>
-                                      <input type="text" name="category" class="form-control">
+                                    <div class="col-md-12">
+                                      <div class="form-group">
+                                        <label for="exampleSelectGender">Status</label>
+                                        <select class="form-control" name="status" id="exampleSelectGender">
+                                          <option>Active</option>
+                                          <option>Inactive</option>
+                                        </select>
+                                      </div>
+
                                     </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Brand</label>
-                                      <input type="text" name="brand" class="form-control">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="submit" class="btn btn-info">Save Category</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- END OF ADD Category MODAL -->
+
+                                            <!-- Add Unit Modal -->
+                      <div class="modal fade" id="add_unit_Modal" tabindex="-1" aria-labelledby="add_unit_ModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-md">
+                          <div class="modal-content">
+                            <form id="itemForm" action="add_unit" method="POST">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="add_unit_ModalLabel">Add Unit</h5>
+                                <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal">&times;</button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="container-fluid">
+                                  <div class="row g-3">
+                                    <div class="col-md-12">
+                                      <label class="form-label">Unit Name</label>
+                                      <input type="text" name="name" class="form-control" required>
                                     </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Unit</label>
-                                      <input type="text" name="unit" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
-                                      <label class="form-label">Reorder Level</label>
-                                      <input type="number" name="reorder_level" class="form-control">
-                                    </div>
-                                    <div class="col-md-4">
-                                      <label class="form-label">Quantity in Stock</label>
-                                      <input type="number" name="quantity" class="form-control">
-                                    </div>
-                                    <div class="col-md-4">
-                                      <label class="form-label">Cost Price</label>
-                                      <input type="number" name="cost_price" class="form-control">
-                                    </div>
-                                    <div class="col-md-4">
-                                      <label class="form-label">Selling Price</label>
-                                      <input type="number" name="selling_price" class="form-control">
-                                    </div>
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                       <div class="form-group">
                                         <label for="exampleSelectGender">Status</label>
                                         <select class="form-control" id="exampleSelectGender">
@@ -359,34 +359,19 @@ include 'Get/fetch_category_item.php';
                                       </div>
 
                                     </div>
-                                    <div class="col-md-6">
-                                      <div class="form-group">
-                                        <label>File upload</label>
-                                        <input type="file" name="img[]" class="file-upload-default">
-                                        <div class="input-group col-xs-12">
-                                          <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
-                                          <span class="input-group-append">
-                                            <button class="file-upload-browse btn btn-light" type="button">Upload</button>
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                      <label class="form-label">Description</label>
-                                      <textarea name="description" class="form-control" rows="3"></textarea>
-                                    </div>
                                   </div>
                                 </div>
                               </div>
                               <div class="modal-footer">
-                                <button type="submit" class="btn btn-info">Save Product</button>
+                                <button type="submit" class="btn btn-info">Save Unit</button>
                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                               </div>
                             </form>
                           </div>
                         </div>
                       </div>
-                      <!-- END OF ADD ITEM MODAL -->
+                      <!-- END OF ADD Unit MODAL -->
+
                       <div class="table-responsive pt-3">
                         <table id="productTable" class="table table-hover bg-white shadow-sm">
                           <thead class="table-light">
