@@ -5,6 +5,8 @@ if (!isset($_SESSION['logged_in'])) {
     exit;
 }
 include 'config/db.php';
+include 'Get/fetch_active_items.php';
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -94,30 +96,22 @@ include 'config/db.php';
                           <div class="col-lg-6">
                             <div id="circleProgress6" class="progressbar-js-circle rounded p-3"></div>
                           </div>
-                          <div class="col-lg-6">
-                            <ul class="session-by-channel-legend">
-                              <li>
-                                <div>Firewalls(3)</div>
-                                <div>4(100%)</div>
-                              </li>
-                              <li>
-                                <div>Ports(12)</div>
-                                <div>12(100%)</div>
-                              </li>
-                              <li>
-                                <div>Servers(233)</div>
-                                <div>2(100%)</div>
-                              </li>
-                              <li>
-                                <div>Firewalls(3)</div>
-                                <div>7(100%)</div>
-                              </li>
-                              <li>
-                                <div>Firewalls(3)</div>
-                                <div>6(70%)</div>
-                              </li>
-                            </ul>
-                          </div>
+                        <div class="col-lg-6">
+<ul class="session-by-channel-legend">
+<?php foreach($items as $row): 
+    $percentage = ($row['total'] > 0) 
+        ? round(($row['active'] / $row['total']) * 100) 
+        : 0;
+?>
+
+    <li>
+        <div><?= $row['cat_name'] ?>(<?= $row['total'] ?>)</div>
+        <div><?= $row['active'] ?>(<?= $percentage ?>%)</div>
+    </li>
+
+<?php endforeach; ?>
+</ul>
+                        </div>
                         </div>
                       </div>
                     </div>

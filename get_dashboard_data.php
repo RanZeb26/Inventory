@@ -23,8 +23,8 @@ while ($row = $result->fetch_assoc()) {
 
 // Get progress Sessions by Channel (example: % of closed events)
 $sql2 = "SELECT 
-            (SELECT COUNT(*) FROM events WHERE status='closed') / COUNT(*) 
-         AS progress FROM events";
+            (SELECT COUNT(*) FROM products WHERE status='Active') / COUNT(*) 
+         AS progress FROM products";
 $result2 = $conn->query($sql2);
 $row2 = $result2->fetch_assoc();
 $circleProgress = round($row2['progress'], 2); // e.g. 0.75 for 75%

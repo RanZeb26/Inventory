@@ -490,10 +490,15 @@ include 'Get/fetch_category_item.php';
                                                 <label class="form-label">Product Name</label>
                                                 <input type="text" name="name" value="<?= $row['name'] ?>" class="form-control" required>
                                               </div>
-                                              <div class="col-md-6">
-                                                <label class="form-label">Category</label>
-                                                <input type="text" name="category" value="<?= $row['category'] ?>" class="form-control">
-                                              </div>
+                                    <div class="col-md-6">
+                                      <label class="form-label">Category</label>
+                                      <select name="category" class="form-control">
+                                        <option value="" disabled selected>Select Category</option>
+                                        <?php foreach ($category as $categories): ?>
+                                          <option value="<?= $categories['id'] ?>"><?= htmlspecialchars($categories['cat_name']) ?></option>
+                                        <?php endforeach; ?>
+                                      </select>
+                                    </div>
                                               <div class="col-md-6">
                                                 <label class="form-label">Brand</label>
                                                 <input type="text" name="brand" value="<?= $row['brand'] ?>" class="form-control">
