@@ -114,7 +114,7 @@ include 'Get/fetch_products.php';
                                       <label class="form-label">Reason</label>
                                       <textarea name="reason" class="form-control" rows="3" placeholder="e.g. Damaged item, Incoming shipment, Inventory correction" required></textarea>
                                     </div>
-                                    <!-- Upload photo -->
+                                    <!-- Upload photo 
                                     <div class="col-md-12">
                                       <div class="form-group">
                                         <label>File upload</label>
@@ -127,7 +127,7 @@ include 'Get/fetch_products.php';
                                         </div>
                                       </div>
                                     </div>
-
+-->
 
 
                                   </div>

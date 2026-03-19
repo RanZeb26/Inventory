@@ -279,10 +279,7 @@ include 'Get/fetch_payment_option.php';
                               <input type="number" id="shipping" class="form-control form-control-sm w-50" value="0">
                             </div>
 
-                            <div class="d-flex justify-content-between mb-2">
-                              <span>VAT (7.5%)</span>
-                              <span id="vat">0.00</span>
-                            </div>
+                            
 
                             <div class="d-flex justify-content-between mb-2">
                               <span>Adjustment</span>
@@ -292,8 +289,16 @@ include 'Get/fetch_payment_option.php';
                             <hr>
 
                             <div class="d-flex justify-content-between mb-2 fw-bold">
-                              <span>Total Amount</span>
-                              <span id="grand_total" >0.00</span>
+                              <span style="font-weight: bold;">Total Amount</span>
+                              <span style="font-weight: bold;" id="grand_total" >0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                              <span>Vatable</span>
+                              <span id="vatable">0.00</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                              <span>VAT Amt</span>
+                              <span id="vat">0.00</span>
                             </div>
 
                           </div>
@@ -487,13 +492,17 @@ document.addEventListener("click", function(e) {
 
       let shipping = parseFloat(document.getElementById("shipping").value) || 0;
       let adjustment = parseFloat(document.getElementById("adjustment").value) || 0;
-      let vat = subtotal * 0.075; // 7.5%
+      
 
       document.getElementById("subtotal").textContent = subtotal.toFixed(2);
-      document.getElementById("vat").textContent = vat.toFixed(2);
+      
 
-      let grand = subtotal + vat + shipping + adjustment;
+      let grand = subtotal + shipping + adjustment;
       document.getElementById("grand_total").textContent = grand.toFixed(2);
+      let vat = grand / 1.12; // 7.5%
+      let vatable = grand - vat;
+      document.getElementById("vatable").textContent = vatable.toFixed(2);
+      document.getElementById("vat").textContent = vat.toFixed(2);
     }
 
     // Trigger recalculation when shipping or adjustment changes
