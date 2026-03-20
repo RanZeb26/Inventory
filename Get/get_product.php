@@ -65,7 +65,8 @@ foreach ($rows as $row) {
         'quantity'   => $row['quantity'],
         'cost_price' => $row['cost_price'],
         'total_cost' => $row['cost_price'] * $row['quantity'],
-        'category'   => $row['category']
+        'category'   => $row['category'],
+        'unit'       => $row['unit']
     ];
 }
 ?>

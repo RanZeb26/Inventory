@@ -7,6 +7,7 @@ if (!isset($_SESSION['logged_in'])) {
 include 'config/db.php';
 include 'Get/get_product.php';
 include 'Get/fetch_category_item.php';
+include 'Get/fetch_unit_item.php';
 ?>
 
 <!DOCTYPE html>
@@ -242,7 +243,12 @@ include 'Get/fetch_category_item.php';
                                     </div>
                                     <div class="col-md-6">
                                       <label class="form-label">Unit</label>
-                                      <input type="text" name="unit" class="form-control">
+                                                                            <select name="unit" class="form-control">
+                                        <option value="" disabled selected>Select Unit</option>
+                                        <?php foreach ($unit as $units): ?>
+                                          <option value="<?= htmlspecialchars($units['unit_name']) ?>"><?= htmlspecialchars($units['unit_name']) ?></option>
+                                        <?php endforeach; ?>
+                                      </select>
                                     </div>
                                     <div class="col-md-6">
                                       <div class="form-group">
@@ -477,12 +483,18 @@ include 'Get/fetch_category_item.php';
                                               </div>
                                     <div class="col-md-6">
                                       <label class="form-label">Category</label>
-                                      <select name="category" class="form-control">
-                                        <option value="" disabled selected>Select Category</option>
-                                        <?php foreach ($category as $categories): ?>
-                                          <option value="<?= $categories['id'] ?>"><?= htmlspecialchars($categories['cat_name']) ?></option>
-                                        <?php endforeach; ?>
-                                      </select>
+<select name="category" class="form-control">
+  <option disabled <?= empty($selectedCategoryId) ? 'selected' : '' ?>>Select Category</option>
+
+  <?php foreach ($category as $cat): ?>
+    <option value="<?= htmlspecialchars($cat['id']) ?>"
+      <?= (trim($cat['id']) === trim($row['category'])) ? 'selected' : '' ?>>
+      <?= htmlspecialchars($cat['cat_name']) ?>
+    </option>
+  <?php endforeach; ?>
+</select>
+
+
                                     </div>
                                               <div class="col-md-6">
                                                 <label class="form-label">Brand</label>
@@ -490,7 +502,16 @@ include 'Get/fetch_category_item.php';
                                               </div>
                                               <div class="col-md-6">
                                                 <label class="form-label">Unit</label>
-                                                <input type="text" name="unit" value="<?= $row['unit'] ?>" class="form-control">
+
+                                               <select name="unit" class="form-control">
+                                              <option disabled <?= empty($row['unit']) ? 'selected' : '' ?>>Select Unit</option>
+                                              <?php foreach ($unit as $type): ?>
+                                                <option value="<?= htmlspecialchars($type['unit_name']) ?>" 
+                                                  <?= trim($type['unit_name']) === trim($row['unit']) ? 'selected' : '' ?>>
+                                                  <?= htmlspecialchars($type['unit_name']) ?>
+                                                </option>
+                                              <?php endforeach; ?>
+                                            </select>
                                               </div>
                                               <div class="col-md-6">
                                                 <div class="form-group">

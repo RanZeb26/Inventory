@@ -160,7 +160,7 @@ include 'Get/fetch_products.php';
                               <?php foreach ($result as $row): ?>
                                 <tr>
                                   <td class="d-flex align-items-center">
-                                    <img src="<?= htmlspecialchars($row['image']) ?>" alt="img" class="me-3" width="40" height="40" style="object-fit:cover; border-radius:5px; padding:2px; border:1px solid #ccc;">
+                                    <img src="<?= !empty($row['image']) ? htmlspecialchars($row['image']) : 'images/default.png' ?>" alt="img" class="me-3" width="40" height="40" style="object-fit:cover; border-radius:5px; padding:2px; border:1px solid #ccc;">
                                     <div>
                                       <div class="fw-bold" style="font-weight: 900;"> <?= $row['company_name'] ?></div>
                                       <div class="fw-bold"> <?= $row['customer_name'] ?></div>
@@ -210,7 +210,7 @@ include 'Get/fetch_products.php';
                             <div class="modal-dialog modal-md">
                               <div class="modal-content">
                                 <form id="editItemForm" action="Update_Customer" method="POST" enctype="multipart/form-data">
-                                  <input type="hidden" id="edit_item_id" name="customer_id" value="<?= $row['customer_id'] ?>">
+                                  <input type="hidden" name="customer_id" value="<?= $row['customer_id'] ?>">
                                   <div class="modal-header">
                                     <h5 class="modal-title" id="editItemModalLabel">Edit Customer</h5>
                                     <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close">&times;</button>
@@ -220,7 +220,7 @@ include 'Get/fetch_products.php';
                                       <div class="row g-3">
                                         <div class="col-md-12">
                                           <label class="form-label">Customer Name</label>
-                                          <input type="text" value="<?= $row['customer_name'] ?>" name="customer_name" class="form-control" required>
+                                          <input type="text" value="<?= htmlspecialchars($row['customer_name']) ?>" name="customer_name" class="form-control" required>
                                         </div>
                                         <div class="col-md-12">
                                           <label class="form-label">Company Name</label>
@@ -255,7 +255,7 @@ include 'Get/fetch_products.php';
                                     </div>
                                   </div>
                                   <div class="modal-footer">
-                                    <button type="submit" class="btn btn-info">Update Product</button>
+                                    <button type="submit" class="btn btn-info">Update Customer</button>
                                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                                   </div>
                                 </form>
@@ -268,15 +268,15 @@ include 'Get/fetch_products.php';
                         <nav>
                           <ul class="pagination justify-content-center">
                             <?php if ($page > 1): ?>
-                              <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>&search=<?= $search ?>">&laquo; Prev</a></li>
+                              <li class="page-item"><a class="page-link" href="?page=<?= $page - 1 ?>&search=<?= urlencode($search) ?>">&laquo; Prev</a></li>
                             <?php endif; ?>
                             <?php for ($i = 1; $i <= $total_pages; $i++): ?>
                               <li class="page-item <?= $i == $page ? 'active' : '' ?>">
-                                <a class="page-link" href="?page=<?= $i ?>&search=<?= $search ?>"><?= $i ?></a>
+                                <a class="page-link" href="?page=<?= $i ?>&search=<?= urlencode($search) ?>"><?= $i ?></a>
                               </li>
                             <?php endfor; ?>
                             <?php if ($page < $total_pages): ?>
-                              <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>&search=<?= $search ?>">Next &raquo;</a></li>
+                              <li class="page-item"><a class="page-link" href="?page=<?= $page + 1 ?>&search=<?= urlencode($search) ?>">Next &raquo;</a></li>
                             <?php endif; ?>
                           </ul>
                         </nav>
@@ -304,6 +304,7 @@ include 'Get/fetch_products.php';
   <script src="js/template.js"></script>
   <script src="js/settings.js"></script>
   <script src="js/file-upload.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $(document).ready(function() {
       let deleteId = null;
@@ -314,7 +315,8 @@ include 'Get/fetch_products.php';
         deleteId = $(this).data("customer_id"); // ✅ matches attribute
 
         $("#delete_id").val(deleteId);
-        $("#deleteModal").modal("show");
+        var modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+modal.show();
 
       });
 
@@ -325,10 +327,8 @@ include 'Get/fetch_products.php';
           $.ajax({
             url: "delete_customer", // ✅ full filename
             type: "POST",
-            data: {
-
-              customer_id: deleteId
-            }, // ✅ matches PHP
+            data: {customer_id: deleteId}, // ✅ matches PHP
+            dataType: "json", 
             success: function(response) {
               if (response.status === "success") {
                 $("#deleteModal").modal("hide");

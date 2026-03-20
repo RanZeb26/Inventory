@@ -60,15 +60,16 @@ include 'Get/fetch_payment_option.php';
               <li class="sidesetings col-12">
                 <a class="nav-link hover:text-blue-500 dark:hover:text-blue-300" href="#">
                   <!--<i class="typcn typcn-device-desktop menu-icon"></i>-->
-                  <span data-bs-toggle="modal" data-bs-target="#add_category_Modal">Add Category</span>
+                  <span data-bs-toggle="modal" data-bs-target="#add_payment_mode_Modal">Add Payment Mode</span>
                 </a>
               </li>
+              <!--
               <li class="sidesetings col-12">
                 <a class="nav-link" href="Products">
-                  <!--<i class="typcn typcn-dropbox menu-icon"></i>-->
+                  <i class="typcn typcn-dropbox menu-icon"></i>
                   <span class="menu-title">Add Unit</span>
                 </a>
-              </li>
+              </li>-->
             </ul>
           </nav>
         </div>
@@ -111,6 +112,44 @@ include 'Get/fetch_payment_option.php';
           </div>
         </div>
         <!-- -------------------- MODALS ---------------------- -->
+                      <!-- Add Payment Mode Modal -->
+                      <div class="modal fade" id="add_payment_mode_Modal" tabindex="-1" aria-labelledby="add_payment_mode_ModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-md">
+                          <div class="modal-content">
+                            <form id="itemForm" action="add_payment_mode" method="POST">
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="add_payment_mode_ModalLabel">Add Payment Mode</h5>
+                                <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal">&times;</button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="container-fluid">
+                                  <div class="row g-3">
+                                    <div class="col-md-12">
+                                      <label class="form-label">Payment Mode</label>
+                                      <input type="text" name="name" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-12">
+                                      <div class="form-group">
+                                        <label for="exampleSelectGender">Status</label>
+                                        <select class="form-control" name="status" id="exampleSelectGender">
+                                          <option>Active</option>
+                                          <option>Inactive</option>
+                                        </select>
+                                      </div>
+
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="submit" class="btn btn-info">Save Payment Mode</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- END OF ADD Payment MODAL -->
 
         <!-- ADD MODAL -->
         <div class="modal fade" id="addModal" tabindex="-1">
@@ -322,7 +361,8 @@ include 'Get/fetch_payment_option.php';
             </div>
           </div>
         </div>
-
+<!-- END OF ADD Invoice MODAL -->
+ 
         <!-- EDIT MODAL -->
         <div class="modal fade" id="editModal" tabindex="-1">
           <div class="modal-dialog modal-mb">

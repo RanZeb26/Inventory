@@ -131,7 +131,7 @@ include 'Get/fetch_active_items.php';
                           <div class="col-sm-12">
                             <div class="d-flex justify-content-between mb-md-5 mt-3">
                               <div class="small">Critical</div>
-                              <div class="text-danger small">Error</div>
+                              <div class="text-danger small">Alert</div>
                               <div  class="text-warning small">Warning</div>
                             </div>
                             <canvas id="eventChart"></canvas>
@@ -249,7 +249,7 @@ include 'Get/fetch_active_items.php';
                     <div class="container mt-5">
                     <div class="analytics-card">
                       <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h5 class="analytics-title">Sales Analytics</h5>
+                        <h5 class="analytics-title">Sales Source Overview</h5>
                         <button class="btn btn-light btn-sm">Month</button>
                       </div>
 
