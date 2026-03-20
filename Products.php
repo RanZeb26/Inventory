@@ -352,7 +352,7 @@ include 'Get/fetch_category_item.php';
                                     <div class="col-md-12">
                                       <div class="form-group">
                                         <label for="exampleSelectGender">Status</label>
-                                        <select class="form-control" id="exampleSelectGender">
+                                        <select class="form-control" name="status" id="exampleSelectGender">
                                           <option>Active</option>
                                           <option>Inactive</option>
                                         </select>

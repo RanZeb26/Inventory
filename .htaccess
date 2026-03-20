@@ -148,6 +148,7 @@ RewriteRule ^save_items$ Add/save_selected_items.php [L]
 RewriteRule ^save_adj_desc$ Add/save_adj_desc.php [L]
 RewriteRule ^add_customer$ Add/save_customer.php [L]
 RewriteRule ^add_category$ Add/save_category.php [L]
+RewriteRule ^add_unit$ Add/save_unit.php [L]
 
 
 RewriteRule ^admin/add_prinv$ admin_salemtec/post/insert_prinv.php [L]
