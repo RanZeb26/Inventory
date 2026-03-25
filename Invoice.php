@@ -99,7 +99,9 @@ include 'Get/fetch_payment_option.php';
                           <div class="left-list bg-white border-end" id="listContainer" style="position: sticky; overflow-y: auto; height: 80vh;"></div>
                         </div>
                         <div class="col-md-7">
+
                           <div id="previewContainer" class="text-center text-muted mt-5">
+
                             <p>Select an item to preview</p>
                           </div>
                         </div>
@@ -339,10 +341,10 @@ include 'Get/fetch_payment_option.php';
                             <div class="d-flex justify-content-between mb-2">
                               <span>VAT Amt</span>
                               <span id="vat">0.00</span>
-                              <input type="text" name="subtotal" id="subtotal_input">
-                              <input type="text" name="tax_amount" id="tax_input">
-                              <input type="text" name="total_amount" id="grand_total_input">
-                              <input type="text" name="discount_total" id="discount_input">
+                              <input type="hidden" name="subtotal" id="subtotal_input">
+                              <input type="hidden" name="tax_amount" id="tax_input">
+                              <input type="hidden" name="total_amount" id="grand_total_input">
+                              <input type="hidden" name="discount_total" id="discount_input">
                             </div>
 
                           </div>
@@ -401,7 +403,7 @@ include 'Get/fetch_payment_option.php';
                 </div>
 
                 <div class="modal-footer">
-                  <button class="btn btn-danger" id="deleteBtn">Delete</button>
+                  <!-- <button class="btn btn-danger" id="deleteBtn" name="deleteBtn">Delete</button> -->
                   <button class="btn btn-primary">Save Changes</button>
                 </div>
 
@@ -512,7 +514,7 @@ computeRow(row);
 });
 
     // Recompute row on input change
-    document.addEventListener("input", function(e) {
+document.addEventListener("input", function(e) {
       if (e.target.classList.contains("qty") ||
         e.target.classList.contains("rate") ||
         e.target.classList.contains("discount") ||
@@ -520,7 +522,7 @@ computeRow(row);
         const row = e.target.closest("tr");
         computeRow(row);
       }
-    });
+});
 
     // Compute Amount per row
     function computeRow(row) {
@@ -540,7 +542,7 @@ computeRow(row);
       } else {
         row.querySelector(".amount").textContent = total.toFixed(2);
       }
-document.getElementById("discount_input").value = discount.toFixed(2);
+      document.getElementById("discount_input").value = discount.toFixed(2);
       computeTotals(); // update totals
     }
 
@@ -596,7 +598,9 @@ if (e.target.classList.contains("removeRow")) {
   computeTotals();
 }
     });
-    document.addEventListener("click", function(e) {
+
+    // Close dropdown when clicking outside
+  document.addEventListener("click", function(e) {
   document.querySelectorAll(".item-dropdown").forEach(d => {
     if (!d.contains(e.target) && !e.target.classList.contains("item-input")) {
       d.classList.remove("show");
@@ -666,7 +670,7 @@ function loadInvoices() {
     .then(res => res.json())
     .then(data => {
 
-      console.log(data);
+      // console.log(data);
 
       let html = "";
 
@@ -701,6 +705,8 @@ document.addEventListener("click", function(e) {
     loadPreview(id);
   }
 });
+
+// Load invoice details for preview
 function loadPreview(id) {
   fetch("fetch_invoice_details?id=" + id)
     .then(res => res.json())
@@ -725,9 +731,60 @@ let logo = c.logo
   ? `<img src="${c.logo}" style="height:60px;">`
   : '';
 
+  //Preview HTML
+    //   <div>
+    //   <button class="btn btn-info d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#addModal">
+    //     <i class="typcn typcn-plus"></i>
+    //     New Transaction
+    //   </button>
+    // </div>
 document.getElementById("previewContainer").innerHTML = `
   <div class="preview-box p-4 bg-white shadow-sm">
-<button class="btn btn-light" onclick="printInvoice()">Print / PDF</button>
+<div class="row mb-3">
+  <div class="col-md-12 d-flex justify-content-between align-items-center">
+<input type="hidden" name="invoice_id" value="${h.invoice_id}">
+    <!-- LEFT SIDE (Primary Action) -->
+
+   <!-- ACTION -->
+            <button class="btn btn-primary"
+              onclick="editInvoice(${h.invoice_id})"
+              data-bs-toggle="modal"
+              data-bs-target="#editModal"><i class="typcn typcn-edit"></i>
+              Edit
+            </button>
+    <!-- RIGHT SIDE (Actions) -->
+    <div class="d-flex align-items-center gap-2">
+
+      <button class="btn btn-light d-flex align-items-center gap-2" onclick="printInvoice()">
+        <i class="typcn typcn-printer"></i>
+        Print
+      </button>
+
+      <!-- 3 DOTS DROPDOWN -->
+      <div class="dropdown">
+        <button class="btn btn-basic" type="button" data-bs-toggle="dropdown">
+          <i class="typcn typcn-cog-outline"></i>
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+          <li><a class="dropdown-item sendInvoiceBtn" href="#">
+  <i class=" typcn typcn-mail"></i> Send Invoice
+</a></li>
+          <li><a class="dropdown-item" href="#" onclick="printInvoice()">
+            <i class="typcn typcn-export "></i> Export PDF
+          </a></li>
+          <li><a class="dropdown-item" href="#">
+            <i class="typcn typcn-tabs-outline"></i> Duplicate Invoice
+          </a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-danger deleteBtn" href="#"><i class="typcn typcn-trash"></i> Delete Invoice</a></li>
+        </ul>
+      </div>
+
+    </div>
+
+  </div>
+</div>
     <!-- HEADER -->
     <div class="d-flex justify-content-between border-bottom pb-3 mb-3">
 
@@ -759,6 +816,7 @@ document.getElementById("previewContainer").innerHTML = `
           </div>
 
           <!-- TABLE -->
+          <div class="table-responsive">
           <table class="table table-bordered">
             <thead class="table-light">
               <tr>
@@ -772,7 +830,7 @@ document.getElementById("previewContainer").innerHTML = `
               ${itemsHtml}
             </tbody>
           </table>
-
+</div>
           <!-- TOTALS -->
           <div class="row justify-content-end">
             <div class="col-md-5">
@@ -813,21 +871,14 @@ document.getElementById("previewContainer").innerHTML = `
             ${h.notes || '-'}
           </div>
 
-          <!-- ACTION -->
-          <div class="text-end mt-4">
-            <button class="btn btn-primary"
-              onclick="editInvoice(${h.invoice_id})"
-              data-bs-toggle="modal"
-              data-bs-target="#editModal">
-              Edit Invoice
-            </button>
-          </div>
+       
           
 
         </div>
       `;
     });
 }
+// Helper to display status badge
 function getStatusBadge(status) {
   switch(status) {
     case 'Paid':
@@ -840,16 +891,19 @@ function getStatusBadge(status) {
       return `<span class="badge bg-secondary">${status}</span>`;
   }
 }
+// Print Invoice (opens in new window)
 function printInvoice() {
 
   // Clone only the invoice content
   let content = document.querySelector(".preview-box").cloneNode(true);
 
   // ❌ Remove buttons (Edit, etc.)
+  let list = content.querySelectorAll("ul")
+  list.forEach(list=>list.remove());
   let buttons = content.querySelectorAll("button");
   buttons.forEach(btn => btn.remove());
 
-  let win = window.open("", "", "width=900,height=700");
+let win = window.open("", "_blank");  
 
   win.document.write(`
     <html>
@@ -976,17 +1030,41 @@ function editInvoice(id) {
 
     });
 }
-document.getElementById("deleteBtn").addEventListener("click", function(e) {
-  e.preventDefault();
 
-  let id = document.querySelector("#editForm [name=id]").value;
+// Delete Invoice
+// Use event delegation (works for dynamic content)
+document.addEventListener("click", function(e) {
+  if (e.target.classList.contains("deleteBtn")) {
+    e.preventDefault();
 
-  if (confirm("Delete this invoice?")) {
-    fetch("delete_invoice.php?id=" + id)
-      .then(() => {
-        loadInvoices();
-        location.reload();
+    let id = document.querySelector("[name=invoice_id]").value;
+
+    if (!id) {
+      alert("No invoice selected.");
+      return;
+    }
+
+    if (confirm("Delete this invoice?")) {
+      fetch("delete_invoice", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: "id=" + encodeURIComponent(id)
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === "success") {
+          loadInvoices(); // reload list only
+        } else {
+          alert(data.message || "Delete failed");
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Something went wrong");
       });
+    }
   }
 });
   </script>

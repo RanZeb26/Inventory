@@ -431,11 +431,11 @@ include 'Get/fetch_unit_item.php';
                                   </td>
                                   <td>
                                     <button class="btn btn-inverse-warning btn-icon mr-2 edit-btn" data-bs-toggle="modal" data-bs-target="#editModal<?= $row['product_id'] ?>"><i class="typcn typcn-edit"></i></button>
-<!-- <button type="button"
+<button type="button"
   class="btn btn-inverse-info btn-icon mr-2 view-btn"
   onclick="redirectToList(<?= $row['product_id'] ?>)">
   <i class="typcn typcn-eye-outline"></i>
-</button> -->
+</button>
                                     <button class="btn btn-inverse-danger btn-icon open-delete-modal" data-id="<?= $row['product_id'] ?>"><i class="typcn typcn-delete-outline"></i></button>
                                   </td>
                                 </tr>

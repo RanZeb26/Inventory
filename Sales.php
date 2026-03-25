@@ -430,7 +430,7 @@ include 'Get/fetch_list_customer.php';
         .then(res => res.json())
         .then(data => {
           items = data; // Save globally
-          console.log("Items loaded:", items);
+          // console.log("Items loaded:", items);
         })
         .catch(err => console.error(err));
     }

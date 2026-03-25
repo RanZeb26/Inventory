@@ -181,12 +181,11 @@ include 'Get/fetch_products.php';
                                       data-bs-toggle="modal" data-bs-target="#editModal<?= $row['customer_id'] ?>">
                                       <i class="typcn typcn-edit"></i>
                                     </button>
-                                    <!-- VIEW BUTTON  
-<button type="button"
-  class="btn btn-inverse-info btn-icon mr-2 view-btn"
-  onclick="redirectToList(<?= $row['customer_id'] ?>)">
-  <i class="typcn typcn-eye-outline"></i>
-</button>-->
+                                    <!-- VIEW BUTTON 
+                                    <button type="button" class="btn btn-inverse-info btn-icon mr-2 view-btn"
+                                      data-bs-toggle="modal" data-bs-target="#viewModal<?= $row['adj_id'] ?>" onclick="redirectToList(<?= $row['adj_id'] ?>)">
+                                      <i class="typcn typcn-eye-outline"></i>
+                                    </button>-->
                                     <!-- DELETE BUTTON -->
                                     <button class="btn btn-inverse-danger btn-icon open-delete-modal"
                                       data-customer_id="<?= $row['customer_id'] ?>">
@@ -305,7 +304,7 @@ include 'Get/fetch_products.php';
   <script src="js/template.js"></script>
   <script src="js/settings.js"></script>
   <script src="js/file-upload.js"></script>
-  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     $(document).ready(function() {
       let deleteId = null;
@@ -346,10 +345,12 @@ modal.show();
         }
       });
     });
-function redirectToList(itemId) {
-  console.log("Redirecting to: csview?id=" + itemId);
-  window.location.href = `csview?id=${itemId}`;
-}
+
+
+    function redirectToList(referenceId) {
+      console.log("Redirecting to: list?id=" + referenceId); // Debugging
+      window.location.href = `list?id=${referenceId}`;
+    }
   </script>
 </body>
 
