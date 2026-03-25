@@ -5,7 +5,6 @@ if (!isset($_SESSION['logged_in'])) {
   exit;
 }
 include 'config/db.php';
-include 'Get/fetch_sales.php';
 include 'Get/fetch_list_customer.php';
 include 'Get/fetch_coa.php';
 include 'Get/fetch_payment_option.php';
@@ -32,6 +31,7 @@ include 'Get/fetch_payment_option.php';
     text-align: center;
     cursor: pointer;
   }
+
 </style>
 <head>
   <meta charset="UTF-8">
@@ -117,6 +117,7 @@ include 'Get/fetch_payment_option.php';
                         <div class="modal-dialog modal-md">
                           <div class="modal-content">
                             <form id="itemForm" action="add_payment_mode" method="POST">
+                              <!-- <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>"> -->
                               <div class="modal-header">
                                 <h5 class="modal-title" id="add_payment_mode_ModalLabel">Add Payment Mode</h5>
                                 <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal">&times;</button>
@@ -156,7 +157,7 @@ include 'Get/fetch_payment_option.php';
           <div class="modal-dialog modal-lg">
             <div class="modal-content">
 
-              <form id="addForm">
+              <form id="addForm" method="POST" action="add_invoice">
                 <div class="modal-header">
                   <h5 class="modal-title">Add New Invoice</h5>
                   <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal">&times;</button>
@@ -286,7 +287,7 @@ include 'Get/fetch_payment_option.php';
                                 <?php foreach ($account as $accounts): ?>
                                   <option
                                     value="<?= $accounts['id'] ?>"
-                                    data-customernamedata-companyname="<?= $accounts['account_code'] ?>">
+                                    data-accountcode="<?= $accounts['account_code'] ?>">
                                     <?= htmlspecialchars($accounts['account_code']) ?> - <?= htmlspecialchars($accounts['account_name']) ?>
                                   </option>
                                 <?php endforeach; ?>
@@ -294,7 +295,7 @@ include 'Get/fetch_payment_option.php';
                             </div>
                             <div class="col-md-4">
                               <label>Reference #</label>
-                              <input type="text" style="height: 35px;" class="form-control" name="company_name" id="companyName">
+                              <input type="text" style="height: 35px;" class="form-control" name="reference" id="reference">
                             </div>
                             <div class="col-md-12">
                               <label>Notes</label>
@@ -338,6 +339,10 @@ include 'Get/fetch_payment_option.php';
                             <div class="d-flex justify-content-between mb-2">
                               <span>VAT Amt</span>
                               <span id="vat">0.00</span>
+                              <input type="text" name="subtotal" id="subtotal_input">
+                              <input type="text" name="tax_amount" id="tax_input">
+                              <input type="text" name="total_amount" id="grand_total_input">
+                              <input type="text" name="discount_total" id="discount_input">
                             </div>
 
                           </div>
@@ -362,7 +367,7 @@ include 'Get/fetch_payment_option.php';
           </div>
         </div>
 <!-- END OF ADD Invoice MODAL -->
- 
+
         <!-- EDIT MODAL -->
         <div class="modal fade" id="editModal" tabindex="-1">
           <div class="modal-dialog modal-mb">
@@ -461,7 +466,9 @@ include 'Get/fetch_payment_option.php';
 
         // Create dropdown list
         dropdown.innerHTML = filtered.map(i => `
-      <button class="dropdown-item select-item" data-name="${i.name}" data-rate="${i.selling_price}">
+
+
+      <button type="button" class="dropdown-item select-item" data-id="${i.product_id}" data-name="${i.name}" data-rate="${i.selling_price}">
         ${i.name} <span class="text-muted float-end"> ₱${i.selling_price}</span>
       </button>
     `).join("");
@@ -473,16 +480,32 @@ document.addEventListener("click", function(e) {
   if (e.target.classList.contains("select-item")) {
     e.preventDefault(); // ⛔ stop form submit
 
-    const name = e.target.dataset.name;
-    const rate = e.target.dataset.rate;
+const id = e.target.dataset.id;
+const name = e.target.dataset.name;
+const rate = e.target.dataset.rate;
 
-    const wrapper = e.target.closest(".item-dropdown-wrapper");
-    wrapper.querySelector(".item-input").value = name;
+const wrapper = e.target.closest(".item-dropdown-wrapper");
 
-    const row = wrapper.closest("tr");
-    row.querySelector(".rate").value = rate;
+// set visible name
+wrapper.querySelector(".item-input").value = name;
 
-    computeRow(row);
+// 👉 store product_id (hidden)
+let hidden = wrapper.querySelector(".product-id");
+
+if (!hidden) {
+  hidden = document.createElement("input");
+  hidden.type = "hidden";
+  hidden.classList.add("product-id");
+  wrapper.appendChild(hidden);
+}
+
+hidden.value = id;
+
+// set price
+const row = wrapper.closest("tr");
+row.querySelector(".rate").value = rate;
+
+computeRow(row);
 
     wrapper.querySelector(".item-dropdown").classList.remove("show");
   }
@@ -517,7 +540,7 @@ document.addEventListener("click", function(e) {
       } else {
         row.querySelector(".amount").textContent = total.toFixed(2);
       }
-
+document.getElementById("discount_input").value = discount.toFixed(2);
       computeTotals(); // update totals
     }
 
@@ -535,14 +558,18 @@ document.addEventListener("click", function(e) {
       
 
       document.getElementById("subtotal").textContent = subtotal.toFixed(2);
+      document.getElementById("subtotal_input").value = subtotal.toFixed(2);
       
 
       let grand = subtotal + shipping + adjustment;
       document.getElementById("grand_total").textContent = grand.toFixed(2);
+      document.getElementById("grand_total_input").value = grand.toFixed(2);
+
       let vat = grand / 1.12; // 7.5%
       let vatable = grand - vat;
       document.getElementById("vatable").textContent = vatable.toFixed(2);
       document.getElementById("vat").textContent = vat.toFixed(2);
+      document.getElementById("tax_input").value = vat.toFixed(2);
     }
 
     // Trigger recalculation when shipping or adjustment changes
@@ -553,99 +580,415 @@ document.addEventListener("click", function(e) {
     // Add Row
     document.getElementById("addRow").onclick = function() {
       let row = document.querySelector("tbody tr").cloneNode(true);
-      row.querySelectorAll("input").forEach(i => i.value = 0);
+      //row.querySelectorAll("input").forEach(i => i.value = 0);
+      row.querySelector(".item-input").value = "";
+      row.querySelector(".qty").value = 1;
+      row.querySelector(".rate").value = 0;
+      row.querySelector(".discount").value = 0;
+      row.querySelector(".amount").value = 0;
       document.getElementById("itemRows").appendChild(row);
     };
 
     // Remove Row
     document.addEventListener("click", function(e) {
-      if (e.target.classList.contains("removeRow")) {
-        e.target.closest("tr").remove();
-      }
+if (e.target.classList.contains("removeRow")) {
+  e.target.closest("tr").remove();
+  computeTotals();
+}
     });
+    document.addEventListener("click", function(e) {
+  document.querySelectorAll(".item-dropdown").forEach(d => {
+    if (!d.contains(e.target) && !e.target.classList.contains("item-input")) {
+      d.classList.remove("show");
+    }
+  });
+});
 
     // TEMP LOCAL DATA (will be replaced by PHP + MySQL)
-    let data = {
-      "Invoices": [{
-          id: 1,
-          code: "INV-0001",
-          date: "2025-01-10",
-          customer: "ABC Corp",
-          amount: 15000
-        },
-        {
-          id: 2,
-          code: "INV-0002",
-          date: "2025-01-12",
-          customer: "John Doe",
-          amount: 8950
-        },
-        {
-          id: 3,
-          code: "INV-0003",
-          date: "2025-01-14",
-          customer: "Metro Supplies",
-          amount: 32000
-        },
-      ],
-      "Bills": [{
-        id: 1,
-        code: "BILL-9001",
-        date: "2025-01-08",
-        vendor: "Water Utility",
-        amount: 2500
-      }, ]
-    };
+    // let data = {
+    //   "Invoices": [{
+    //       id: 1,
+    //       code: "INV-0001",
+    //       date: "2025-01-10",
+    //       customer: "ABC Corp",
+    //       amount: 15000
+    //     },
+    //     {
+    //       id: 2,
+    //       code: "INV-0002",
+    //       date: "2025-01-12",
+    //       customer: "John Doe",
+    //       amount: 8950
+    //     },
+    //     {
+    //       id: 3,
+    //       code: "INV-0003",
+    //       date: "2025-01-14",
+    //       customer: "Metro Supplies",
+    //       amount: 32000
+    //     },
+    //   ],
+    //   "Bills": [{
+    //     id: 1,
+    //     code: "BILL-9001",
+    //     date: "2025-01-08",
+    //     vendor: "Water Utility",
+    //     amount: 2500
+    //   }, ]
+    // };
 
-    function loadMenu(menu) {
-      document.getElementById("listTitle").innerText = menu;
+    //Submit items as JSON string
+ document.getElementById("addForm").addEventListener("submit", function(e) {
 
-      let list = data[menu] || [];
+  let rows = [];
+
+  document.querySelectorAll("#itemRows tr").forEach(row => {
+    rows.push({
+      product_id: row.querySelector(".product-id")?.value || 0,
+      qty: row.querySelector(".qty").value,
+      rate: row.querySelector(".rate").value,
+      tax: row.querySelector(".tax").value,
+      amount: row.querySelector(".amount").value
+    });
+  });
+
+  let hidden = document.createElement("input");
+  hidden.type = "hidden";
+  hidden.name = "items";
+  hidden.value = JSON.stringify(rows);
+
+  this.appendChild(hidden);
+});
+
+//Load list of invoices
+function loadInvoices() {
+  fetch("fetch_invoices") // ← make sure .php if no routing
+    .then(res => res.json())
+    .then(data => {
+
+      console.log(data);
+
       let html = "";
 
-      list.forEach(item => {
+      data.forEach(item => {
         html += `
-        <div class="card mb-2 invoice-item" onclick='loadPreview(${JSON.stringify(item)})'>
-            <div class="card-body border">
-                <strong>${item.code}</strong><br>
-                <small>${item.date}</small><br>
-                <span>${item.customer || item.vendor}</span>
-            </div>
+        <div class="card mb-2 invoice-item" data-id="${item.invoice_id}">
+          <div class="card-body border">
+            <strong>${item.invoice_no ?? ''}</strong><br>
+            <small>${item.invoice_date ?? ''}</small><br>
+            <span>${item.customer_name ?? ''}</span>
+          </div>
         </div>
         `;
       });
 
       document.getElementById("listContainer").innerHTML = html;
-    }
+    })
+    .catch(err => {
+      console.error("Fetch error:", err);
+    });
+}
+document.addEventListener("click", function(e) {
+  const card = e.target.closest(".invoice-item");
+  if (card) {
+    document.querySelectorAll(".invoice-item").forEach(el => {
+      el.classList.remove("active");
+    });
 
-    function loadPreview(item) {
-      document.getElementById("previewContainer").innerHTML = `
-        <div class="preview-box">
-            <span class="tag">Draft</span>
-            <h3 class="mt-3">INVOICE</h3>
-            <p class="mt-2"><strong># ${item.code}</strong></p>
+    card.classList.add("active");
 
-            <p><strong>Date:</strong> ${item.date}</p>
-            <p><strong>Name:</strong> ${item.customer || item.vendor}</p>
-            <p><strong>Amount Due:</strong> ₱${item.amount.toLocaleString()}</p>
+    const id = card.dataset.id;
+    loadPreview(id);
+  }
+});
+function loadPreview(id) {
+  fetch("fetch_invoice_details?id=" + id)
+    .then(res => res.json())
+    .then(data => {
 
-            <button class="btn btn-sm btn-primary mt-3" onclick='editInvoice(${JSON.stringify(item)})'
-                    data-bs-toggle="modal" data-bs-target="#editModal">
-                Edit Invoice
+  let h = data.header;
+  let c = data.company; // 👈 company data
+      let itemsHtml = "";
+
+      data.items.forEach(i => {
+        itemsHtml += `
+          <tr>
+            <td>${i.name}</td>
+            <td class="text-center">${i.quantity}</td>
+            <td class="text-end">₱${parseFloat(i.unit_price).toFixed(2)}</td>
+            <td class="text-end">₱${parseFloat(i.line_total).toFixed(2)}</td>
+          </tr>
+        `;
+      });
+
+let logo = c.logo 
+  ? `<img src="${c.logo}" style="height:60px;">`
+  : '';
+
+document.getElementById("previewContainer").innerHTML = `
+  <div class="preview-box p-4 bg-white shadow-sm">
+<button class="btn btn-light" onclick="printInvoice()">Print / PDF</button>
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between border-bottom pb-3 mb-3">
+
+      <div>
+        ${logo}
+        <h5 class="mt-2">${c.company_name}</h5>
+        <small>${c.address}</small><br>
+        <small>${c.contact}</small>
+      </div>
+
+      <div class="text-end">
+        <h4>INVOICE</h4>
+        <strong>#${h.invoice_no}</strong><br>
+        <small>Date: ${h.invoice_date}</small>
+      </div>
+
+    </div>
+
+          <!-- CUSTOMER INFO -->
+          <div class="row mb-3">
+            <div class="col-6">
+              <strong>BILL TO:</strong><br>
+              ${h.customer_name || '-'}
+            </div>
+            <div class="col-6 text-end">
+              <strong>Status:</strong> ${getStatusBadge(h.status)} <br>
+              <strong>Due:</strong> ${h.due_date || '-'}
+            </div>
+          </div>
+
+          <!-- TABLE -->
+          <table class="table table-bordered">
+            <thead class="table-light">
+              <tr>
+                <th>Item</th>
+                <th class="text-center">Qty</th>
+                <th class="text-end">Price</th>
+                <th class="text-end">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemsHtml}
+            </tbody>
+          </table>
+
+          <!-- TOTALS -->
+          <div class="row justify-content-end">
+            <div class="col-md-5">
+
+              <table class="table table-sm">
+                <tr>
+                  <td>Subtotal</td>
+                  <td class="text-end">₱${parseFloat(h.subtotal).toFixed(2)}</td>
+                </tr>
+                <tr>
+                  <td>Tax</td>
+                  <td class="text-end">₱${parseFloat(h.tax_amount).toFixed(2)}</td>
+                </tr>
+                <tr>
+                  <td>Discount</td>
+                  <td class="text-end">₱${parseFloat(h.discount).toFixed(2)}</td>
+                </tr>
+                <tr class="fw-bold">
+                  <td>Total</td>
+                  <td class="text-end">₱${parseFloat(h.total_amount).toFixed(2)}</td>
+                </tr>
+                <tr>
+                  <td>Paid</td>
+                  <td class="text-end">₱${parseFloat(h.amount_paid).toFixed(2)}</td>
+                </tr>
+                <tr class="fw-bold text-danger">
+                  <td>Balance</td>
+                  <td class="text-end">₱${parseFloat(h.balance).toFixed(2)}</td>
+                </tr>
+              </table>
+
+            </div>
+          </div>
+
+          <!-- NOTES -->
+          <div class="mt-3">
+            <strong>Notes:</strong><br>
+            ${h.notes || '-'}
+          </div>
+
+          <!-- ACTION -->
+          <div class="text-end mt-4">
+            <button class="btn btn-primary"
+              onclick="editInvoice(${h.invoice_id})"
+              data-bs-toggle="modal"
+              data-bs-target="#editModal">
+              Edit Invoice
             </button>
+          </div>
+          
+
         </div>
-    `;
-    }
+      `;
+    });
+}
+function getStatusBadge(status) {
+  switch(status) {
+    case 'Paid':
+      return `<span class="badge bg-success">Paid</span>`;
+    case 'Draft':
+      return `<span class="badge bg-warning text-dark">Draft</span>`;
+    case 'Overdue':
+      return `<span class="badge bg-danger">Overdue</span>`;
+    default:
+      return `<span class="badge bg-secondary">${status}</span>`;
+  }
+}
+function printInvoice() {
 
-    function editInvoice(item) {
-      document.querySelector("#editForm [name=id]").value = item.id;
-      document.querySelector("#editForm [name=customer]").value = item.customer;
-      document.querySelector("#editForm [name=date]").value = item.date;
-      document.querySelector("#editForm [name=amount]").value = item.amount;
-    }
+  // Clone only the invoice content
+  let content = document.querySelector(".preview-box").cloneNode(true);
 
-    // Default load
-    loadMenu("Invoices");
+  // ❌ Remove buttons (Edit, etc.)
+  let buttons = content.querySelectorAll("button");
+  buttons.forEach(btn => btn.remove());
+
+  let win = window.open("", "", "width=900,height=700");
+
+  win.document.write(`
+    <html>
+      <head>
+        <title>Invoice</title>
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <style>
+          @page {
+            size: A4;
+            margin: 20mm;
+          }
+
+          body {
+            font-family: Arial, sans-serif;
+            background: #fff;
+          }
+
+          .invoice-container {
+            max-width: 800px;
+            margin: auto;
+          }
+
+          h4, h5 {
+            margin: 0;
+          }
+
+          .table {
+            width: 100%;
+            border-collapse: collapse;
+          }
+
+          .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+          }
+
+          .table th {
+            background: #f5f5f5;
+          }
+
+          .text-end {
+            text-align: right;
+          }
+
+          .text-center {
+            text-align: center;
+          }
+
+          .fw-bold {
+            font-weight: bold;
+          }
+
+          .totals-table td {
+            border: none !important;
+            padding: 4px 8px;
+          }
+
+          .totals-table tr:last-child td {
+            border-top: 2px solid #000 !important;
+            font-size: 16px;
+          }
+
+          .no-print {
+            display: none;
+          }
+        </style>
+      </head>
+
+      <body>
+
+        <div class="invoice-container">
+          ${content.innerHTML}
+        </div>
+
+      </body>
+    </html>
+  `);
+
+  win.document.close();
+
+  // Wait for content to load before printing
+  win.onload = function() {
+    win.focus();
+    win.print();
+    win.close();
+  };
+}
+
+// load on start
+loadInvoices();
+// Edit Invoice (pre-fill form)
+function editInvoice(id) {
+  fetch("fetch_invoice_details?id=" + id)
+    .then(res => res.json())
+    .then(data => {
+
+      let h = data.header;
+
+      // SET HEADER
+      document.querySelector("#editForm [name=id]").value = h.invoice_id;
+      document.querySelector("#editForm [name=customer]").value = h.customer_name;
+      document.querySelector("#editForm [name=date]").value = h.invoice_date;
+      document.querySelector("#editForm [name=amount]").value = h.total_amount;
+
+      // LOAD ITEMS
+      let tbody = document.getElementById("itemRows");
+      tbody.innerHTML = "";
+
+      data.items.forEach(i => {
+        let row = `
+        <tr>
+          <td>
+            <input type="text" class="form-control" value="${i.product_name}">
+          </td>
+          <td><input type="number" class="form-control" value="${i.quantity}"></td>
+          <td><input type="number" class="form-control" value="${i.unit_price}"></td>
+          <td><input type="text" class="form-control" value="${i.line_total}" readonly></td>
+        </tr>
+        `;
+        tbody.innerHTML += row;
+      });
+
+    });
+}
+document.getElementById("deleteBtn").addEventListener("click", function(e) {
+  e.preventDefault();
+
+  let id = document.querySelector("#editForm [name=id]").value;
+
+  if (confirm("Delete this invoice?")) {
+    fetch("delete_invoice.php?id=" + id)
+      .then(() => {
+        loadInvoices();
+        location.reload();
+      });
+  }
+});
   </script>
 </body>
 

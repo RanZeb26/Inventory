@@ -125,8 +125,8 @@ include 'config/db.php';
             <hr style="border-top:1px solid #374151">
 
             <a href="#" onclick="loadPage('settings_company', this)"><i class="typcn typcn-group"></i> Company Information</a>
-            <a href="#" onclick="loadPage('items', this)"><i class="typcn typcn-shopping-bag"></i> Inventory Settings</a>
-            <a href="#" onclick="loadPage('customers', this)"><i class="typcn typcn-document-text"></i> Documents Settings</a>
+            <a href="#" onclick="loadPage('profile', this)"><i class="typcn typcn-shopping-bag"></i> Profile Settings</a>
+            <a href="#" onclick="loadPage('document_settings', this)"><i class="typcn typcn-document-text"></i> Documents Settings</a>
             <a href="#" onclick="loadPage('add_products', this)"><i class="typcn typcn-user"></i> User & Role</a>
             <a href="#" onclick="loadPage('product_adjustment', this)"><i class="typcn typcn-tag"></i> Tax</a>
             <a href="#" onclick="loadPage('adjustment_history', this)"><i class="typcn typcn-calculator"></i> Accounting</a>
@@ -212,8 +212,8 @@ include 'config/db.php';
 
         const allowedPages = [
             "settings_company",
-            "items",
-            "customers",
+            "profile",
+            "document_settings",
             "add_products",
             "product_adjustment",
             "adjustment_history",

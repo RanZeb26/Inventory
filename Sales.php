@@ -5,7 +5,6 @@ if (!isset($_SESSION['logged_in'])) {
   exit;
 }
 include 'config/db.php';
-include 'Get/fetch_sales.php';
 include 'Get/fetch_list_customer.php';
 ?>
 <!-- Required for 💰 Sales
@@ -58,15 +57,16 @@ include 'Get/fetch_list_customer.php';
               <li class="sidesetings col-12">
                 <a class="nav-link hover:text-blue-500 dark:hover:text-blue-300" href="#">
                   <!--<i class="typcn typcn-device-desktop menu-icon"></i>-->
-                  <span data-bs-toggle="modal" data-bs-target="#add_category_Modal">Add Category</span>
+                  <span data-bs-toggle="modal" data-bs-target="#add_payment_mode_Modal">Add Payment Mode</span>
                 </a>
               </li>
+              <!--
               <li class="sidesetings col-12">
                 <a class="nav-link" href="Products">
-                  <!--<i class="typcn typcn-dropbox menu-icon"></i>-->
+                  <i class="typcn typcn-dropbox menu-icon"></i>
                   <span class="menu-title">Add Unit</span>
                 </a>
-              </li>
+              </li>-->
             </ul>
           </nav>
         </div>
@@ -90,7 +90,7 @@ include 'Get/fetch_list_customer.php';
 
                             <!-- BUTTONS -->
                             <div>
-                              <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">+ New Sales Receipt</button>
+                              <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">+ New Sales</button>
                             </div>
                           </div>
                           <div class="left-list bg-white border-end" id="listContainer" style="position: sticky; overflow-y: auto; height: 80vh;"></div>
@@ -109,7 +109,45 @@ include 'Get/fetch_list_customer.php';
           </div>
         </div>
         <!-- -------------------- MODALS ---------------------- -->
+                      <!-- Add Payment Mode Modal -->
+                      <div class="modal fade" id="add_payment_mode_Modal" tabindex="-1" aria-labelledby="add_payment_mode_ModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-md">
+                          <div class="modal-content">
+                            <form id="itemForm" action="add_payment_mode" method="POST">
+                              <!-- <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>"> -->
+                              <div class="modal-header">
+                                <h5 class="modal-title" id="add_payment_mode_ModalLabel">Add Payment Mode</h5>
+                                <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal">&times;</button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="container-fluid">
+                                  <div class="row g-3">
+                                    <div class="col-md-12">
+                                      <label class="form-label">Payment Mode</label>
+                                      <input type="text" name="name" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-12">
+                                      <div class="form-group">
+                                        <label for="exampleSelectGender">Status</label>
+                                        <select class="form-control" name="status" id="exampleSelectGender">
+                                          <option>Active</option>
+                                          <option>Inactive</option>
+                                        </select>
+                                      </div>
 
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button type="submit" class="btn btn-info">Save Payment Mode</button>
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- END OF ADD Payment MODAL -->
         <!-- ADD MODAL -->
         <div class="modal fade" id="addModal" tabindex="-1">
           <div class="modal-dialog modal-lg">
@@ -513,52 +551,52 @@ include 'Get/fetch_list_customer.php';
     });
 
     // TEMP LOCAL DATA (will be replaced by PHP + MySQL)
-    let data = {
-      "Sales": [{
-          id: 1,
-          code: "SR-0001",
-          date: "2025-01-10",
-          customer: "ABC Corp",
-          amount: 15000
-        },
-        {
-          id: 2,
-          code: "SR-0002",
-          date: "2025-01-12",
-          customer: "John Doe",
-          amount: 8950
-        },
-        {
-          id: 3,
-          code: "SR-0003",
-          date: "2025-01-14",
-          customer: "Metro Supplies",
-          amount: 32000
-        },
-        {
-          id: 4,
-          code: "SR-0004",
-          date: "2025-01-14",
-          customer: "Gardening Supplies",
-          amount: 32000
-        },
-        {
-          id: 5,
-          code: "SR-0005",
-          date: "2025-01-14",
-          customer: "Electric Supplies",
-          amount: 32000
-        },
+    // let data = {
+    //   "Sales": [{
+    //       id: 1,
+    //       code: "SR-0001",
+    //       date: "2025-01-10",
+    //       customer: "ABC Corp",
+    //       amount: 15000
+    //     },
+    //     {
+    //       id: 2,
+    //       code: "SR-0002",
+    //       date: "2025-01-12",
+    //       customer: "John Doe",
+    //       amount: 8950
+    //     },
+    //     {
+    //       id: 3,
+    //       code: "SR-0003",
+    //       date: "2025-01-14",
+    //       customer: "Metro Supplies",
+    //       amount: 32000
+    //     },
+    //     {
+    //       id: 4,
+    //       code: "SR-0004",
+    //       date: "2025-01-14",
+    //       customer: "Gardening Supplies",
+    //       amount: 32000
+    //     },
+    //     {
+    //       id: 5,
+    //       code: "SR-0005",
+    //       date: "2025-01-14",
+    //       customer: "Electric Supplies",
+    //       amount: 32000
+    //     },
 
-      ],
-      "Bills": [{
-        id: 1,
-        code: "BILL-9001",
-        date: "2025-01-08",
-        vendor: "Water Utility",
-        amount: 2500
-      }, ]
-    };
+    //   ],
+    //   "Bills": [{
+    //     id: 6,
+    //     code: "BILL-9001",
+    //     date: "2025-01-08",
+    //     vendor: "Water Utility",
+    //     amount: 2500
+    //   }, ]
+    // };
 
     function loadMenu(menu) {
       document.getElementById("listTitle").innerText = menu;

@@ -74,3 +74,23 @@ input[type=range]::-moz-range-thumb {
   border-radius: 50%;
   cursor: pointer;
 }
+  .preview-box {
+  border-radius: 10px;
+}
+
+.preview-box h4 {
+  font-weight: bold;
+}
+
+.table td, .table th {
+  vertical-align: middle;
+}
+
+.watermark {
+  position: absolute;
+  top: 40%;
+  left: 20%;
+  font-size: 80px;
+  color: rgba(0,0,0,0.05);
+  transform: rotate(-30deg);
+}

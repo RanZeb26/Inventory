@@ -20,13 +20,20 @@ include '../config/db.php';
 </head>
 <body>
           <div class="col-12 grid-margin">
+                                  <h4 class="fw-bold">🏢 Company & System Information</h4>
+  <p class="text-muted">Manage company profile and system defaults.</p>
             <div class="card-body">
               <div class="row">
                 <div class="col-lg-12 d-flex grid-margin stretch-card">
+
                   <div class="card">
+
                     <div class="card-body">
+
                       <h4 class="card-title">Settings</h4>
-                      
+
+
+  <div id="alertBox"></div>
 
                       <!-- ADD ITEM Modal -->
                       <div class="modal fade" id="add_item_Modal" tabindex="-1" aria-labelledby="add_item_ModalLabel" aria-hidden="true">

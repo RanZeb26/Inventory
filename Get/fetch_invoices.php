@@ -4,14 +4,14 @@ header("Content-Type: application/json");
 
 try {
     $stmt = $pdo->query("SELECT 
-            i.invoice_id,
-            i.invoice_no,
-            i.invoice_date,
-            i.total_amount,
+            ih.invoice_id,
+            ih.invoice_no,
+            ih.invoice_date,
+            ih.total_amount,
             c.customer_name
-        FROM sales_receipts i
-        LEFT JOIN customers c ON c.customer_id = i.customer_id
-        ORDER BY i.invoice_id DESC
+        FROM invoice_header ih
+        LEFT JOIN customers c ON c.customer_id = ih.customer_id
+        ORDER BY ih.invoice_id DESC
     ");
 
     echo json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
