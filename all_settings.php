@@ -1,7 +1,8 @@
-<?php
+<?
+
 session_start();
 if (!isset($_SESSION['logged_in'])) {
-    http_response_code(401);
+    header("Location: login");
     exit;
 }
 include 'config/db.php';
@@ -20,10 +21,6 @@ include 'config/db.php';
     <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css">
     <link rel="stylesheet" href="css/vertical-layout-light/style.css">
     <link rel="stylesheet" href="css/product.css">
-
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
     <link rel="shortcut icon" href="images/favicon.png" />
 
     <style>
@@ -85,6 +82,9 @@ include 'config/db.php';
             .mobile-toggle {
                 margin-top: 0px;
             }
+            .mobile-toggle-btn {
+    margin-top: 100px;
+}
 
             #content,
             #content.expanded {
@@ -114,7 +114,7 @@ include 'config/db.php';
             <!-- Mobile toggle -->
             <div class="d-md-none text-end p-3 mobile-toggle">
                 <button class="btn btn-sm" onclick="toggleSidebar()">
-                    <i style="color: #fff;" class="typcn typcn-chevron-left-outline"></i>
+                    <i style="color: #fff;" class="typcn typcn-th-menu"></i>
                 </button>
             </div>
 
@@ -138,7 +138,7 @@ include 'config/db.php';
         <!-- Main Content -->
         <div class="d-md-none text-end p-3">
             <button style="padding-top:100px;" class="btn btn-sm" onclick="toggleSidebar()">
-                <i class="typcn typcn-chevron-right-outline"></i>
+                <i class="typcn typcn-th-menu"></i>
             </button>
         </div>
         <div id="content">
@@ -205,6 +205,8 @@ include 'config/db.php';
     <script src="js/template.js"></script>
 
     <script>
+
+        
         const sidebar = document.getElementById("sidebar");
         const content = document.getElementById("content");
 
@@ -246,7 +248,8 @@ include 'config/db.php';
             localStorage.setItem("sidebarCollapsed", collapsed);
             const chevron = document.querySelector("#sidebar .typcn-chevron-left-outline");
             if (chevron) {
-                chevron.classList.toggle("typcn-chevron-right-outline");
+                chevron.classList.toggle("typcn-chevron-left-outline");
+chevron.classList.toggle("typcn-chevron-right-outline");
 
             }
             sidebar.classList.toggle("collapsed");
@@ -267,6 +270,7 @@ include 'config/db.php';
             const lastPage = localStorage.getItem("lastSettingsPage");
             if (lastPage) loadPage(lastPage);
         };
+        
     </script>
 
 </body>
