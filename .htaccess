@@ -83,6 +83,7 @@ RewriteRule ^Invoice$ Invoice.php [L]
 RewriteRule ^list$ Qty_Adj_list.php [L]
 RewriteRule ^prlist$ Product_view.php [L]
 RewriteRule ^csview$ Customer_view.php [L]
+RewriteRule ^viewinvoice$ Invoice_view.php [L]
 
 
 # Admin Products Adjustment

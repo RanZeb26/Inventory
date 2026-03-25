@@ -59,7 +59,7 @@ include 'Get/fetch_products.php';
                         </div>
                         <div class="control-form col-md-3">
                           <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#add_item_Modal">
-                            New Qty Adjustment
+                           + New Qty Adjustment
                           </button>
 
                         </div>

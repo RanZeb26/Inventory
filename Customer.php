@@ -59,7 +59,7 @@ include 'Get/fetch_products.php';
                         </div>
                         <div class="control-form col-md-3">
                           <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#add_customer_Modal">
-                            New Customer
+                           + New Customer
                           </button>
                         </div>
                       </div>

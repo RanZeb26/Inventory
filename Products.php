@@ -87,7 +87,7 @@ include 'Get/fetch_unit_item.php';
                         </div>
                         <div class="control-form col-md-3">
                           <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#add_item_Modal">
-                            <i class="typcn typcn-plus-outline"></i> Add Product
+                            + Add Product
                           </button>
                           <!--
                         <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#qtyModal">
