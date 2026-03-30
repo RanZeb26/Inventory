@@ -11,7 +11,9 @@
           <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item dropdown d-flex">
               <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-toggle="dropdown">
-                <p>Help</p>
+                <i class="typcn typcn-phone"></i>
+                <span class="count bg-warning">4</span>
+              </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">
                 <p class="mb-0 font-weight-normal float-left dropdown-header">Contact Us</p>
                 <a class="dropdown-item preview-item">
@@ -54,7 +56,7 @@
             </li>
             <li class="nav-item dropdown d-flex">
               <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-toggle="dropdown">
-                <i class="typcn typcn-message-typing"></i>
+                <i class="typcn typcn-messages"></i>
                 <span class="count bg-success">2</span>
               </a>
               <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list" aria-labelledby="messageDropdown">

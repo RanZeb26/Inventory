@@ -122,8 +122,6 @@ include 'Get/fetch_products.php';
                       </div>
                       <!-- END OF ADD CUSTOMER MODAL -->
 
-
-
                       <!-- Delete Confirmation Modal -->
                       <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
@@ -143,7 +141,9 @@ include 'Get/fetch_products.php';
                           </div>
                         </div>
                       </div>
+<!-- END OF DELETE CONFIRMATION MODAL -->
 
+<!-- CUSTOMER TABLE -->
                       <div class="table-responsive pt-3">
                         <table class="table table-hover bg-white shadow-sm">
                           <thead class="table-light">
@@ -160,15 +160,15 @@ include 'Get/fetch_products.php';
                               <?php foreach ($result as $row): ?>
                                 <tr>
                                   <td class="d-flex align-items-center">
-                                    <img src="<?= !empty($row['image']) ? htmlspecialchars($row['image']) : 'images/default.png' ?>" alt="img" class="me-3" width="40" height="40" style="object-fit:cover; border-radius:5px; padding:2px; border:1px solid #ccc;">
+                                    <img src="<?= !empty($row['image']) ? htmlspecialchars($row['image']) : 'images/default.png' ?>" alt="img" class="me-3" width="40" height="40" style="object-fit:cover; border-radius:5px; padding:5px; border:1px solid #ccc;">
                                     <div>
-                                      <div class="fw-bold" style="font-weight: 900;"> <?= $row['company_name'] ?></div>
-                                      <div class="fw-bold"> <?= $row['customer_name'] ?></div>
+                                      <div class="fw-bold" style="padding-bottom: 2px; color:cornflowerblue;"> <?= $row['company_name'] ?></div>
+                                      <div class="fw-bold" style="padding-bottom: 2px;"> <?= $row['customer_name'] ?></div>
                                       <div class="text-muted small">CS <?= $row['customer_id'] ?></div>
                                     </div>
                                   </td>
                                   <td>
-                                    <div class="fw-bold" style="font-weight: 900;"> <?= $row['email'] ?></div>
+                                    <div class="fw-bold" style="color:cornflowerblue;"> <?= $row['email'] ?></div>
                                     <div class="fw-bold"> <?= $row['phone'] ?></div>
                                   </td>
                                   <td><?= htmlspecialchars($row['address']) ?></td>
@@ -265,6 +265,7 @@ include 'Get/fetch_products.php';
                           </div>
                         <?php endforeach; ?>
                         <!-- END OF EDIT ITEM MODAL -->
+
                         <!-- Pagination -->
                         <nav>
                           <ul class="pagination justify-content-center">
@@ -282,6 +283,8 @@ include 'Get/fetch_products.php';
                           </ul>
                         </nav>
                       </div>
+                      <!-- END OF CUSTOMER TABLE -->
+
                     </div>
                   </div>
                 </div>

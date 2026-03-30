@@ -1,5 +1,6 @@
 <?php
-include "config/db.php"; // Database connection
+include "config/db.php";
+
 
 // Get search input
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
@@ -25,7 +26,7 @@ $total_pages = ceil($total_products / $limit);
 
 // Fetch records
 $sql = "SELECT *
-FROM customers where status='Active'
+FROM customers 
 $search_sql LIMIT :limit OFFSET :offset";
 $stmt = $pdo->prepare($sql);
 

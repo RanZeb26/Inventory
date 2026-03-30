@@ -664,13 +664,13 @@ if (e.target.classList.contains("removeRow")) {
   this.appendChild(hidden);
 });
 
-//Load list of invoices
+const urlParams = new URLSearchParams(window.location.search);
+const selectedId = urlParams.get("id");
+
 function loadInvoices() {
-  fetch("fetch_invoices") // ← make sure .php if no routing
+  fetch(`fetch_invoices?id=${selectedId || ""}`)
     .then(res => res.json())
     .then(data => {
-
-      // console.log(data);
 
       let html = "";
 
@@ -687,9 +687,6 @@ function loadInvoices() {
       });
 
       document.getElementById("listContainer").innerHTML = html;
-    })
-    .catch(err => {
-      console.error("Fetch error:", err);
     });
 }
 document.addEventListener("click", function(e) {

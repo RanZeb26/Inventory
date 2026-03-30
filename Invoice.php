@@ -61,87 +61,6 @@ include 'Get/fetch_products.php';
                           <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#add_customer_Modal">+ New Invoice</button>
                         </div>
                       </div>
-
-                      <!-- ADD CUSTOMER Modal -->
-                      <div class="modal fade" id="add_customer_Modal" tabindex="-1" aria-labelledby="add_customer_ModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-md">
-                          <div class="modal-content">
-                            <form id="customerForm" action="add_customer" method="POST" enctype="multipart/form-data">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="add_customer_ModalLabel">Add New Customer</h5>
-                                <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-                              </div>
-                              <div class="modal-body">
-                                <div class="container-fluid">
-                                  <div class="row g-3">
-                                    <div class="col-md-12">
-                                      <label class="form-label">Customer Name</label>
-                                      <input type="text" name="customer_name" class="form-control" required>
-                                    </div>
-                                    <div class="col-md-12">
-                                      <label class="form-label">Company Name</label>
-                                      <input type="text" name="company_name" class="form-control" required>
-                                    </div>
-                                    <div class="col-md-12">
-                                      <label class="form-label">Email Address</label>
-                                      <input type="email" name="email" class="form-control">
-                                    </div>
-                                    <div class="col-md-12">
-                                      <label class="form-label">Phone Number</label>
-                                      <input type="tel" name="phone" class="form-control">
-                                    </div>
-                                    <div class="col-md-12">
-                                      <label class="form-label">Address</label>
-                                      <textarea name="address" class="form-control" rows="3"></textarea>
-                                    </div>
-                                    <div class="col-md-12">
-                                      <div class="form-group">
-                                        <label>File upload</label>
-                                        <input type="file" name="image" class="file-upload-default">
-                                        <div class="input-group col-xs-12">
-                                          <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
-                                          <span class="input-group-append">
-                                            <button class="file-upload-browse btn btn-light" type="button">Upload</button>
-                                          </span>
-                                        </div>
-                                      </div>
-                                    </div>
-
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="submit" class="btn btn-info">Save Customer</button>
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                              </div>
-                            </form>
-                          </div>
-                        </div>
-                      </div>
-                      <!-- END OF ADD CUSTOMER MODAL -->
-
-
-
-                      <!-- Delete Confirmation Modal -->
-                      <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header bg-light text-black">
-                              <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                              <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-                            </div>
-                            <div class="modal-body">
-                              Are you sure you want to delete this customer?
-                              <input type="hidden" id="delete_id">
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" id="confirmDeleteBtn" class="btn btn-info">Delete</button>
-                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
                       <div class="table-responsive pt-3">
                         <table class="table table-hover bg-white shadow-sm">
                           <thead class="table-light">
@@ -158,7 +77,7 @@ include 'Get/fetch_products.php';
                               <?php foreach ($result as $row): ?>
                                 <tr>
                                   <td class="d-flex align-items-center">
-                                    <img src="<?= !empty($row['image']) ? htmlspecialchars($row['image']) : 'images/default.png' ?>" alt="img" class="me-3" width="40" height="40" style="object-fit:cover; border-radius:5px; padding:2px; border:1px solid #ccc;">
+                                    <!-- <img src="<?= !empty($row['image']) ? htmlspecialchars($row['image']) : 'images/default.png' ?>" alt="img" class="me-3" width="40" height="40" style="object-fit:cover; border-radius:5px; padding:2px; border:1px solid #ccc;"> -->
                                     <div>
                                       <div class="fw-bold" style="font-weight: 900;"> <?= $row['company_name'] ?></div>
                                       <div class="fw-bold"> <?= $row['customer_name'] ?></div>
@@ -180,11 +99,9 @@ include 'Get/fetch_products.php';
                                       <i class="typcn typcn-edit"></i>
                                     </button>
                                     <!-- VIEW BUTTON -->
-<button type="button"
-  class="btn btn-inverse-info btn-icon mr-2 view-btn"
-  onclick="redirectToList(<?= $row['customer_id'] ?>)">
-  <i class="typcn typcn-eye-outline"></i>
-</button>
+                                    <button type="button" class="btn btn-inverse-info btn-icon mr-2 view-btn" onclick="redirectToList(<?= $row['customer_id'] ?>)">
+                                      <i class="typcn typcn-eye-outline"></i>
+                                    </button>
                                     <!-- DELETE BUTTON -->
                                     <button class="btn btn-inverse-danger btn-icon open-delete-modal"
                                       data-customer_id="<?= $row['customer_id'] ?>">
@@ -201,68 +118,8 @@ include 'Get/fetch_products.php';
 
                             <?php endif; ?>
                           </tbody>
-
                         </table>
-                        <!-- Edit ITEM Modal -->
-                        <?php foreach ($result as $row): ?>
-                          <div class="modal fade" id="editModal<?= $row['customer_id'] ?>" tabindex="-1" aria-labelledby="editItemModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-md">
-                              <div class="modal-content">
-                                <form id="editItemForm" action="Update_Customer" method="POST" enctype="multipart/form-data">
-                                  <input type="hidden" name="customer_id" value="<?= $row['customer_id'] ?>">
-                                  <div class="modal-header">
-                                    <h5 class="modal-title" id="editItemModalLabel">Edit Customer</h5>
-                                    <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal" aria-label="Close">&times;</button>
-                                  </div>
-                                  <div class="modal-body">
-                                    <div class="container-fluid">
-                                      <div class="row g-3">
-                                        <div class="col-md-12">
-                                          <label class="form-label">Customer Name</label>
-                                          <input type="text" value="<?= htmlspecialchars($row['customer_name']) ?>" name="customer_name" class="form-control" required>
-                                        </div>
-                                        <div class="col-md-12">
-                                          <label class="form-label">Company Name</label>
-                                          <input type="text" value="<?= $row['company_name'] ?>" name="company_name" class="form-control" required>
-                                        </div>
-                                        <div class="col-md-12">
-                                          <label class="form-label">Email Address</label>
-                                          <input type="email" value="<?= $row['email'] ?>" name="email" class="form-control">
-                                        </div>
-                                        <div class="col-md-12">
-                                          <label class="form-label">Phone Number</label>
-                                          <input type="tel" value="<?= $row['phone'] ?>" name="phone" class="form-control">
-                                        </div>
-                                        <div class="col-md-12">
-                                          <label class="form-label">Address</label>
-                                          <textarea name="address" class="form-control" rows="3"><?= $row['address'] ?></textarea>
-                                        </div>
-                                        <div class="col-md-12">
-                                          <div class="form-group">
-                                            <label>File upload</label>
-                                            <input type="file" name="image" class="file-upload-default">
-                                            <div class="input-group col-xs-12">
-                                              <input type="text" class="form-control file-upload-info" disabled placeholder="Upload Image">
-                                              <span class="input-group-append">
-                                                <button class="file-upload-browse btn btn-light" type="button">Upload</button>
-                                              </span>
-                                            </div>
-                                            <small class="text-muted">Current: <?= $row['image'] ?></small>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                  <div class="modal-footer">
-                                    <button type="submit" class="btn btn-info">Update Customer</button>
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                  </div>
-                                </form>
-                              </div>
-                            </div>
-                          </div>
-                        <?php endforeach; ?>
-                        <!-- END OF EDIT ITEM MODAL -->
+
                         <!-- Pagination -->
                         <nav>
                           <ul class="pagination justify-content-center">

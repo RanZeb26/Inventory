@@ -33,6 +33,8 @@ $postList = []; // key => post id
 $postKeys = []; // ordered list of keys for table rows
 while ($post = $posts->fetch_assoc()) {
   // Unique key includes post_name to avoid collisions
+  // This allows multiple posts with same location+shift but different names
+  // e.g. "DPO (NSPL) - 1st - Main Gate"
   $key = $post['location'] . ' - ' . $post['shift'] . ' - ' . $post['post_name'];
   $postList[$key] = $post['id'];
   $postKeys[] = $key;
@@ -161,8 +163,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h2 class="text-center mb-4">Weekly Duty Schedule</h2>
             <form method="GET" style="margin-bottom: 20px;">
               <label><strong>📆 Select Week Start:</strong></label>
-              <input type="date" name="week" value="<?= htmlspecialchars($_GET['week'] ?? date('Y-m-d')) ?>" required>
-              <button class="btn btn-secondary rounded-pill" type="submit">View</button>
+              <!-- Remove row-cols-4 to let the col-md classes take control -->
+<div class="row g-2 align-items-center"> 
+    <!-- Pair 1 -->
+    <div class="col-md-3">
+        <input class="form-control" type="date" name="week1" value="<?= htmlspecialchars($_GET['week'] ?? date('Y-m-d')) ?>" required>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-secondary rounded-pill w-100" type="submit">View</button>
+    </div>
+
+    <!-- Pair 2 -->
+    <!-- <div class="col-md-2">
+        <input class="form-control" type="date" name="week2" value="<?= htmlspecialchars($_GET['week'] ?? date('Y-m-d')) ?>" required>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-secondary rounded-pill w-100" type="submit">View</button>
+    </div> -->
+
+    <!-- Pair 3 -->
+    <!-- <div class="col-md-2">
+        <input class="form-control" type="date" name="week3" value="<?= htmlspecialchars($_GET['week'] ?? date('Y-m-d')) ?>" required>
+    </div>
+    <div class="col-md-2">
+        <button class="btn btn-secondary rounded-pill w-100" type="submit">View</button>
+    </div> -->
+</div>
+
             </form>
 
             <div class="mb-3">
@@ -176,6 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <tr>
                   <th>Post</th>
                   <?php foreach ($dates as $d): ?>
+                    <!-- Format date as "01 Jan 2024 (Mon)" -->
                     <th><?= date("d M Y (D)", strtotime($d)) ?></th>
                   <?php endforeach; ?>
                 </tr>
