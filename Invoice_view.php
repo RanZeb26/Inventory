@@ -433,6 +433,7 @@ include 'Get/fetch_payment_option.php';
   <script src="js/todolist.js"></script>
   <script src="js/file-upload.js"></script>
   <script>
+    // AUTO-FILL COMPANY NAME BASED ON CUSTOMER SELECTION
     document.getElementById('customerSelect').addEventListener('change', function() {
       let customername = this.options[this.selectedIndex].getAttribute('data-customername');
       let companyname = this.options[this.selectedIndex].getAttribute('data-companyname');
@@ -440,6 +441,7 @@ include 'Get/fetch_payment_option.php';
       document.getElementById('customerName').value = customername;
       document.getElementById('companyName').value = companyname;
     });
+    // GLOBAL ITEMS ARRAY
     let items = [];
 
     // Load items from database
