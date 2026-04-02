@@ -5,8 +5,10 @@ if (!isset($_SESSION['logged_in'])) {
   exit;
 }
 include 'config/db.php';
-
-include 'Get/fetch_customer.php';
+include 'Get/fetch_invoice_list.php';
+include 'Get/fetch_list_customer.php';
+include 'Get/fetch_coa.php';
+include 'Get/fetch_payment_option.php';
 include 'Get/fetch_products.php';
 ?>
 <!DOCTYPE html>

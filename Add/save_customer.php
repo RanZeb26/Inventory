@@ -37,15 +37,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
 
-        if (isset($_FILES['image']) && $_FILES['image']['size'] > 0) {
-            $targetDir = "../images/";
-            if (!is_dir($targetDir)) {
-                mkdir($targetDir, 0755, true);
-            }
-                    $fileName = uniqid() . "_" . basename($_FILES["image"]["name"]);
-        $targetFile = $targetDir . $fileName;
-        $fileType = strtolower(pathinfo($targetFile, PATHINFO_EXTENSION));
-        $allowedTypes = ['jpg', 'jpeg', 'png', 'gif'];
+if (isset($_FILES['image']) && $_FILES['image']['size'] > 0) {
+    $targetDir = __DIR__ . "/../uploads/";
+    if (!is_dir($targetDir)) {
+        mkdir($targetDir, 0755, true);
+    }
+
+        // Validate MIME type
+    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+    $mime = finfo_file($finfo, $_FILES['image']['tmp_name']);
+    finfo_close($finfo);
+
+    
+    $allowed = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!in_array($mime, $allowed)) {
+        echo json_encode(["status" => "error", "message" => "Invalid image type."]);
+        exit;
+    }
+
+    // Validate image
+    if (getimagesize($_FILES['image']['tmp_name']) === false) {
+        echo json_encode(["status" => "error", "message" => "File is not a valid image."]);
+        exit;
+    }
+
+    // Limit size
+    if ($_FILES['image']['size'] > 2 * 1024 * 1024) {
+        echo json_encode(["status" => "error", "message" => "File too large."]);
+        exit;
+    }
+
+    // Safe filename
+    $extension = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+    $fileName = uniqid("cust_", true) . "." . strtolower($extension);
+    $targetFile = $targetDir . $fileName;
         if (in_array($fileType, $allowedTypes)) {
             if (move_uploaded_file($_FILES["image"]["tmp_name"], $targetFile)) {
                 // Delete old image if exists
